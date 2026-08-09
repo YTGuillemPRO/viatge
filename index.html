@@ -36,63 +36,156 @@
             line-height: 1.6;
         }
 
-        /* PORTADA DIVERTIDA AMB NÚVOLS I AVIONS */
-        .hero {
-            background: linear-gradient(135deg, #4FC3F7, #0288D1);
-            text-align: center;
-            padding: 60px 20px;
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
-            box-shadow: 0 10px 0 rgba(0,0,0,0.1);
+        /* ==========================================
+           PANTALLA COMPLETA DE CEL
+           ========================================== */
+        .cel-portada {
+            height: 100vh;
+            width: 100%;
+            background: linear-gradient(180deg, #4FC3F7 0%, #81D4FA 60%, #B3E5FC 100%);
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 1;
         }
 
-        .hero h1 {
+        .titol-portada {
+            z-index: 10;
+            animation: rebotar-titol 2s infinite ease-in-out;
+            margin-bottom: 20vh; /* Pujem el títol perquè no el tapin els núvols grans */
+        }
+
+        .cel-portada h1 {
             font-family: 'Baloo 2', cursive;
-            font-size: 3.5rem;
+            font-size: 4.5rem;
             margin: 0;
             color: white;
-            text-shadow: 3px 3px 0px #01579B;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 2;
+            text-shadow: 4px 4px 0px #0277BD;
+            letter-spacing: 2px;
         }
 
-        .hero p {
-            font-size: 1.4rem;
-            color: #E1F5FE;
-            font-weight: 700;
+        .cel-portada p {
+            font-size: 1.6rem;
+            color: #01579B;
+            font-weight: 800;
             margin-top: 10px;
-            position: relative;
-            z-index: 2;
+            background: rgba(255,255,255,0.6);
+            padding: 5px 20px;
+            border-radius: 20px;
         }
 
-        /* NÚVOLS I AVIANS DECORATIUS TIPUS CANVA */
-        .deco {
+        @keyframes rebotar-titol {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* AVIONS */
+        .avio-wrapper {
             position: absolute;
-            font-size: 3rem;
-            z-index: 1;
+            z-index: 5;
+            transition: transform 1.5s cubic-bezier(0.5, 0, 0.75, 0), opacity 1s ease;
+        }
+        
+        .avio-inner {
+            font-size: 3.5rem;
             filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
         }
-        .avion-1 { top: 20px; left: -50px; animation: volar 4s infinite linear; }
-        .avion-2 { top: 150px; right: -50px; transform: scaleX(-1); animation: volar-inv 5s infinite linear; }
-        .nube-1 { top: 30px; right: 10%; font-size: 4rem; animation: flotar 3s infinite ease-in-out; }
-        .nube-2 { bottom: 20px; left: 5%; font-size: 3rem; animation: flotar 4s infinite ease-in-out reverse; }
-        .nube-3 { top: 100px; left: 20%; font-size: 2.5rem; animation: flotar 3.5s infinite ease-in-out; }
+        
+        .avio-1 { top: 10%; left: -150px; }
+        .avio-2 { top: 25%; left: -150px; }
+        .avio-3 { top: 15%; right: -150px; }
 
-        @keyframes volar { from { left: -100px; } to { left: 110%; } }
-        @keyframes volar-inv { from { right: -100px; } to { right: 110%; } }
-        @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .avio-1 .avio-inner { animation: creuar-dreta 8s infinite linear; transform: rotate(-5deg); }
+        .avio-2 .avio-inner { animation: creuar-dreta 12s infinite linear; animation-delay: 2s; transform: rotate(-5deg); font-size: 2.5rem; }
+        .avio-3 .avio-inner { animation: creuar-esquerra 10s infinite linear; transform: scaleX(-1) rotate(-5deg); font-size: 4rem; }
 
-        /* CONTENIDOR PRINCIPAL */
+        @keyframes creuar-dreta {
+            from { transform: translateX(0) rotate(-5deg); }
+            to { transform: translateX(120vw) rotate(-5deg); }
+        }
+        @keyframes creuar-esquerra {
+            from { transform: translateX(0) scaleX(-1) rotate(-5deg); }
+            to { transform: translateX(-120vw) scaleX(-1) rotate(-5deg); }
+        }
+
+        /* NÚVOLS REALISTES, FOSCS I MOLT GRANS */
+        .nube {
+            position: absolute;
+            bottom: -60px; /* Posicionats a la part de baix */
+            z-index: 2;
+            filter: drop-shadow(0 -10px 30px rgba(0, 0, 0, 0.2)); /* Ombra forta per donar volum */
+            transition: transform 1.5s cubic-bezier(0.5, 0, 0.75, 0), opacity 1s ease;
+        }
+
+        .nube svg {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Mides exagerades perquè siguin "molt grans" */
+        .nube-1 { left: -200px; width: 800px; bottom: -100px; }
+        .nube-2 { left: 30%; width: 700px; bottom: -150px; }
+        .nube-3 { right: -200px; width: 900px; bottom: -80px; }
+
+        .nube-inner {
+            animation: flotar 4s infinite ease-in-out;
+        }
+        .nube-2 .nube-inner { animation-duration: 5s; animation-direction: reverse; }
+        .nube-3 .nube-inner { animation-duration: 6s; }
+
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* FLETXA DE BAIXAR */
+        .fletxa-baixar {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            font-size: 3rem;
+            color: white;
+            z-index: 20;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transform: translateX(-50%);
+            animation: baixar 1.5s infinite ease-in-out;
+            transition: transform 1.5s ease, opacity 1s ease;
+        }
+
+        @keyframes baixar {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(15px); }
+        }
+
+        /* CLASSE PER FER VOLAR ELS NÚVOLS I AVIONS CAP AMUNT AL FER SCROLL */
+        body.scrolled .nube,
+        body.scrolled .avio-wrapper,
+        body.scrolled .fletxa-baixar {
+            transform: translateY(-130vh) !important;
+            opacity: 0;
+        }
+        
+        body.scrolled .fletxa-baixar {
+            animation: none;
+        }
+
+        /* ==========================================
+           CONTINGUT PRINCIPAL (DIES)
+           ========================================== */
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 30px 20px;
+            position: relative;
+            z-index: 20;
+            background: var(--color-sky);
         }
 
-        /* BOTONS GIGANTS QUE OCUPEN TOT L'AMPLE (ENLLAÇOS) */
+        /* BOTONS GIGANTS */
         .botones-dias {
             display: flex;
             flex-direction: column;
@@ -129,7 +222,7 @@
         .btn-3 { background-color: var(--color-purple); box-shadow: 0 6px 0 #4A148C; }
         .btn-4 { background-color: var(--color-red); box-shadow: 0 6px 0 #B71C1C; }
 
-        /* CONTINGUT DELS DIES (VISIBLES PER DEFECTE) */
+        /* TARGETES DE CONTINGUT */
         .dia-contenido {
             background: white;
             border-radius: 30px;
@@ -137,7 +230,7 @@
             margin-bottom: 40px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             border: 4px dashed #B3E5FC;
-            scroll-margin-top: 20px; /* Per a que al clicar no es talli amb la part de dalt */
+            scroll-margin-top: 20px;
         }
 
         .dia-contenido h2 {
@@ -150,77 +243,6 @@
             padding-bottom: 15px;
         }
 
-        /* LÍNIA DE TEMPS ESTIL MAPA DEL TRESOR */
-        .timeline {
-            position: relative;
-            padding-left: 40px;
-            margin-top: 30px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 15px;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: #B3E5FC;
-            border-radius: 2px;
-        }
-
-        .punto {
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .punto::before {
-            content: '📍';
-            position: absolute;
-            left: -33px;
-            top: -5px;
-            font-size: 1.4rem;
-            background: white;
-            padding: 2px;
-            border-radius: 50%;
-        }
-
-        .hora {
-            display: inline-block;
-            background: var(--color-orange);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-weight: 800;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-            box-shadow: 0 3px 0 #E65100;
-        }
-
-        .punto h3 {
-            margin: 5px 0;
-            font-family: 'Baloo 2', cursive;
-            font-size: 1.3rem;
-            color: var(--text-color);
-        }
-
-        /* CAIXES D'AVÍS DIVERTIDES */
-        .caja-aviso {
-            background: #FFF9C4;
-            border: 3px solid #FBC02D;
-            border-radius: 15px;
-            padding: 15px;
-            margin: 20px 0;
-            font-weight: 700;
-        }
-
-        .caja-turno {
-            background: #E1F5FE;
-            border: 3px solid #0288D1;
-            border-radius: 15px;
-            padding: 15px;
-            margin: 20px 0;
-        }
-
         footer {
             text-align: center;
             padding: 40px 20px;
@@ -230,27 +252,101 @@
         }
 
         @media (max-width: 600px) {
-            .hero h1 { font-size: 2.5rem; }
+            .cel-portada h1 { font-size: 3rem; }
+            .avio-inner { font-size: 2.5rem; }
             .btn-gigante { font-size: 1.4rem; padding: 20px 15px; }
+            .nube-1 { width: 500px; left: -150px; }
+            .nube-2 { width: 450px; left: 10%; }
+            .nube-3 { width: 550px; right: -150px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- PORTADA -->
-    <header class="hero">
-        <div class="deco avion-1">✈️</div>
-        <div class="deco avion-2">✈️</div>
-        <div class="deco nube-1">☁️</div>
-        <div class="deco nube-2">☁️</div>
-        <div class="deco nube-3">☁️</div>
-        <h1>Països Baixos</h1>
-        <p>La nostra gran aventura!</p>
+    <!-- PANTALLA COMPLETA DE CEL -->
+    <header class="cel-portada">
+        
+        <!-- Avions -->
+        <div class="avio-wrapper avio-1"><div class="avio-inner">✈️</div></div>
+        <div class="avio-wrapper avio-2"><div class="avio-inner">🛩️</div></div>
+        <div class="avio-wrapper avio-3"><div class="avio-inner">✈️</div></div>
+
+        <!-- Núvols grans i foscos -->
+        <div class="nube nube-1">
+            <div class="nube-inner">
+                <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Degradat de gris fosc a blanc trencat -->
+                        <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#eceff1"/>
+                            <stop offset="60%" stop-color="#90a4ae"/>
+                            <stop offset="100%" stop-color="#455a64"/>
+                        </linearGradient>
+                        <filter id="blur1"><feGaussianBlur stdDeviation="4" /></filter>
+                    </defs>
+                    <g filter="url(#blur1)">
+                        <circle cx="100" cy="150" r="70" fill="url(#g1)"/>
+                        <circle cx="200" cy="110" r="90" fill="url(#g1)"/>
+                        <circle cx="300" cy="140" r="80" fill="url(#g1)"/>
+                        <rect x="80" y="140" width="250" height="70" rx="35" fill="url(#g1)"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <div class="nube nube-2">
+            <div class="nube-inner">
+                <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#eceff1"/>
+                            <stop offset="60%" stop-color="#90a4ae"/>
+                            <stop offset="100%" stop-color="#455a64"/>
+                        </linearGradient>
+                        <filter id="blur2"><feGaussianBlur stdDeviation="4" /></filter>
+                    </defs>
+                    <g filter="url(#blur2)">
+                        <circle cx="120" cy="140" r="80" fill="url(#g2)"/>
+                        <circle cx="220" cy="100" r="100" fill="url(#g2)"/>
+                        <circle cx="320" cy="150" r="70" fill="url(#g2)"/>
+                        <rect x="100" y="130" width="260" height="80" rx="40" fill="url(#g2)"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <div class="nube nube-3">
+            <div class="nube-inner">
+                <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#eceff1"/>
+                            <stop offset="60%" stop-color="#90a4ae"/>
+                            <stop offset="100%" stop-color="#455a64"/>
+                        </linearGradient>
+                        <filter id="blur3"><feGaussianBlur stdDeviation="4" /></filter>
+                    </defs>
+                    <g filter="url(#blur3)">
+                        <circle cx="80" cy="160" r="60" fill="url(#g3)"/>
+                        <circle cx="180" cy="120" r="85" fill="url(#g3)"/>
+                        <circle cx="280" cy="150" r="75" fill="url(#g3)"/>
+                        <rect x="60" y="150" width="260" height="60" rx="30" fill="url(#g3)"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <div class="titol-portada">
+            <h1>Països Baixos</h1>
+            <p>La nostra gran aventura!</p>
+        </div>
+
+        <div class="fletxa-baixar">⬇️</div>
     </header>
 
     <div class="container">
 
-        <!-- BOTONS GIGANTS PER SALTAR ALS DIES -->
+        <!-- BOTONS GIGANTS PER SALTAR RÀPID -->
         <div class="botones-dias">
             <a href="#dia-1" class="btn-gigante btn-1">🧳 DIA 1: Ja marxem!</a>
             <a href="#dia-2" class="btn-gigante btn-2">🚲 DIA 2</a>
@@ -258,157 +354,23 @@
             <a href="#dia-4" class="btn-gigante btn-4">🏠 DIA 4: Tornada a casa</a>
         </div>
 
-        <!-- ================= CONTINGUT DIA 1 ================= -->
+        <!-- ================= CONTINGUT DIA 1 (TOTALMENT BUIT) ================= -->
         <div id="dia-1" class="dia-contenido">
-            <h2>✈️ DIA 1: Arribada a Amsterdam!</h2>
-
-            <div class="timeline">
-                <div class="punto">
-                    <span class="hora">05:20 - 07:30</span>
-                    <h3>🚌 Bus a l'aeroport</h3>
-                    <p>¡Comença l'aventura! Pugem al bus amb molta il·lusió.</p>
-                </div>
-                <div class="punto">
-                    <span class="hora">10:10</span>
-                    <h3>🛫 ¡Enlairem el vol!</h3>
-                    <p>Avió cap al nord. ¡A veure el mar des dels núvols!</p>
-                </div>
-                <div class="punto">
-                    <span class="hora">12:40</span>
-                    <h3>🛬 Arribada a Schiphol</h3>
-                    <p>Aterrem a l'aeroport d'Amsterdam.</p>
-                </div>
-                <div class="punto">
-                    <h3>🚆 Tren subterrani màgic</h3>
-                    <p>Estació subterrània de Schiphol. Tren cap a Amsterdam Sloterdijk / Amsterdam Centraal (¡Normalment Andana 3!).</p>
-                </div>
-                <div class="punto">
-                    <span class="hora">15:00</span>
-                    <h3>🏨 Entrada a l'Hotel MEININGER</h3>
-                    <p>Deixem les maletes i ¡a explorar! (Entrada 15:00 - Sortida 11:00).</p>
-                </div>
-            </div>
-
-            <h2>🗺️ Ruta de la tarda</h2>
-            <div class="timeline">
-                <div class="punto">
-                    <span class="hora">13:30</span>
-                    <h3>🚆 Tren a l'Estació Central (6 min)</h3>
-                    <p>Des del Meininger Amsterdam City West fins al centre.</p>
-                </div>
-                <div class="punto">
-                    <h3>🌊 Cases Ballarines</h3>
-                    <p>En sortir de l'estació, el canal Damrak i les cases estretes i inclinades sobre l'aigua.</p>
-                </div>
-                <div class="punto">
-                    <h3>🍔 ¡Hora de dinar!</h3>
-                    <p>Al carrer Damrak o Nieuwendyk. Hamburgueses, pizzes o patates fregides de Manneken Pis.</p>
-                </div>
-                <div class="punto">
-                    <span class="hora">17:00</span>
-                    <h3>🚤 Vaixell pels Canals (1 hora)</h3>
-                    <p>Embarcadors Lovers o Stromma. Passarem pel Pont dels 7 Canals i les cases flotants.</p>
-                </div>
-                <div class="punto">
-                    <span class="hora">18:30</span>
-                    <h3>🏡 Casa d'Anne Frank</h3>
-                    <p>Contemplem l'edifici per fora des del canal i descobrim la seva història.</p>
-                </div>
-                <div class="punto">
-                    <span class="hora">18:45</span>
-                    <h3>⛪ Westerkerk</h3>
-                    <p>Església amb la torre més alta de la ciutat, ¡coronada amb una corona reial!</p>
-                </div>
-                <div class="punto">
-                    <span class="hora">19:00</span>
-                    <h3>🍟 Berenar per a gegants!</h3>
-                    <p>Fabel Friet o Manneken Pis (patates amb salses) o Stroopwafels (galletes de caramel calentes).</p>
-                </div>
-                <div class="punto">
-                    <span class="hora">19:30</span>
-                    <h3>🌉 Els 9 Carrers (Negen Straatjes)</h3>
-                    <p>L'Amsterdam de postal: ponts plens de flors i bicicletes.</p>
-                    <p><strong>🤫 Begijnhof:</strong> Busquem el pati secret.</p>
-                </div>
-                <div class="punto">
-                    <span class="hora">20:30</span>
-                    <h3>🏛️ Plaça Dam i Sopar</h3>
-                    <p>Palau Reial il·luminat a la fosca. ¡A sopar!</p>
-                </div>
-            </div>
-
-            <h2>🔴 Explorant el Barri Roig</h2>
-            
-            <div class="caja-aviso">
-                ⚠️ <strong>¡ATENCIÓ REGLA D'OR!</strong><br>
-                Prohibit fer fotos: Està estrictament prohibida fotografiar o gravar els aparadors.
-            </div>
-
-            <div class="caja-turno">
-                👨‍👩‍👧‍👦 <strong>Pla per als petits (Torns):</strong>
-                <ul>
-                    <li><strong>Torn 1:</strong> 2 adults amb els 8 nens prenent gelat/gofra. Els altres 2 adults passegen 30 min.</li>
-                    <li><strong>Torn 2:</strong> ¡Es canvien els papers!</li>
-                </ul>
-            </div>
-
-            <div class="timeline">
-                <div class="punto">
-                    <h3>📍 Inici: Plaça Dam / Damrak</h3>
-                    <p>Creuem per Oude Doelenstraat o Oudehoogstraat cap al primer pont.</p>
-                </div>
-                <div class="punto">
-                    <h3>1️⃣ Oudezijds Voorburgwal</h3>
-                    <p>Canal antic. Veiem "Ons' Lieve Heer op Solder" (església secreta a les golfes), façanes amb politges per pujar mobles i el primer Bulldog coffeeshop.</p>
-                </div>
-                <div class="punto">
-                    <h3>2️⃣ Oudezijds Achterburgwal</h3>
-                    <p>El canal dels neons vermells. Pont Stoofsteeg i l'estàtua "Belle" (Respecta les treballadores sexuals).</p>
-                </div>
-                <div class="punto">
-                    <h3>3️⃣ La Oude Kerk (Església Vella)</h3>
-                    <p>L'església més antiga envoltada de llums de neó. Al terra de la plaça hi ha un relleu secret de bronze.</p>
-                </div>
-                <div class="punto">
-                    <h3>4️⃣ Tornada per Zeedijk</h3>
-                    <p>Carrer del Barri Xinès amb llanternes vermelles per tornar a l'Estació Central.</p>
-                </div>
-            </div>
-
-            <h2>🌿 Parada Adulta: Coffeeshops</h2>
-            <div class="timeline">
-                <div class="punto">
-                    <h3>☕ Bulldog The First</h3>
-                    <p>Oudezijds Voorburgwal 218. El més famós i el primer que va obrir.</p>
-                </div>
-                <div class="punto">
-                    <h3>☕ Dampkring</h3>
-                    <p>Handboogstraat 29. Famosós per la pel·lícula Ocean's Twelve. Ambient molt tranquil.</p>
-                </div>
-                <div class="punto">
-                    <h3>☕ Green House Center</h3>
-                    <p>Oudezijds Voorburgwal 191. Qualitat premium i famós entre celebritats.</p>
-                </div>
-            </div>
-            <div class="caja-aviso">
-                ℹ️ <strong>Normativa 2023:</strong> Prohibit fumar tabac a l'interior dels coffeeshops; només herba pura o vaporitzadors.
-            </div>
+            <h2>🧳 DIA 1: Ja marxem!</h2>
+            <!-- Aqui anirà el text quan me'l passis -->
         </div>
 
         <!-- ================= CONTINGUT DIES PENDENTS ================= -->
         <div id="dia-2" class="dia-contenido">
             <h2>🚲 DIA 2: ¡A pedalejar!</h2>
-            <p style="text-align:center; font-size:1.2rem;">Pendent de passar la ruta. ¡Preparant més aventures! 🌷</p>
         </div>
 
         <div id="dia-3" class="dia-contenido">
             <h2>🌷 DIA 3: Museu i Parcs</h2>
-            <p style="text-align:center; font-size:1.2rem;">Pendent de passar la ruta. 🧀</p>
         </div>
 
         <div id="dia-4" class="dia-contenido">
             <h2>✈️ DIA 4: Tornada a casa</h2>
-            <p style="text-align:center; font-size:1.2rem;">Pendent de passar la ruta. 🏠</p>
         </div>
 
     </div>
@@ -416,6 +378,17 @@
     <footer>
         ¡Bon viatge als Països Baixos! 🇳🇱✈️
     </footer>
+
+    <!-- JAVASCRIPT PER L'ANIMACIÓ CAP AMUNT AL FER SCROLL -->
+    <script>
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.body.classList.add('scrolled');
+            } else {
+                document.body.classList.remove('scrolled');
+            }
+        }, { passive: true });
+    </script>
 
 </body>
 </html>
