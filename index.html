@@ -20,20 +20,32 @@
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
         }
 
+        /* BLOQUEIG DE SCROLL INICIAL */
         body {
-            font-family: 'Nunito', sans-serif;
+            overflow: hidden; /* No es pot fer scroll */
+            height: 100vh;
             background-color: var(--color-sky);
             background-image: radial-gradient(#B3E5FC 20%, transparent 20%), radial-gradient(#B3E5FC 20%, transparent 20%);
             background-position: 0 0, 50px 50px;
             background-size: 100px 100px;
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
+            transition: height 0s;
+        }
+
+        body.unlocked {
+            overflow-y: auto; /* Es desbloqueja després de l'animació */
+            height: auto;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         /* ==========================================
@@ -56,7 +68,7 @@
         .titol-portada {
             z-index: 10;
             animation: rebotar-titol 2s infinite ease-in-out;
-            margin-bottom: 20vh; /* Pujem el títol perquè no el tapin els núvols grans */
+            margin-bottom: 15vh;
         }
 
         .cel-portada h1 {
@@ -83,42 +95,25 @@
             50% { transform: translateY(-20px); }
         }
 
-        /* AVIONS */
-        .avio-wrapper {
+        /* AVIONS 3D ESTÀTICS TIPUS CANVA */
+        .avio-3d {
             position: absolute;
             z-index: 5;
-            transition: transform 1.5s cubic-bezier(0.5, 0, 0.75, 0), opacity 1s ease;
-        }
-        
-        .avio-inner {
-            font-size: 3.5rem;
-            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
-        }
-        
-        .avio-1 { top: 10%; left: -150px; }
-        .avio-2 { top: 25%; left: -150px; }
-        .avio-3 { top: 15%; right: -150px; }
-
-        .avio-1 .avio-inner { animation: creuar-dreta 8s infinite linear; transform: rotate(-5deg); }
-        .avio-2 .avio-inner { animation: creuar-dreta 12s infinite linear; animation-delay: 2s; transform: rotate(-5deg); font-size: 2.5rem; }
-        .avio-3 .avio-inner { animation: creuar-esquerra 10s infinite linear; transform: scaleX(-1) rotate(-5deg); font-size: 4rem; }
-
-        @keyframes creuar-dreta {
-            from { transform: translateX(0) rotate(-5deg); }
-            to { transform: translateX(120vw) rotate(-5deg); }
-        }
-        @keyframes creuar-esquerra {
-            from { transform: translateX(0) scaleX(-1) rotate(-5deg); }
-            to { transform: translateX(-120vw) scaleX(-1) rotate(-5deg); }
+            filter: drop-shadow(8px 8px 15px rgba(0,0,0,0.3));
+            transform: perspective(1000px) rotateY(-20deg) rotateX(5deg) rotateZ(-10deg);
         }
 
-        /* NÚVOLS REALISTES, FOSCS I MOLT GRANS */
+        .avio-1 { top: 15%; left: 10%; width: 220px; }
+        .avio-2 { top: 25%; right: 5%; width: 180px; transform: perspective(1000px) rotateY(20deg) rotateX(5deg) rotateZ(10deg) scaleX(-1); }
+        .avio-3 { top: 50%; left: 40%; width: 150px; transform: perspective(1000px) rotateY(-15deg) rotateX(10deg) rotateZ(-5deg); }
+
+        /* NÚVOLS REALISTES, FOSCS, MOLT GRANS I AMAGATS INICIALMENT */
         .nube {
             position: absolute;
-            bottom: -60px; /* Posicionats a la part de baix */
+            bottom: -150px; /* Amagats sota la pantalla */
             z-index: 2;
-            filter: drop-shadow(0 -10px 30px rgba(0, 0, 0, 0.2)); /* Ombra forta per donar volum */
-            transition: transform 1.5s cubic-bezier(0.5, 0, 0.75, 0), opacity 1s ease;
+            filter: drop-shadow(0 -10px 30px rgba(0, 0, 0, 0.2));
+            opacity: 0;
         }
 
         .nube svg {
@@ -126,23 +121,26 @@
             height: auto;
         }
 
-        /* Mides exagerades perquè siguin "molt grans" */
-        .nube-1 { left: -200px; width: 800px; bottom: -100px; }
-        .nube-2 { left: 30%; width: 700px; bottom: -150px; }
-        .nube-3 { right: -200px; width: 900px; bottom: -80px; }
+        .nube-1 { left: -200px; width: 800px; }
+        .nube-2 { left: 30%; width: 700px; }
+        .nube-3 { right: -200px; width: 900px; }
 
-        .nube-inner {
-            animation: flotar 4s infinite ease-in-out;
+        /* ANIMACIÓ AUTOMÀTICA DELS NÚVOLS */
+        body.loaded .nube {
+            animation: pujar-i-desapareixer 3s cubic-bezier(0.5, 0, 0.75, 0) forwards;
         }
-        .nube-2 .nube-inner { animation-duration: 5s; animation-direction: reverse; }
-        .nube-3 .nube-inner { animation-duration: 6s; }
+        
+        body.loaded .nube-1 { animation-delay: 0.2s; }
+        body.loaded .nube-2 { animation-delay: 0s; }
+        body.loaded .nube-3 { animation-delay: 0.4s; }
 
-        @keyframes flotar {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+        @keyframes pujar-i-desapareixer {
+            0% { transform: translateY(0); opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(-130vh); opacity: 0; }
         }
 
-        /* FLETXA DE BAIXAR */
+        /* FLETXA DE BAIXAR (AMAGADA FINS QUE ACABI L'ANIMACIÓ) */
         .fletxa-baixar {
             position: absolute;
             bottom: 30px;
@@ -152,25 +150,21 @@
             z-index: 20;
             text-shadow: 0 2px 5px rgba(0,0,0,0.3);
             transform: translateX(-50%);
-            animation: baixar 1.5s infinite ease-in-out;
-            transition: transform 1.5s ease, opacity 1s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        body.unlocked .fletxa-baixar {
+            animation: mostrar-fletxa 1s ease forwards, baixar 1.5s 1s infinite ease-in-out;
+        }
+
+        @keyframes mostrar-fletxa {
+            to { opacity: 1; pointer-events: auto; }
         }
 
         @keyframes baixar {
             0%, 100% { transform: translateX(-50%) translateY(0); }
             50% { transform: translateX(-50%) translateY(15px); }
-        }
-
-        /* CLASSE PER FER VOLAR ELS NÚVOLS I AVIONS CAP AMUNT AL FER SCROLL */
-        body.scrolled .nube,
-        body.scrolled .avio-wrapper,
-        body.scrolled .fletxa-baixar {
-            transform: translateY(-130vh) !important;
-            opacity: 0;
-        }
-        
-        body.scrolled .fletxa-baixar {
-            animation: none;
         }
 
         /* ==========================================
@@ -253,7 +247,9 @@
 
         @media (max-width: 600px) {
             .cel-portada h1 { font-size: 3rem; }
-            .avio-inner { font-size: 2.5rem; }
+            .avio-1 { width: 140px; top: 10%; left: 5%; }
+            .avio-2 { width: 110px; right: 5%; }
+            .avio-3 { width: 90px; top: 45%; left: 30%; }
             .btn-gigante { font-size: 1.4rem; padding: 20px 15px; }
             .nube-1 { width: 500px; left: -150px; }
             .nube-2 { width: 450px; left: 10%; }
@@ -266,74 +262,128 @@
     <!-- PANTALLA COMPLETA DE CEL -->
     <header class="cel-portada">
         
-        <!-- Avions -->
-        <div class="avio-wrapper avio-1"><div class="avio-inner">✈️</div></div>
-        <div class="avio-wrapper avio-2"><div class="avio-inner">🛩️</div></div>
-        <div class="avio-wrapper avio-3"><div class="avio-inner">✈️</div></div>
+        <!-- Avions 3D Estàtics (SVG amb degradats) -->
+        <div class="avio-3d avio-1">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="cos1" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="100%" stop-color="#cfd8dc"/>
+                    </linearGradient>
+                    <linearGradient id="ala1" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#e53935"/>
+                        <stop offset="100%" stop-color="#b71c1c"/>
+                    </linearGradient>
+                </defs>
+                <!-- Cos -->
+                <path d="M20,50 L150,30 L190,45 L190,55 L150,70 Z" fill="url(#cos1)" />
+                <!-- Cua -->
+                <path d="M20,50 L40,20 L60,45 Z" fill="url(#cos1)" />
+                <!-- Aleta superior -->
+                <path d="M150,30 L160,10 L170,30 Z" fill="url(#ala1)" />
+                <!-- Ala inferior -->
+                <path d="M70,55 L110,90 L140,60 Z" fill="url(#ala1)" />
+                <!-- Finestra -->
+                <circle cx="160" cy="45" r="4" fill="#0288d1" />
+            </svg>
+        </div>
+
+        <div class="avio-3d avio-2">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="cos2" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="100%" stop-color="#cfd8dc"/>
+                    </linearGradient>
+                    <linearGradient id="ala2" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#1e88e5"/>
+                        <stop offset="100%" stop-color="#0d47a1"/>
+                    </linearGradient>
+                </defs>
+                <path d="M20,50 L150,30 L190,45 L190,55 L150,70 Z" fill="url(#cos2)" />
+                <path d="M20,50 L40,20 L60,45 Z" fill="url(#cos2)" />
+                <path d="M150,30 L160,10 L170,30 Z" fill="url(#ala2)" />
+                <path d="M70,55 L110,90 L140,60 Z" fill="url(#ala2)" />
+                <circle cx="160" cy="45" r="4" fill="#ffeb3b" />
+            </svg>
+        </div>
+
+        <div class="avio-3d avio-3">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="cos3" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="100%" stop-color="#cfd8dc"/>
+                    </linearGradient>
+                    <linearGradient id="ala3" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#ffca28"/>
+                        <stop offset="100%" stop-color="#ff6f00"/>
+                    </linearGradient>
+                </defs>
+                <path d="M20,50 L150,30 L190,45 L190,55 L150,70 Z" fill="url(#cos3)" />
+                <path d="M20,50 L40,20 L60,45 Z" fill="url(#cos3)" />
+                <path d="M150,30 L160,10 L170,30 Z" fill="url(#ala3)" />
+                <path d="M70,55 L110,90 L140,60 Z" fill="url(#ala3)" />
+                <circle cx="160" cy="45" r="4" fill="#4caf50" />
+            </svg>
+        </div>
 
         <!-- Núvols grans i foscos -->
         <div class="nube nube-1">
-            <div class="nube-inner">
-                <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <!-- Degradat de gris fosc a blanc trencat -->
-                        <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#eceff1"/>
-                            <stop offset="60%" stop-color="#90a4ae"/>
-                            <stop offset="100%" stop-color="#455a64"/>
-                        </linearGradient>
-                        <filter id="blur1"><feGaussianBlur stdDeviation="4" /></filter>
-                    </defs>
-                    <g filter="url(#blur1)">
-                        <circle cx="100" cy="150" r="70" fill="url(#g1)"/>
-                        <circle cx="200" cy="110" r="90" fill="url(#g1)"/>
-                        <circle cx="300" cy="140" r="80" fill="url(#g1)"/>
-                        <rect x="80" y="140" width="250" height="70" rx="35" fill="url(#g1)"/>
-                    </g>
-                </svg>
-            </div>
+            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#eceff1"/>
+                        <stop offset="60%" stop-color="#90a4ae"/>
+                        <stop offset="100%" stop-color="#455a64"/>
+                    </linearGradient>
+                    <filter id="blur1"><feGaussianBlur stdDeviation="4" /></filter>
+                </defs>
+                <g filter="url(#blur1)">
+                    <circle cx="100" cy="150" r="70" fill="url(#g1)"/>
+                    <circle cx="200" cy="110" r="90" fill="url(#g1)"/>
+                    <circle cx="300" cy="140" r="80" fill="url(#g1)"/>
+                    <rect x="80" y="140" width="250" height="70" rx="35" fill="url(#g1)"/>
+                </g>
+            </svg>
         </div>
 
         <div class="nube nube-2">
-            <div class="nube-inner">
-                <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#eceff1"/>
-                            <stop offset="60%" stop-color="#90a4ae"/>
-                            <stop offset="100%" stop-color="#455a64"/>
-                        </linearGradient>
-                        <filter id="blur2"><feGaussianBlur stdDeviation="4" /></filter>
-                    </defs>
-                    <g filter="url(#blur2)">
-                        <circle cx="120" cy="140" r="80" fill="url(#g2)"/>
-                        <circle cx="220" cy="100" r="100" fill="url(#g2)"/>
-                        <circle cx="320" cy="150" r="70" fill="url(#g2)"/>
-                        <rect x="100" y="130" width="260" height="80" rx="40" fill="url(#g2)"/>
-                    </g>
-                </svg>
-            </div>
+            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#eceff1"/>
+                        <stop offset="60%" stop-color="#90a4ae"/>
+                        <stop offset="100%" stop-color="#455a64"/>
+                    </linearGradient>
+                    <filter id="blur2"><feGaussianBlur stdDeviation="4" /></filter>
+                </defs>
+                <g filter="url(#blur2)">
+                    <circle cx="120" cy="140" r="80" fill="url(#g2)"/>
+                    <circle cx="220" cy="100" r="100" fill="url(#g2)"/>
+                    <circle cx="320" cy="150" r="70" fill="url(#g2)"/>
+                    <rect x="100" y="130" width="260" height="80" rx="40" fill="url(#g2)"/>
+                </g>
+            </svg>
         </div>
 
         <div class="nube nube-3">
-            <div class="nube-inner">
-                <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#eceff1"/>
-                            <stop offset="60%" stop-color="#90a4ae"/>
-                            <stop offset="100%" stop-color="#455a64"/>
-                        </linearGradient>
-                        <filter id="blur3"><feGaussianBlur stdDeviation="4" /></filter>
-                    </defs>
-                    <g filter="url(#blur3)">
-                        <circle cx="80" cy="160" r="60" fill="url(#g3)"/>
-                        <circle cx="180" cy="120" r="85" fill="url(#g3)"/>
-                        <circle cx="280" cy="150" r="75" fill="url(#g3)"/>
-                        <rect x="60" y="150" width="260" height="60" rx="30" fill="url(#g3)"/>
-                    </g>
-                </svg>
-            </div>
+            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#eceff1"/>
+                        <stop offset="60%" stop-color="#90a4ae"/>
+                        <stop offset="100%" stop-color="#455a64"/>
+                    </linearGradient>
+                    <filter id="blur3"><feGaussianBlur stdDeviation="4" /></filter>
+                </defs>
+                <g filter="url(#blur3)">
+                    <circle cx="80" cy="160" r="60" fill="url(#g3)"/>
+                    <circle cx="180" cy="120" r="85" fill="url(#g3)"/>
+                    <circle cx="280" cy="150" r="75" fill="url(#g3)"/>
+                    <rect x="60" y="150" width="260" height="60" rx="30" fill="url(#g3)"/>
+                </g>
+            </svg>
         </div>
 
         <div class="titol-portada">
@@ -379,15 +429,19 @@
         ¡Bon viatge als Països Baixos! 🇳🇱✈️
     </footer>
 
-    <!-- JAVASCRIPT PER L'ANIMACIÓ CAP AMUNT AL FER SCROLL -->
+    <!-- JAVASCRIPT PER BLOQUEJAR I DESBLOQUEJAR EL SCROLL -->
     <script>
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) {
-                document.body.classList.add('scrolled');
-            } else {
-                document.body.classList.remove('scrolled');
-            }
-        }, { passive: true });
+        window.onload = function() {
+            // Activa l'animació dels núvols mig segon després de carregar
+            setTimeout(function() {
+                document.body.classList.add('loaded');
+            }, 500);
+
+            // Desbloqueja el scroll i mostra la fletxa quan acaba l'animació (3.5 segons)
+            setTimeout(function() {
+                document.body.classList.add('unlocked');
+            }, 3500);
+        };
     </script>
 
 </body>
