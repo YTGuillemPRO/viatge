@@ -13,13 +13,14 @@
             margin: 0;
             font-family: 'Nunito', sans-serif;
             background-color: #E0F7FA;
+            color: #333;
         }
 
         /* Barra superior */
         .header {
             background: #03A9F4;
             color: white;
-            padding: 15px 20px;
+            padding: 12px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -32,80 +33,199 @@
         .header h1 {
             font-family: 'Baloo 2', cursive;
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
         }
 
         .btn-tornar {
             background: white;
             color: #03A9F4;
-            padding: 8px 15px;
+            padding: 6px 12px;
             border-radius: 20px;
             text-decoration: none;
             font-weight: 800;
             font-family: 'Baloo 2', cursive;
+            font-size: 0.9rem;
         }
 
-        /* El Mapa ocupa tota la pantalla */
+        /* El Mapa */
         #map {
-            height: calc(100vh - 70px);
+            height: 40vh; /* Una mica més baix per al mòbil */
             width: 100%;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        /* Estil de la targeta (Popup) dins del mapa */
         .map-card {
             text-align: center;
             font-family: 'Nunito', sans-serif;
-            max-width: 250px;
+            max-width: 220px;
+        }
+        .map-card h3 { font-family: 'Baloo 2', cursive; color: #03A9F4; margin: 5px 0; font-size: 1.1rem; }
+        .map-card .hora { display: inline-block; background: #FF9800; color: white; padding: 3px 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 800; margin-bottom: 5px; }
+        .map-card img { width: 100%; height: 100px; object-fit: cover; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .map-card p { font-size: 0.9rem; color: #555; line-height: 1.4; }
+
+        /* CONTENIDOR DE TARGETES TIPUS CANVA */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 15px;
+            position: relative;
         }
 
-        .map-card h3 {
-            font-family: 'Baloo 2', cursive;
-            color: #03A9F4;
-            margin: 5px 0;
-            font-size: 1.3rem;
+        /* LA LÍNIA DE PUNTS SUPER COOL (Vertical) */
+        .timeline-container {
+            position: relative;
+            padding-left: 45px; /* Marge ajustat per a mòbil */
         }
 
-        .map-card .hora {
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 10px;
+            bottom: 10px;
+            width: 6px;
+            background-image: linear-gradient(#0288D1 50%, rgba(255,255,255,0) 0%);
+            background-size: 6px 20px;
+            background-repeat: repeat-y;
+        }
+
+        /* TARGETA INDIVIDUAL */
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        /* PUNTS I EMOJIS GRANS PER A MÒBIL */
+        .timeline-item::before {
+            content: '📍';
+            position: absolute;
+            left: -38px; /* Ajustat */
+            top: -10px;
+            width: 36px; 
+            height: 36px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem; /* EMOJI ajustat */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border: 3px solid #03A9F4;
+            z-index: 2;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            border: 2px solid #f0f0f0;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 160px; /* Fotos més baixes per al mòbil */
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .time-badge {
             display: inline-block;
             background: #FF9800;
             color: white;
-            padding: 3px 10px;
-            border-radius: 10px;
-            font-size: 0.9rem;
+            padding: 4px 12px;
+            border-radius: 15px;
             font-weight: 800;
-            margin-bottom: 5px;
-        }
-
-        .map-card img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        .map-card p {
             font-size: 0.95rem;
+            margin-bottom: 8px;
+            box-shadow: 0 3px 0 #E65100;
+            font-family: 'Baloo 2', cursive;
+        }
+
+        .card-body h3 {
+            font-family: 'Baloo 2', cursive;
+            margin: 0 0 8px 0;
+            color: #0277BD;
+            font-size: 1.2rem;
+        }
+
+        .card-body p {
+            margin: 0;
             color: #555;
             line-height: 1.4;
+            font-size: 0.95rem;
         }
 
-        /* Botó flotant per anar al següent dia */
+        /* SECCIONS ESPECIALS (BARRI ROIG I COFFEESHOPS) */
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 800px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-left: 6px solid #FF5252;
+        }
+
+        .info-card.coffeeshop {
+            border-left-color: #9C27B0;
+        }
+
+        .info-card h2 {
+            font-family: 'Baloo 2', cursive;
+            color: #0288D1;
+            font-size: 1.4rem;
+            margin-top: 0;
+        }
+
+        .alert-box {
+            background: #FFF9C4;
+            border: 2px solid #FBC02D;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 12px 0;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .turn-box {
+            background: #E1F5FE;
+            border: 2px solid #0288D1;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 12px 0;
+            font-size: 0.9rem;
+        }
+
+        .info-card p {
+            font-size: 0.9rem;
+        }
+
+        /* Botó flotant */
         .btn-flotant {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 15px;
+            right: 15px;
             background: #4CAF50;
             color: white;
-            width: 60px;
-            height: 60px;
+            width: 50px; /* Més petit per no tapar */
+            height: 50px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            font-size: 2rem;
+            font-size: 1.5rem;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             z-index: 1000;
         }
@@ -118,31 +238,186 @@
         <a href="index.html" class="btn-tornar">⬅ Tornar</a>
     </div>
 
-    <!-- Aquí es crea el mapa -->
+    <!-- MAPA INTERACTIU -->
     <div id="map"></div>
 
-    <!-- Botó per anar al Dia 2 -->
+    <!-- LÍNIA DE TEMPS AMB TARGETES TIPUS CANVA -->
+    <div class="container">
+        <div class="timeline-container">
+
+            <div class="timeline-item">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1546945651-aeb9e0d3a3b9?q=80&w=800&auto=format&fit=crop" alt="Bus">
+                    <div class="card-body">
+                        <span class="time-badge">05:20 - 07:30</span>
+                        <h3>🚌 Bus a l'aeroport</h3>
+                        <p>Comença l'aventura! Ens trobem per agafar el bus.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop" alt="Avió">
+                    <div class="card-body">
+                        <span class="time-badge">10:10</span>
+                        <h3>🛫 Vol a Amsterdam</h3>
+                        <p>Enlairem! Ens esperen els Països Baixos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1566516248807-8f1b9c7e8c2c?q=80&w=800&auto=format&fit=crop" alt="Schiphol">
+                    <div class="card-body">
+                        <span class="time-badge">12:40</span>
+                        <h3>🛬 Arribada a Schiphol</h3>
+                        <p>Aterrem. Tren subterrani a Sloterdijk/Centraal (Andana 3).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=800&auto=format&fit=crop" alt="Hotel">
+                    <div class="card-body">
+                        <span class="time-badge">15:00</span>
+                        <h3>🏨 Hotel MEININGER</h3>
+                        <p>Entrada a l'Hotel (Sortida 11:00). Deixem les maletes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="Estació">
+                    <div class="card-body">
+                        <span class="time-badge">13:30</span>
+                        <h3>🚆 Estació Central</h3>
+                        <p>Tren de 6 minuts al centre. Cases Ballarines al Damrak.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=800&auto=format&fit=crop" alt="Barco">
+                    <div class="card-body">
+                        <span class="time-badge">17:00</span>
+                        <h3>🚤 Barco Canals (1h)</h3>
+                        <p>Lovers/Stromma. Prinsengracht, Herengracht, Pont 7 Canals.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=800&auto=format&fit=crop" alt="Anne Frank">
+                    <div class="card-body">
+                        <span class="time-badge">18:30</span>
+                        <h3>🏡 Casa Anne Frank</h3>
+                        <p>Contemplem l'edifici per fora des del canal.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1542640244-7e672d6cef4e?q=80&w=800&auto=format&fit=crop" alt="Westerkerk">
+                    <div class="card-body">
+                        <span class="time-badge">18:45</span>
+                        <h3>⛪ Westerkerk</h3>
+                        <p>Església amb la torre més alta i la corona reial.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop" alt="Patates">
+                    <div class="card-body">
+                        <span class="time-badge">19:00</span>
+                        <h3>🍟 Berenar</h3>
+                        <p>Fabel Friet/Manneken Pis (patates) o Stroopwafels calentes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="9 Carrers">
+                    <div class="card-body">
+                        <span class="time-badge">19:30</span>
+                        <h3>🌉 9 Carrers</h3>
+                        <p>Negen Straatjes (postal) i pati secret del Begijnhof.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="Plaça Dam">
+                    <div class="card-body">
+                        <span class="time-badge">20:30</span>
+                        <h3>🏛️ Plaça Dam</h3>
+                        <p>Palau Reial il·luminat. És l'hora de sopar!</p>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- Fi Timeline -->
+
+        <!-- BARRI ROIG -->
+        <div class="info-card">
+            <h2>🔴 Barri Roig</h2>
+            
+            <div class="alert-box">
+                ⚠️ <strong>PROHIBIT FER FOTOS:</strong> Està prohibit fotografiar els aparadors.
+            </div>
+
+            <div class="turn-box">
+                👨‍👩‍👧‍👦 <strong>ESTRATÈGIA NENS:</strong>
+                <ul style="margin: 5px 0; padding-left: 20px;">
+                    <li><strong>Torn 1:</strong> 2 adults amb els 4 nens (gelat/gofre). Els altres 2 adults passegen 30 min.</li>
+                    <li><strong>Torn 2:</strong> Es canvien els papers.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- COFFEESHOPS -->
+        <div class="info-card coffeeshop">
+            <h2>🌿 Coffeeshops</h2>
+            <p><strong>Bulldog The First</strong> (Oudezijds V. 218) - El més famós.</p>
+            <p><strong>Dampkring</strong> (Handboogstraat 29) - Famos per Ocean's Twelve.</p>
+            <p><strong>Green House Center</strong> (Oudezijds V. 191) - Qualitat premium.</p>
+            <div class="alert-box">
+                ℹ️ <strong>Normativa 2023:</strong> Prohibit fumar tabac a l'interior.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Botó flotant Dia 2 -->
     <a href="dia2.html" class="btn-flotant">➡</a>
 
     <script>
-        // Inicialitzem el mapa centrat a Amsterdam
-        var map = L.map('map').setView([52.3676, 4.9041], 14);
+        // Inicialitzem el mapa
+        var map = L.map('map').setView([52.3731, 4.8926], 14);
 
-        // Li posem l'estil de mapa (els carrers, edificis, etc.)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        // Creem la icona del pin (personalitzada)
+        // Icona del mapa
         var customIcon = L.divIcon({
             className: 'custom-pin',
-            html: '📍',
+            html: '<div style="font-size: 28px;">📍</div>',
             iconSize: [30, 30],
             iconAnchor: [15, 30],
             popupAnchor: [0, -30]
         });
 
-        // Funció per crear targetes fàcilment
         function crearTargeta(hora, titol, foto, descripcio) {
             return `
                 <div class="map-card">
@@ -154,25 +429,29 @@
             `;
         }
 
-        // 1. Estació Central
+        L.marker([52.3105, 4.7683], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('12:40', 'Aeroport Schiphol', 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=400&auto=format&fit=crop', 'Arribada. Tren andana 3.'));
+
+        L.marker([52.3892, 4.8244], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('15:00', 'Hotel MEININGER', 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=400&auto=format&fit=crop', 'Entrada 15:00.'));
+
         L.marker([52.3791, 4.9003], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('13:30', 'Estació Central', 'https://images.unsplash.com/photo-1566516248807-8f1b9c7e8c2c?q=80&w=800&auto=format&fit=crop', 'Arribada amb tren. Sortim cap al canal Damrak a veure les Cases Ballarines.'));
+            .bindPopup(crearTargeta('13:30', 'Estació Central', 'https://images.unsplash.com/photo-1566516248807-8f1b9c7e8c2c?q=80&w=400&auto=format&fit=crop', 'Cases Ballarines.'));
 
-        // 2. Barco pels Canals
         L.marker([52.3745, 4.8965], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('17:00', 'Barco pels Canals', 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=800&auto=format&fit=crop', 'Crucero d\\'1 hora des dels embarcadors Lovers o Stromma.'));
+            .bindPopup(crearTargeta('17:00', 'Barco Canals', 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=400&auto=format&fit=crop', 'Crucero 1h.'));
 
-        // 3. Casa d'Anne Frank
         L.marker([52.3752, 4.8839], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('18:30', 'Casa d\\'Anne Frank', 'https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=800&auto=format&fit=crop', 'Contemplem l\\'edifici per fora des del canal.'));
+            .bindPopup(crearTargeta('18:30', 'Casa Anne Frank', 'https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=400&auto=format&fit=crop', 'Vista exterior.'));
 
-        // 4. Westerkerk
         L.marker([52.3745, 4.8838], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('18:45', 'Westerkerk', 'https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=800&auto=format&fit=crop', 'Església amb la torre més alta de la ciutat.'));
+            .bindPopup(crearTargeta('18:45', 'Westerkerk', 'https://images.unsplash.com/photo-1542640244-7e672d6cef4e?q=80&w=400&auto=format&fit=crop', 'Torre més alta.'));
 
-        // 5. Plaça Dam
+        L.marker([52.3697, 4.8886], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('19:30', '9 Carrers', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=400&auto=format&fit=crop', 'Postal.'));
+
         L.marker([52.3731, 4.8926], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('20:30', 'Plaça Dam i Sopar', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop', 'Palau Reial il·luminat a la fosca. A sopar!'));
+            .bindPopup(crearTargeta('20:30', 'Plaça Dam', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=400&auto=format&fit=crop', 'Sopar.'));
 
     </script>
 </body>
