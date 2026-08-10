@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 1: Mapa Amsterdam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Llibreria del Mapa (Leaflet) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Nunito', sans-serif;
+            background-color: #E0F7FA;
+        }
+
+        /* Barra superior */
+        .header {
+            background: #03A9F4;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header h1 {
+            font-family: 'Baloo 2', cursive;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .btn-tornar {
+            background: white;
+            color: #03A9F4;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 800;
+            font-family: 'Baloo 2', cursive;
+        }
+
+        /* El Mapa ocupa tota la pantalla */
+        #map {
+            height: calc(100vh - 70px);
+            width: 100%;
+        }
+
+        /* Estil de la targeta (Popup) dins del mapa */
+        .map-card {
+            text-align: center;
+            font-family: 'Nunito', sans-serif;
+            max-width: 250px;
+        }
+
+        .map-card h3 {
+            font-family: 'Baloo 2', cursive;
+            color: #03A9F4;
+            margin: 5px 0;
+            font-size: 1.3rem;
+        }
+
+        .map-card .hora {
+            display: inline-block;
+            background: #FF9800;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .map-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .map-card p {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        /* Botó flotant per anar al següent dia */
+        .btn-flotant {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🧳 Dia 1: Amsterdam</h1>
+        <a href="index.html" class="btn-tornar">⬅ Tornar</a>
+    </div>
+
+    <!-- Aquí es crea el mapa -->
+    <div id="map"></div>
+
+    <!-- Botó per anar al Dia 2 -->
+    <a href="dia2.html" class="btn-flotant">➡</a>
+
+    <script>
+        // Inicialitzem el mapa centrat a Amsterdam
+        var map = L.map('map').setView([52.3676, 4.9041], 14);
+
+        // Li posem l'estil de mapa (els carrers, edificis, etc.)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Creem la icona del pin (personalitzada)
+        var customIcon = L.divIcon({
+            className: 'custom-pin',
+            html: '📍',
+            iconSize: [30, 30],
+            iconAnchor: [15, 30],
+            popupAnchor: [0, -30]
+        });
+
+        // Funció per crear targetes fàcilment
+        function crearTargeta(hora, titol, foto, descripcio) {
+            return `
+                <div class="map-card">
+                    <img src="${foto}" alt="${titol}">
+                    <span class="hora">${hora}</span>
+                    <h3>${titol}</h3>
+                    <p>${descripcio}</p>
+                </div>
+            `;
+        }
+
+        // 1. Estació Central
+        L.marker([52.3791, 4.9003], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('13:30', 'Estació Central', 'https://images.unsplash.com/photo-1566516248807-8f1b9c7e8c2c?q=80&w=800&auto=format&fit=crop', 'Arribada amb tren. Sortim cap al canal Damrak a veure les Cases Ballarines.'));
+
+        // 2. Barco pels Canals
+        L.marker([52.3745, 4.8965], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('17:00', 'Barco pels Canals', 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=800&auto=format&fit=crop', 'Crucero d\\'1 hora des dels embarcadors Lovers o Stromma.'));
+
+        // 3. Casa d'Anne Frank
+        L.marker([52.3752, 4.8839], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('18:30', 'Casa d\\'Anne Frank', 'https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=800&auto=format&fit=crop', 'Contemplem l\\'edifici per fora des del canal.'));
+
+        // 4. Westerkerk
+        L.marker([52.3745, 4.8838], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('18:45', 'Westerkerk', 'https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=800&auto=format&fit=crop', 'Església amb la torre més alta de la ciutat.'));
+
+        // 5. Plaça Dam
+        L.marker([52.3731, 4.8926], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('20:30', 'Plaça Dam i Sopar', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop', 'Palau Reial il·luminat a la fosca. A sopar!'));
+
+    </script>
+</body>
+</html>
