@@ -30,17 +30,16 @@
 
         /* BLOQUEIG DE SCROLL INICIAL */
         body {
-            overflow: hidden; /* No es pot fer scroll */
+            overflow: hidden;
             height: 100vh;
             background-color: var(--color-sky);
             background-image: radial-gradient(#B3E5FC 20%, transparent 20%), radial-gradient(#B3E5FC 20%, transparent 20%);
             background-position: 0 0, 50px 50px;
             background-size: 100px 100px;
-            transition: height 0s;
         }
 
         body.unlocked {
-            overflow-y: auto; /* Es desbloqueja després de l'animació */
+            overflow-y: auto;
             height: auto;
         }
 
@@ -48,9 +47,7 @@
             scroll-behavior: smooth;
         }
 
-        /* ==========================================
-           PANTALLA COMPLETA DE CEL
-           ========================================== */
+        /* PANTALLA COMPLETA DE CEL */
         .cel-portada {
             height: 100vh;
             width: 100%;
@@ -95,7 +92,7 @@
             50% { transform: translateY(-20px); }
         }
 
-        /* AVIONS 3D ESTÀTICS TIPUS CANVA */
+        /* AVIONS 3D ESTÀTICS */
         .avio-3d {
             position: absolute;
             z-index: 5;
@@ -107,25 +104,21 @@
         .avio-2 { top: 25%; right: 5%; width: 180px; transform: perspective(1000px) rotateY(20deg) rotateX(5deg) rotateZ(10deg) scaleX(-1); }
         .avio-3 { top: 50%; left: 40%; width: 150px; transform: perspective(1000px) rotateY(-15deg) rotateX(10deg) rotateZ(-5deg); }
 
-        /* NÚVOLS REALISTES, FOSCS, MOLT GRANS I AMAGATS INICIALMENT */
+        /* NÚVOLS */
         .nube {
             position: absolute;
-            bottom: -150px; /* Amagats sota la pantalla */
+            bottom: -150px;
             z-index: 2;
             filter: drop-shadow(0 -10px 30px rgba(0, 0, 0, 0.2));
             opacity: 0;
         }
 
-        .nube svg {
-            width: 100%;
-            height: auto;
-        }
+        .nube svg { width: 100%; height: auto; }
 
         .nube-1 { left: -200px; width: 800px; }
         .nube-2 { left: 30%; width: 700px; }
         .nube-3 { right: -200px; width: 900px; }
 
-        /* ANIMACIÓ AUTOMÀTICA DELS NÚVOLS */
         body.loaded .nube {
             animation: pujar-i-desapareixer 3s cubic-bezier(0.5, 0, 0.75, 0) forwards;
         }
@@ -140,7 +133,7 @@
             100% { transform: translateY(-130vh); opacity: 0; }
         }
 
-        /* FLETXA DE BAIXAR (AMAGADA FINS QUE ACABI L'ANIMACIÓ) */
+        /* FLETXA */
         .fletxa-baixar {
             position: absolute;
             bottom: 30px;
@@ -158,18 +151,10 @@
             animation: mostrar-fletxa 1s ease forwards, baixar 1.5s 1s infinite ease-in-out;
         }
 
-        @keyframes mostrar-fletxa {
-            to { opacity: 1; pointer-events: auto; }
-        }
+        @keyframes mostrar-fletxa { to { opacity: 1; pointer-events: auto; } }
+        @keyframes baixar { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(15px); } }
 
-        @keyframes baixar {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(15px); }
-        }
-
-        /* ==========================================
-           CONTINGUT PRINCIPAL (DIES)
-           ========================================== */
+        /* CONTINGUT PRINCIPAL */
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -179,7 +164,7 @@
             background: var(--color-sky);
         }
 
-        /* BOTONS GIGANTS */
+        /* BOTONS GIGANTS (ARA OBRIN PÀGINES WEB) */
         .botones-dias {
             display: flex;
             flex-direction: column;
@@ -216,27 +201,6 @@
         .btn-3 { background-color: var(--color-purple); box-shadow: 0 6px 0 #4A148C; }
         .btn-4 { background-color: var(--color-red); box-shadow: 0 6px 0 #B71C1C; }
 
-        /* TARGETES DE CONTINGUT */
-        .dia-contenido {
-            background: white;
-            border-radius: 30px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 4px dashed #B3E5FC;
-            scroll-margin-top: 20px;
-        }
-
-        .dia-contenido h2 {
-            font-family: 'Baloo 2', cursive;
-            color: var(--color-blue);
-            font-size: 2rem;
-            margin-top: 0;
-            text-align: center;
-            border-bottom: 3px dotted #B3E5FC;
-            padding-bottom: 15px;
-        }
-
         footer {
             text-align: center;
             padding: 40px 20px;
@@ -259,46 +223,26 @@
 </head>
 <body>
 
-    <!-- PANTALLA COMPLETA DE CEL -->
     <header class="cel-portada">
-        
-        <!-- Avions 3D Estàtics (SVG amb degradats) -->
+        <!-- Avions -->
         <div class="avio-3d avio-1">
             <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <linearGradient id="cos1" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#ffffff"/>
-                        <stop offset="100%" stop-color="#cfd8dc"/>
-                    </linearGradient>
-                    <linearGradient id="ala1" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#e53935"/>
-                        <stop offset="100%" stop-color="#b71c1c"/>
-                    </linearGradient>
+                    <linearGradient id="cos1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#cfd8dc"/></linearGradient>
+                    <linearGradient id="ala1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e53935"/><stop offset="100%" stop-color="#b71c1c"/></linearGradient>
                 </defs>
-                <!-- Cos -->
                 <path d="M20,50 L150,30 L190,45 L190,55 L150,70 Z" fill="url(#cos1)" />
-                <!-- Cua -->
                 <path d="M20,50 L40,20 L60,45 Z" fill="url(#cos1)" />
-                <!-- Aleta superior -->
                 <path d="M150,30 L160,10 L170,30 Z" fill="url(#ala1)" />
-                <!-- Ala inferior -->
                 <path d="M70,55 L110,90 L140,60 Z" fill="url(#ala1)" />
-                <!-- Finestra -->
                 <circle cx="160" cy="45" r="4" fill="#0288d1" />
             </svg>
         </div>
-
         <div class="avio-3d avio-2">
             <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <linearGradient id="cos2" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#ffffff"/>
-                        <stop offset="100%" stop-color="#cfd8dc"/>
-                    </linearGradient>
-                    <linearGradient id="ala2" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#1e88e5"/>
-                        <stop offset="100%" stop-color="#0d47a1"/>
-                    </linearGradient>
+                    <linearGradient id="cos2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#cfd8dc"/></linearGradient>
+                    <linearGradient id="ala2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e88e5"/><stop offset="100%" stop-color="#0d47a1"/></linearGradient>
                 </defs>
                 <path d="M20,50 L150,30 L190,45 L190,55 L150,70 Z" fill="url(#cos2)" />
                 <path d="M20,50 L40,20 L60,45 Z" fill="url(#cos2)" />
@@ -307,18 +251,11 @@
                 <circle cx="160" cy="45" r="4" fill="#ffeb3b" />
             </svg>
         </div>
-
         <div class="avio-3d avio-3">
             <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <linearGradient id="cos3" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#ffffff"/>
-                        <stop offset="100%" stop-color="#cfd8dc"/>
-                    </linearGradient>
-                    <linearGradient id="ala3" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#ffca28"/>
-                        <stop offset="100%" stop-color="#ff6f00"/>
-                    </linearGradient>
+                    <linearGradient id="cos3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#cfd8dc"/></linearGradient>
+                    <linearGradient id="ala3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffca28"/><stop offset="100%" stop-color="#ff6f00"/></linearGradient>
                 </defs>
                 <path d="M20,50 L150,30 L190,45 L190,55 L150,70 Z" fill="url(#cos3)" />
                 <path d="M20,50 L40,20 L60,45 Z" fill="url(#cos3)" />
@@ -328,62 +265,15 @@
             </svg>
         </div>
 
-        <!-- Núvols grans i foscos -->
+        <!-- Núvols -->
         <div class="nube nube-1">
-            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#eceff1"/>
-                        <stop offset="60%" stop-color="#90a4ae"/>
-                        <stop offset="100%" stop-color="#455a64"/>
-                    </linearGradient>
-                    <filter id="blur1"><feGaussianBlur stdDeviation="4" /></filter>
-                </defs>
-                <g filter="url(#blur1)">
-                    <circle cx="100" cy="150" r="70" fill="url(#g1)"/>
-                    <circle cx="200" cy="110" r="90" fill="url(#g1)"/>
-                    <circle cx="300" cy="140" r="80" fill="url(#g1)"/>
-                    <rect x="80" y="140" width="250" height="70" rx="35" fill="url(#g1)"/>
-                </g>
-            </svg>
+            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#eceff1"/><stop offset="60%" stop-color="#90a4ae"/><stop offset="100%" stop-color="#455a64"/></linearGradient><filter id="blur1"><feGaussianBlur stdDeviation="4" /></filter></defs><g filter="url(#blur1)"><circle cx="100" cy="150" r="70" fill="url(#g1)"/><circle cx="200" cy="110" r="90" fill="url(#g1)"/><circle cx="300" cy="140" r="80" fill="url(#g1)"/><rect x="80" y="140" width="250" height="70" rx="35" fill="url(#g1)"/></g></svg>
         </div>
-
         <div class="nube nube-2">
-            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#eceff1"/>
-                        <stop offset="60%" stop-color="#90a4ae"/>
-                        <stop offset="100%" stop-color="#455a64"/>
-                    </linearGradient>
-                    <filter id="blur2"><feGaussianBlur stdDeviation="4" /></filter>
-                </defs>
-                <g filter="url(#blur2)">
-                    <circle cx="120" cy="140" r="80" fill="url(#g2)"/>
-                    <circle cx="220" cy="100" r="100" fill="url(#g2)"/>
-                    <circle cx="320" cy="150" r="70" fill="url(#g2)"/>
-                    <rect x="100" y="130" width="260" height="80" rx="40" fill="url(#g2)"/>
-                </g>
-            </svg>
+            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#eceff1"/><stop offset="60%" stop-color="#90a4ae"/><stop offset="100%" stop-color="#455a64"/></linearGradient><filter id="blur2"><feGaussianBlur stdDeviation="4" /></filter></defs><g filter="url(#blur2)"><circle cx="120" cy="140" r="80" fill="url(#g2)"/><circle cx="220" cy="100" r="100" fill="url(#g2)"/><circle cx="320" cy="150" r="70" fill="url(#g2)"/><rect x="100" y="130" width="260" height="80" rx="40" fill="url(#g2)"/></g></svg>
         </div>
-
         <div class="nube nube-3">
-            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#eceff1"/>
-                        <stop offset="60%" stop-color="#90a4ae"/>
-                        <stop offset="100%" stop-color="#455a64"/>
-                    </linearGradient>
-                    <filter id="blur3"><feGaussianBlur stdDeviation="4" /></filter>
-                </defs>
-                <g filter="url(#blur3)">
-                    <circle cx="80" cy="160" r="60" fill="url(#g3)"/>
-                    <circle cx="180" cy="120" r="85" fill="url(#g3)"/>
-                    <circle cx="280" cy="150" r="75" fill="url(#g3)"/>
-                    <rect x="60" y="150" width="260" height="60" rx="30" fill="url(#g3)"/>
-                </g>
-            </svg>
+            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#eceff1"/><stop offset="60%" stop-color="#90a4ae"/><stop offset="100%" stop-color="#455a64"/></linearGradient><filter id="blur3"><feGaussianBlur stdDeviation="4" /></filter></defs><g filter="url(#blur3)"><circle cx="80" cy="160" r="60" fill="url(#g3)"/><circle cx="180" cy="120" r="85" fill="url(#g3)"/><circle cx="280" cy="150" r="75" fill="url(#g3)"/><rect x="60" y="150" width="260" height="60" rx="30" fill="url(#g3)"/></g></svg>
         </div>
 
         <div class="titol-portada">
@@ -395,49 +285,25 @@
     </header>
 
     <div class="container">
-
-        <!-- BOTONS GIGANTS PER SALTAR RÀPID -->
+        <!-- BOTONS GIGANTS QUE OBRIN ELS ARXIUS DELS DIES -->
         <div class="botones-dias">
-            <a href="#dia-1" class="btn-gigante btn-1">🧳 DIA 1: Ja marxem!</a>
-            <a href="#dia-2" class="btn-gigante btn-2">🚲 DIA 2</a>
-            <a href="#dia-3" class="btn-gigante btn-3">🌷 DIA 3</a>
-            <a href="#dia-4" class="btn-gigante btn-4">🏠 DIA 4: Tornada a casa</a>
+            <a href="dia1.html" class="btn-gigante btn-1">🧳 DIA 1: Ja marxem!</a>
+            <a href="dia2.html" class="btn-gigante btn-2">🚲 DIA 2</a>
+            <a href="dia3.html" class="btn-gigante btn-3">🌷 DIA 3</a>
+            <a href="dia4.html" class="btn-gigante btn-4">🏠 DIA 4: Tornada a casa</a>
         </div>
-
-        <!-- ================= CONTINGUT DIA 1 (TOTALMENT BUIT) ================= -->
-        <div id="dia-1" class="dia-contenido">
-            <h2>🧳 DIA 1: Ja marxem!</h2>
-            <!-- Aqui anirà el text quan me'l passis -->
-        </div>
-
-        <!-- ================= CONTINGUT DIES PENDENTS ================= -->
-        <div id="dia-2" class="dia-contenido">
-            <h2>🚲 DIA 2: ¡A pedalejar!</h2>
-        </div>
-
-        <div id="dia-3" class="dia-contenido">
-            <h2>🌷 DIA 3: Museu i Parcs</h2>
-        </div>
-
-        <div id="dia-4" class="dia-contenido">
-            <h2>✈️ DIA 4: Tornada a casa</h2>
-        </div>
-
     </div>
 
     <footer>
         ¡Bon viatge als Països Baixos! 🇳🇱✈️
     </footer>
 
-    <!-- JAVASCRIPT PER BLOQUEJAR I DESBLOQUEJAR EL SCROLL -->
     <script>
         window.onload = function() {
-            // Activa l'animació dels núvols mig segon després de carregar
             setTimeout(function() {
                 document.body.classList.add('loaded');
             }, 500);
 
-            // Desbloqueja el scroll i mostra la fletxa quan acaba l'animació (3.5 segons)
             setTimeout(function() {
                 document.body.classList.add('unlocked');
             }, 3500);
