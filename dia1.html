@@ -135,7 +135,13 @@
         .card img {
             width: 100%;
             height: 160px;
-            object-fit: cover;
+            object-fit: cover; /* Les altres fotos es veuen així */
+        }
+
+        /* CLASSE ESPECIAL PER A LES FOTOS VERTICALS SENCERES */
+        .img-sencera {
+            object-fit: contain !important; 
+            background-color: #f8f9fa;
         }
 
         .card-body {
@@ -316,7 +322,7 @@
 
             <div class="timeline-item">
                 <div class="card" onclick="centrarMapa('anne')">
-                    <img src="https://z-cdn-media.chatglm.cn/files/970e16e6-a907-403a-a339-e331ce6569f9.png?auth_key=1886456022-9ee06f73c098438c8fb554383f1a2b79-0-9fa55cccfb2e193bb0d0d416cab695ac" alt="Casa Anne Frank">
+                    <img class="img-sencera" src="https://z-cdn-media.chatglm.cn/files/970e16e6-a907-403a-a339-e331ce6569f9.png?auth_key=1886456022-9ee06f73c098438c8fb554383f1a2b79-0-9fa55cccfb2e193bb0d0d416cab695ac" alt="Casa Anne Frank">
                     <div class="card-body">
                         <span class="time-badge">18:30</span>
                         <h3>🏡 Casa Anne Frank</h3>
@@ -327,7 +333,7 @@
 
             <div class="timeline-item">
                 <div class="card" onclick="centrarMapa('westerkerk')">
-                    <img src="https://z-cdn-media.chatglm.cn/files/0b6fbf03-d4c6-4d2f-ac0a-803f273807a1.png?auth_key=1886456022-ca351aea754b4037a437ac71f31eb178-0-7ae7a43450e06aa16017566ee71fa78e" alt="Westerkerk">
+                    <img class="img-sencera" src="https://z-cdn-media.chatglm.cn/files/0b6fbf03-d4c6-4d2f-ac0a-803f273807a1.png?auth_key=1886456022-ca351aea754b4037a437ac71f31eb178-0-7ae7a43450e06aa16017566ee71fa78e" alt="Westerkerk">
                     <div class="card-body">
                         <span class="time-badge">18:45</span>
                         <h3>⛪ Westerkerk</h3>
@@ -424,10 +430,12 @@
             popupAnchor: [0, -30]
         });
 
-        function crearTargeta(hora, titol, foto, descripcio) {
+        // Funció actualitzada per admetre imatges verticals (senceres)
+        function crearTargeta(hora, titol, foto, descripcio, esSencera) {
+            var classeCss = esSencera ? 'class="img-sencera"' : '';
             return `
                 <div class="map-card">
-                    <img src="${foto}" alt="${titol}">
+                    <img src="${foto}" alt="${titol}" ${classeCss}>
                     <span class="hora">${hora}</span>
                     <h3>${titol}</h3>
                     <p>${descripcio}</p>
@@ -439,37 +447,37 @@
         var markers = {};
 
         markers['bus'] = L.marker([52.3105, 4.7683], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('05:20', 'Bus a l\'aeroport', 'https://images.unsplash.com/photo-1546945651-aeb9e0d3a3b9?q=80&w=400&auto=format&fit=crop', 'Ens trobem per agafar el bus.'));
+            .bindPopup(crearTargeta('05:20', 'Bus a l\'aeroport', 'https://images.unsplash.com/photo-1546945651-aeb9e0d3a3b9?q=80&w=400&auto=format&fit=crop', 'Ens trobem per agafar el bus.', false));
 
         markers['avio'] = L.marker([52.3105, 4.7683], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('10:10', 'Vol a Amsterdam', 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=400&auto=format&fit=crop', 'Enlairem cap als Països Baixos.'));
+            .bindPopup(crearTargeta('10:10', 'Vol a Amsterdam', 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=400&auto=format&fit=crop', 'Enlairem cap als Països Baixos.', false));
 
         markers['schiphol'] = L.marker([52.3105, 4.7683], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('12:40', 'Aeroport Schiphol', 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=400&auto=format&fit=crop', 'Arribada. Tren andana 3.'));
+            .bindPopup(crearTargeta('12:40', 'Aeroport Schiphol', 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=400&auto=format&fit=crop', 'Arribada. Tren andana 3.', false));
 
         markers['hotel'] = L.marker([52.3892, 4.8244], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('15:00', 'Hotel MEININGER', 'https://z-cdn-media.chatglm.cn/files/98626f39-9be9-4e49-ba8a-374f03a78e0e.png?auth_key=1886454897-e9a971023f5049c5b68c5b92cbd44d9c-0-3754b982fb0a2c3f6dcf8906b7f3fc22', 'Hotel a la intersecció A5/A10, a 6 min de Sloterdijk.'));
+            .bindPopup(crearTargeta('15:00', 'Hotel MEININGER', 'https://z-cdn-media.chatglm.cn/files/98626f39-9be9-4e49-ba8a-374f03a78e0e.png?auth_key=1886454897-e9a971023f5049c5b68c5b92cbd44d9c-0-3754b982fb0a2c3f6dcf8906b7f3fc22', 'Hotel a la intersecció A5/A10, a 6 min de Sloterdijk.', false));
 
         markers['estacio'] = L.marker([52.3791, 4.9003], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('13:30', 'Estació Central', 'https://z-cdn-media.chatglm.cn/files/5cd8905b-400c-43f5-895b-74b663dedb6d.png?auth_key=1886454897-dfe0302ec7ec40058cb7f355b8c59010-0-2c6ae38e096705c8da79e971c6f9ad34', 'Terminal gòtic renaixentista (1889).'));
+            .bindPopup(crearTargeta('13:30', 'Estació Central', 'https://z-cdn-media.chatglm.cn/files/5cd8905b-400c-43f5-895b-74b663dedb6d.png?auth_key=1886454897-dfe0302ec7ec40058cb7f355b8c59010-0-2c6ae38e096705c8da79e971c6f9ad34', 'Terminal gòtic renaixentista (1889).', false));
 
         markers['barco'] = L.marker([52.3745, 4.8965], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('17:00', 'Barco Canals', 'https://z-cdn-media.chatglm.cn/files/274da9ea-3648-4d1c-988d-e5465bcd9165.png?auth_key=1886454897-d13cc625ce44439792d43891ed7ede8d-0-28898bf1e24ac24dc10adb0ebba9176a', 'Passejada d\'1 hora pels canals.'));
+            .bindPopup(crearTargeta('17:00', 'Barco Canals', 'https://z-cdn-media.chatglm.cn/files/274da9ea-3648-4d1c-988d-e5465bcd9165.png?auth_key=1886454897-d13cc625ce44439792d43891ed7ede8d-0-28898bf1e24ac24dc10adb0ebba9176a', 'Passejada d\'1 hora pels canals.', false));
 
         markers['anne'] = L.marker([52.3752, 4.8839], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('18:30', 'Casa Anne Frank', 'https://z-cdn-media.chatglm.cn/files/970e16e6-a907-403a-a339-e331ce6569f9.png?auth_key=1886456022-9ee06f73c098438c8fb554383f1a2b79-0-9fa55cccfb2e193bb0d0d416cab695ac', 'Casa museu on es va amagar durant la Segona Guerra Mundial.'));
+            .bindPopup(crearTargeta('18:30', 'Casa Anne Frank', 'https://z-cdn-media.chatglm.cn/files/970e16e6-a907-403a-a339-e331ce6569f9.png?auth_key=1886456022-9ee06f73c098438c8fb554383f1a2b79-0-9fa55cccfb2e193bb0d0d416cab695ac', 'Casa museu on es va amagar durant la Segona Guerra Mundial.', true)); // true per veure-la sencera
 
         markers['westerkerk'] = L.marker([52.3745, 4.8838], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('18:45', 'Westerkerk', 'https://z-cdn-media.chatglm.cn/files/0b6fbf03-d4c6-4d2f-ac0a-803f273807a1.png?auth_key=1886456022-ca351aea754b4037a437ac71f31eb178-0-7ae7a43450e06aa16017566ee71fa78e', 'Església on està enterrat Rembrandt.'));
+            .bindPopup(crearTargeta('18:45', 'Westerkerk', 'https://z-cdn-media.chatglm.cn/files/0b6fbf03-d4c6-4d2f-ac0a-803f273807a1.png?auth_key=1886456022-ca351aea754b4037a437ac71f31eb178-0-7ae7a43450e06aa16017566ee71fa78e', 'Església on està enterrat Rembrandt.', true)); // true per veure-la sencera
 
         markers['berenar'] = L.marker([52.3740, 4.8870], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('19:00', 'Berenar', 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400&auto=format&fit=crop', 'Patates fregides i Stroopwafels.'));
+            .bindPopup(crearTargeta('19:00', 'Berenar', 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400&auto=format&fit=crop', 'Patates fregides i Stroopwafels.', false));
 
         markers['carrers'] = L.marker([52.3697, 4.8886], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('19:30', 'Las 9 calles', 'https://z-cdn-media.chatglm.cn/files/70b878b6-e351-4a5d-a9d0-db39c4a04c58.png?auth_key=1886455503-29858d1ae0454fcf97d1ca7430becfab-0-cd4186dc2c3fe420df97e7775af844f8', 'Zona pintoresca amb botigues vintage.'));
+            .bindPopup(crearTargeta('19:30', 'Las 9 calles', 'https://z-cdn-media.chatglm.cn/files/70b878b6-e351-4a5d-a9d0-db39c4a04c58.png?auth_key=1886455503-29858d1ae0454fcf97d1ca7430becfab-0-cd4186dc2c3fe420df97e7775af844f8', 'Zona pintoresca amb botigues vintage.', false));
 
         markers['dam'] = L.marker([52.3731, 4.8926], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('20:30', 'Plaça Dam', 'https://z-cdn-media.chatglm.cn/files/96f3a927-bfa5-4143-a73b-721914b93b37.png?auth_key=1886455503-694c5d9796fb49b59de511fbc621f567-0-4b4d3368b07892cce19a55c6db19c592', 'Cor històric d\'Amsterdam.'));
+            .bindPopup(crearTargeta('20:30', 'Plaça Dam', 'https://z-cdn-media.chatglm.cn/files/96f3a927-bfa5-4143-a73b-721914b93b37.png?auth_key=1886455503-694c5d9796fb49b59de511fbc621f567-0-4b4d3368b07892cce19a55c6db19c592', 'Cor històric d\'Amsterdam.', false));
 
         // FUNCIÓ PER CENTRAR EL MAPA I OBRIR LA TARGETA AL CLICAR
         function centrarMapa(id) {
