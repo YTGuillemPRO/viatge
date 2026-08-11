@@ -47,7 +47,7 @@
             font-size: 0.9rem;
         }
 
-        /* El Mapa - Alçada fixa per evitar errors */
+        /* El Mapa */
         #map {
             height: 400px; 
             min-height: 300px;
@@ -316,22 +316,22 @@
 
             <div class="timeline-item">
                 <div class="card" onclick="centrarMapa('anne')">
-                    <img src="https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=800&auto=format&fit=crop" alt="Anne Frank">
+                    <img src="https://z-cdn-media.chatglm.cn/files/970e16e6-a907-403a-a339-e331ce6569f9.png?auth_key=1886456022-9ee06f73c098438c8fb554383f1a2b79-0-9fa55cccfb2e193bb0d0d416cab695ac" alt="Casa Anne Frank">
                     <div class="card-body">
                         <span class="time-badge">18:30</span>
                         <h3>🏡 Casa Anne Frank</h3>
-                        <p>Contemplem l'edifici per fora des del canal.</p>
+                        <p>Casa museu on Anne Frank i la seva família es van amagar dels nazis durant la Segona Guerra Mundial.</p>
                     </div>
                 </div>
             </div>
 
             <div class="timeline-item">
                 <div class="card" onclick="centrarMapa('westerkerk')">
-                    <img src="https://images.unsplash.com/photo-1542640244-7e672d6cef4e?q=80&w=800&auto=format&fit=crop" alt="Westerkerk">
+                    <img src="https://z-cdn-media.chatglm.cn/files/0b6fbf03-d4c6-4d2f-ac0a-803f273807a1.png?auth_key=1886456022-ca351aea754b4037a437ac71f31eb178-0-7ae7a43450e06aa16017566ee71fa78e" alt="Westerkerk">
                     <div class="card-body">
                         <span class="time-badge">18:45</span>
                         <h3>⛪ Westerkerk</h3>
-                        <p>Església amb la torre més alta i la corona reial.</p>
+                        <p>Església protestant del Renaixement, on està enterrat Rembrandt, amb un capitel adornat amb una corona a la part superior.</p>
                     </div>
                 </div>
             </div>
@@ -349,22 +349,22 @@
 
             <div class="timeline-item">
                 <div class="card" onclick="centrarMapa('carrers')">
-                    <img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="9 Carrers">
+                    <img src="https://z-cdn-media.chatglm.cn/files/70b878b6-e351-4a5d-a9d0-db39c4a04c58.png?auth_key=1886455503-29858d1ae0454fcf97d1ca7430becfab-0-cd4186dc2c3fe420df97e7775af844f8" alt="Las 9 calles">
                     <div class="card-body">
                         <span class="time-badge">19:30</span>
-                        <h3>🌉 9 Carrers</h3>
-                        <p>Negen Straatjes (postal) i pati secret del Begijnhof.</p>
+                        <h3>🌉 Las 9 calles</h3>
+                        <p>Zona pintoresca vora un canal, amb botigues de dissenyadors, tendes vintage i cafeteries acollidores.</p>
                     </div>
                 </div>
             </div>
 
             <div class="timeline-item">
                 <div class="card" onclick="centrarMapa('dam')">
-                    <img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="Plaça Dam">
+                    <img src="https://z-cdn-media.chatglm.cn/files/96f3a927-bfa5-4143-a73b-721914b93b37.png?auth_key=1886455503-694c5d9796fb49b59de511fbc621f567-0-4b4d3368b07892cce19a55c6db19c592" alt="Plaça Dam">
                     <div class="card-body">
                         <span class="time-badge">20:30</span>
                         <h3>🏛️ Plaça Dam</h3>
-                        <p>Palau Reial il·luminat. És l'hora de sopar!</p>
+                        <p>La Plaça Dam és el cor històric i el punt neuràlgic d'Amsterdam. Situada a uns 750 metres al sud de l'Estació Central, el seu nom prové del dic o presa (dam) construït al segle XIII sobre el riu Amstel, origen del nom de la pròpia ciutat.</p>
                     </div>
                 </div>
             </div>
@@ -457,19 +457,19 @@
             .bindPopup(crearTargeta('17:00', 'Barco Canals', 'https://z-cdn-media.chatglm.cn/files/274da9ea-3648-4d1c-988d-e5465bcd9165.png?auth_key=1886454897-d13cc625ce44439792d43891ed7ede8d-0-28898bf1e24ac24dc10adb0ebba9176a', 'Passejada d\'1 hora pels canals.'));
 
         markers['anne'] = L.marker([52.3752, 4.8839], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('18:30', 'Casa Anne Frank', 'https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=400&auto=format&fit=crop', 'Vista exterior.'));
+            .bindPopup(crearTargeta('18:30', 'Casa Anne Frank', 'https://z-cdn-media.chatglm.cn/files/970e16e6-a907-403a-a339-e331ce6569f9.png?auth_key=1886456022-9ee06f73c098438c8fb554383f1a2b79-0-9fa55cccfb2e193bb0d0d416cab695ac', 'Casa museu on es va amagar durant la Segona Guerra Mundial.'));
 
         markers['westerkerk'] = L.marker([52.3745, 4.8838], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('18:45', 'Westerkerk', 'https://images.unsplash.com/photo-1542640244-7e672d6cef4e?q=80&w=400&auto=format&fit=crop', 'Torre més alta.'));
+            .bindPopup(crearTargeta('18:45', 'Westerkerk', 'https://z-cdn-media.chatglm.cn/files/0b6fbf03-d4c6-4d2f-ac0a-803f273807a1.png?auth_key=1886456022-ca351aea754b4037a437ac71f31eb178-0-7ae7a43450e06aa16017566ee71fa78e', 'Església on està enterrat Rembrandt.'));
 
         markers['berenar'] = L.marker([52.3740, 4.8870], {icon: customIcon}).addTo(map)
             .bindPopup(crearTargeta('19:00', 'Berenar', 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400&auto=format&fit=crop', 'Patates fregides i Stroopwafels.'));
 
         markers['carrers'] = L.marker([52.3697, 4.8886], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('19:30', '9 Carrers', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=400&auto=format&fit=crop', 'Postal.'));
+            .bindPopup(crearTargeta('19:30', 'Las 9 calles', 'https://z-cdn-media.chatglm.cn/files/70b878b6-e351-4a5d-a9d0-db39c4a04c58.png?auth_key=1886455503-29858d1ae0454fcf97d1ca7430becfab-0-cd4186dc2c3fe420df97e7775af844f8', 'Zona pintoresca amb botigues vintage.'));
 
         markers['dam'] = L.marker([52.3731, 4.8926], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('20:30', 'Plaça Dam', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=400&auto=format&fit=crop', 'Sopar.'));
+            .bindPopup(crearTargeta('20:30', 'Plaça Dam', 'https://z-cdn-media.chatglm.cn/files/96f3a927-bfa5-4143-a73b-721914b93b37.png?auth_key=1886455503-694c5d9796fb49b59de511fbc621f567-0-4b4d3368b07892cce19a55c6db19c592', 'Cor històric d\'Amsterdam.'));
 
         // FUNCIÓ PER CENTRAR EL MAPA I OBRIR LA TARGETA AL CLICAR
         function centrarMapa(id) {
