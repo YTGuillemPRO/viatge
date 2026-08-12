@@ -7,307 +7,366 @@
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-sky: #E0F7FA;
             --color-orange: #FF9800;
             --color-blue: #03A9F4;
             --color-green: #4CAF50;
             --color-purple: #9C27B0;
             --color-red: #FF5252;
-            --text-color: #37474F;
+            --color-teal: #00897B;
+            --color-darkpurple: #5E35B1;
+            --color-sunset: #F4511E;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Nunito', sans-serif;
-            color: var(--text-color);
-            line-height: 1.6;
-        }
+        html { scroll-behavior: smooth; }
 
-        /* BLOQUEIG DE SCROLL INICIAL */
         body {
-            overflow: hidden;
-            height: 100vh;
-            background-color: var(--color-sky);
-            background-image: radial-gradient(#B3E5FC 20%, transparent 20%), radial-gradient(#B3E5FC 20%, transparent 20%);
-            background-position: 0 0, 50px 50px;
-            background-size: 100px 100px;
+            font-family: 'Nunito', sans-serif;
+            background-color: #E0F7FA;
+            background-image: 
+                radial-gradient(#B3E5FC 15%, transparent 16%), 
+                radial-gradient(#B3E5FC 15%, transparent 16%);
+            background-position: 0 0, 20px 20px;
+            background-size: 40px 40px;
+            color: #333;
+            overflow-x: hidden;
         }
 
-        body.unlocked {
-            overflow-y: auto;
-            height: auto;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* PANTALLA COMPLETA DE CEL */
-        .cel-portada {
+        /* ==========================================
+           PANTALLA DE CEL (ES PUJA SOLA)
+           ========================================== */
+        .sky-container {
             height: 100vh;
             width: 100%;
             background: linear-gradient(180deg, #4FC3F7 0%, #81D4FA 60%, #B3E5FC 100%);
-            position: relative;
-            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            z-index: 1;
+            transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 1s ease;
         }
 
-        .titol-portada {
+        body.unlocked .sky-container {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .hero-content {
             z-index: 10;
-            animation: rebotar-titol 2s infinite ease-in-out;
-            margin-bottom: 15vh;
+            animation: fadeDown 1.5s ease forwards;
         }
 
-        .cel-portada h1 {
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sky-container h1 {
             font-family: 'Baloo 2', cursive;
             font-size: 4.5rem;
-            margin: 0;
             color: white;
             text-shadow: 4px 4px 0px #0277BD;
             letter-spacing: 2px;
         }
 
-        .cel-portada p {
+        .sky-container p {
             font-size: 1.6rem;
             color: #01579B;
             font-weight: 800;
             margin-top: 10px;
-            background: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.7);
             padding: 5px 20px;
             border-radius: 20px;
         }
 
-        @keyframes rebotar-titol {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        /* AVIONS 3D ESTÀTICS */
-        .avio-3d {
+        /* AVIONS I NÚVOLS */
+        .deco {
             position: absolute;
-            z-index: 5;
-            filter: drop-shadow(8px 8px 15px rgba(0,0,0,0.3));
-            transform: perspective(1000px) rotateY(-20deg) rotateX(5deg) rotateZ(-10deg);
-        }
-
-        .avio-1 { top: 15%; left: 10%; width: 220px; }
-        .avio-2 { top: 25%; right: 5%; width: 180px; transform: perspective(1000px) rotateY(20deg) rotateX(5deg) rotateZ(10deg) scaleX(-1); }
-        .avio-3 { top: 50%; left: 40%; width: 150px; transform: perspective(1000px) rotateY(-15deg) rotateX(10deg) rotateZ(-5deg); }
-
-        /* NÚVOLS */
-        .nube {
-            position: absolute;
-            bottom: -150px;
-            z-index: 2;
-            filter: drop-shadow(0 -10px 30px rgba(0, 0, 0, 0.2));
-            opacity: 0;
-        }
-
-        .nube svg { width: 100%; height: auto; }
-
-        .nube-1 { left: -200px; width: 800px; }
-        .nube-2 { left: 30%; width: 700px; }
-        .nube-3 { right: -200px; width: 900px; }
-
-        body.loaded .nube {
-            animation: pujar-i-desapareixer 3s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+            will-change: transform;
         }
         
-        body.loaded .nube-1 { animation-delay: 0.2s; }
-        body.loaded .nube-2 { animation-delay: 0s; }
-        body.loaded .nube-3 { animation-delay: 0.4s; }
+        .avio { font-size: 3.5rem; z-index: 5; filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1)); }
+        .avio-1 { top: 15%; left: -150px; animation: creuar 8s infinite linear; transform: rotate(-5deg); }
+        .avio-2 { top: 45%; left: -150px; animation: creuar 12s infinite linear; animation-delay: 2s; transform: rotate(-5deg); font-size: 2.5rem; }
+        .avio-3 { top: 75%; right: -150px; animation: creuar-inv 10s infinite linear; transform: scaleX(-1) rotate(-5deg); font-size: 4rem; }
 
-        @keyframes pujar-i-desapareixer {
-            0% { transform: translateY(0); opacity: 1; }
-            80% { opacity: 1; }
-            100% { transform: translateY(-130vh); opacity: 0; }
+        @keyframes creuar { from { left: -150px; } to { left: 110%; } }
+        @keyframes creuar-inv { from { right: -150px; } to { right: 110%; } }
+
+        .nube {
+            position: absolute;
+            filter: drop-shadow(0 -5px 15px rgba(2, 119, 189, 0.15));
+            z-index: 2;
+        }
+        .nube svg { width: 100%; height: auto; }
+        .nube-1 { top: 10%; left: 5%; width: 200px; animation: flotar 4s infinite ease-in-out; }
+        .nube-2 { top: 30%; right: 10%; width: 300px; animation: flotar 5s infinite ease-in-out reverse; }
+        .nube-3 { bottom: 20%; left: 15%; width: 250px; animation: flotar 3s infinite ease-in-out; }
+
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
-        /* FLETXA */
-        .fletxa-baixar {
+        /* BOTÓ SALTAR */
+        .skip-btn {
             position: absolute;
             bottom: 30px;
-            left: 50%;
-            font-size: 3rem;
-            color: white;
+            right: 30px;
+            background: white;
+            color: #0288D1;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-family: 'Baloo 2', cursive;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s, background 0.2s;
             z-index: 20;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            transform: translateX(-50%);
-            opacity: 0;
-            pointer-events: none;
         }
 
-        body.unlocked .fletxa-baixar {
-            animation: mostrar-fletxa 1s ease forwards, baixar 1.5s 1s infinite ease-in-out;
+        .skip-btn:hover {
+            transform: scale(1.05);
+            background: #FFF9C4;
         }
 
-        @keyframes mostrar-fletxa { to { opacity: 1; pointer-events: auto; } }
-        @keyframes baixar { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(15px); } }
-
-        /* CONTINGUT PRINCIPAL */
-        .container {
-            max-width: 800px;
+        /* ==========================================
+           CONTENIDOR DELS DIES (ES REVELA)
+           ========================================== */
+        .days-wrapper {
+            padding: 60px 20px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 30px 20px;
-            position: relative;
-            z-index: 20;
-            background: var(--color-sky);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        /* BOTONS GIGANTS (ARA OBRIN PÀGINES WEB) */
-        .botones-dias {
+        .days-title {
+            text-align: center;
+            font-family: 'Baloo 2', cursive;
+            font-size: 2.5rem;
+            color: #0288D1;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 0px #B3E5FC;
+        }
+
+        .days-grid {
             display: flex;
             flex-direction: column;
             gap: 20px;
-            margin-bottom: 40px;
         }
 
-        .btn-gigante {
+        .day-card {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 15px;
-            width: 100%;
-            padding: 25px 20px;
-            border: none;
-            border-radius: 25px;
-            font-family: 'Baloo 2', cursive;
-            font-size: 1.8rem;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
+            background: white;
+            border-radius: 20px;
+            padding: 20px 25px;
             text-decoration: none;
-            box-shadow: 0 6px 0px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 10px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-gigante:active {
-            transform: translateY(6px);
-            box-shadow: 0 0px 0px rgba(0,0,0,0.2);
+        .day-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
         }
 
-        .btn-1 { background-color: var(--color-orange); box-shadow: 0 6px 0 #E65100; }
-        .btn-2 { background-color: var(--color-green); box-shadow: 0 6px 0 #1B5E20; }
-        .btn-3 { background-color: var(--color-purple); box-shadow: 0 6px 0 #4A148C; }
-        .btn-4 { background-color: var(--color-red); box-shadow: 0 6px 0 #B71C1C; }
+        .day-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 80%, rgba(0,0,0,0.05) 100%);
+            pointer-events: none;
+        }
+
+        .day-emoji {
+            font-size: 2.5rem;
+            margin-right: 20px;
+            width: 60px;
+            text-align: center;
+        }
+
+        .day-info h2 {
+            font-family: 'Baloo 2', cursive;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .day-info p {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        /* COLORS PER CADA DIA */
+        .d1 { border-left-color: var(--color-blue); } .d1 .day-info h2 { color: var(--color-blue); }
+        .d2 { border-left-color: var(--color-green); } .d2 .day-info h2 { color: var(--color-green); }
+        .d3 { border-left-color: var(--color-purple); } .d3 .day-info h2 { color: var(--color-purple); }
+        .d4 { border-left-color: var(--color-red); } .d4 .day-info h2 { color: var(--color-red); }
+        .d5 { border-left-color: var(--color-darkpurple); } .d5 .day-info h2 { color: var(--color-darkpurple); }
+        .d6 { border-left-color: var(--color-teal); } .d6 .day-info h2 { color: var(--color-teal); }
+        .d7 { border-left-color: var(--color-sunset); } .d7 .day-info h2 { color: var(--color-sunset); }
+
+        /* ANIMACIÓ D'ENTRADA DELS DIES */
+        body.unlocked .day-card {
+            animation: pujarDia 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        body.unlocked .day-card:nth-child(1) { animation-delay: 0.1s; }
+        body.unlocked .day-card:nth-child(2) { animation-delay: 0.2s; }
+        body.unlocked .day-card:nth-child(3) { animation-delay: 0.3s; }
+        body.unlocked .day-card:nth-child(4) { animation-delay: 0.4s; }
+        body.unlocked .day-card:nth-child(5) { animation-delay: 0.5s; }
+        body.unlocked .day-card:nth-child(6) { animation-delay: 0.6s; }
+        body.unlocked .day-card:nth-child(7) { animation-delay: 0.7s; }
+
+        @keyframes pujarDia {
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         footer {
             text-align: center;
-            padding: 40px 20px;
+            padding: 40px;
             font-family: 'Baloo 2', cursive;
             color: #0288D1;
             font-size: 1.2rem;
         }
 
         @media (max-width: 600px) {
-            .cel-portada h1 { font-size: 3rem; }
-            .avio-1 { width: 140px; top: 10%; left: 5%; }
-            .avio-2 { width: 110px; right: 5%; }
-            .avio-3 { width: 90px; top: 45%; left: 30%; }
-            .btn-gigante { font-size: 1.4rem; padding: 20px 15px; }
-            .nube-1 { width: 500px; left: -150px; }
-            .nube-2 { width: 450px; left: 10%; }
-            .nube-3 { width: 550px; right: -150px; }
+            .sky-container h1 { font-size: 3rem; }
+            .days-title { font-size: 2rem; }
+            .day-card { padding: 15px; }
+            .day-emoji { font-size: 2rem; margin-right: 15px; }
+            .day-info h2 { font-size: 1.2rem; }
+            .skip-btn { bottom: 15px; right: 15px; padding: 10px 20px; font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <header class="cel-portada">
-        <!-- Avions -->
-        <div class="avio-3d avio-1">
-            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="cos1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#cfd8dc"/></linearGradient>
-                    <linearGradient id="ala1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e53935"/><stop offset="100%" stop-color="#b71c1c"/></linearGradient>
-                </defs>
-                <path d="M20,50 L150,30 L190,45 L190,55 L150,70 Z" fill="url(#cos1)" />
-                <path d="M20,50 L40,20 L60,45 Z" fill="url(#cos1)" />
-                <path d="M150,30 L160,10 L170,30 Z" fill="url(#ala1)" />
-                <path d="M70,55 L110,90 L140,60 Z" fill="url(#ala1)" />
-                <circle cx="160" cy="45" r="4" fill="#0288d1" />
-            </svg>
+    <!-- PANTALLA DE CEL AMB AVIONS I NÚVOLS -->
+    <div class="sky-container" id="sky">
+        <div class="deco avio avio-1">✈️</div>
+        <div class="deco avio avio-2">🛩️</div>
+        <div class="deco avio avio-3">✈️</div>
+
+        <div class="deco nube nube-1">
+            <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#e3f2fd"/></linearGradient><filter id="b1"><feGaussianBlur stdDeviation="2" /></filter></defs><g filter="url(#b1)"><circle cx="50" cy="70" r="30" fill="url(#g1)"/><circle cx="90" cy="50" r="40" fill="url(#g1)"/><circle cx="140" cy="65" r="35" fill="url(#g1)"/><rect x="40" y="60" width="110" height="40" rx="20" fill="url(#g1)"/></g></svg>
         </div>
-        <div class="avio-3d avio-2">
-            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="cos2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#cfd8dc"/></linearGradient>
-                    <linearGradient id="ala2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e88e5"/><stop offset="100%" stop-color="#0d47a1"/></linearGradient>
-                </defs>
-                <path d="M20,50 L150,30 L190,45 L190,55 L150,70 Z" fill="url(#cos2)" />
-                <path d="M20,50 L40,20 L60,45 Z" fill="url(#cos2)" />
-                <path d="M150,30 L160,10 L170,30 Z" fill="url(#ala2)" />
-                <path d="M70,55 L110,90 L140,60 Z" fill="url(#ala2)" />
-                <circle cx="160" cy="45" r="4" fill="#ffeb3b" />
-            </svg>
+        <div class="deco nube nube-2">
+            <svg viewBox="0 0 250 150" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#e3f2fd"/></linearGradient><filter id="b2"><feGaussianBlur stdDeviation="2" /></filter></defs><g filter="url(#b2)"><circle cx="50" cy="120" r="50" fill="url(#g2)"/><circle cx="120" cy="100" r="60" fill="url(#g2)"/><circle cx="190" cy="115" r="45" fill="url(#g2)"/><rect x="40" y="110" width="170" height="50" rx="25" fill="url(#g2)"/></g></svg>
         </div>
-        <div class="avio-3d avio-3">
-            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="cos3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#cfd8dc"/></linearGradient>
-                    <linearGradient id="ala3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffca28"/><stop offset="100%" stop-color="#ff6f00"/></linearGradient>
-                </defs>
-                <path d="M20,50 L150,30 L190,45 L190,55 L150,70 Z" fill="url(#cos3)" />
-                <path d="M20,50 L40,20 L60,45 Z" fill="url(#cos3)" />
-                <path d="M150,30 L160,10 L170,30 Z" fill="url(#ala3)" />
-                <path d="M70,55 L110,90 L140,60 Z" fill="url(#ala3)" />
-                <circle cx="160" cy="45" r="4" fill="#4caf50" />
-            </svg>
+        <div class="deco nube nube-3">
+            <svg viewBox="0 0 150 90" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#e3f2fd"/></linearGradient><filter id="b3"><feGaussianBlur stdDeviation="2" /></filter></defs><g filter="url(#b3)"><circle cx="40" cy="55" r="25" fill="url(#g3)"/><circle cx="75" cy="40" r="35" fill="url(#g3)"/><circle cx="110" cy="50" r="30" fill="url(#g3)"/><rect x="30" y="50" width="90" height="35" rx="17.5" fill="url(#g3)"/></g></svg>
         </div>
 
-        <!-- Núvols -->
-        <div class="nube nube-1">
-            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#eceff1"/><stop offset="60%" stop-color="#90a4ae"/><stop offset="100%" stop-color="#455a64"/></linearGradient><filter id="blur1"><feGaussianBlur stdDeviation="4" /></filter></defs><g filter="url(#blur1)"><circle cx="100" cy="150" r="70" fill="url(#g1)"/><circle cx="200" cy="110" r="90" fill="url(#g1)"/><circle cx="300" cy="140" r="80" fill="url(#g1)"/><rect x="80" y="140" width="250" height="70" rx="35" fill="url(#g1)"/></g></svg>
-        </div>
-        <div class="nube nube-2">
-            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#eceff1"/><stop offset="60%" stop-color="#90a4ae"/><stop offset="100%" stop-color="#455a64"/></linearGradient><filter id="blur2"><feGaussianBlur stdDeviation="4" /></filter></defs><g filter="url(#blur2)"><circle cx="120" cy="140" r="80" fill="url(#g2)"/><circle cx="220" cy="100" r="100" fill="url(#g2)"/><circle cx="320" cy="150" r="70" fill="url(#g2)"/><rect x="100" y="130" width="260" height="80" rx="40" fill="url(#g2)"/></g></svg>
-        </div>
-        <div class="nube nube-3">
-            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#eceff1"/><stop offset="60%" stop-color="#90a4ae"/><stop offset="100%" stop-color="#455a64"/></linearGradient><filter id="blur3"><feGaussianBlur stdDeviation="4" /></filter></defs><g filter="url(#blur3)"><circle cx="80" cy="160" r="60" fill="url(#g3)"/><circle cx="180" cy="120" r="85" fill="url(#g3)"/><circle cx="280" cy="150" r="75" fill="url(#g3)"/><rect x="60" y="150" width="260" height="60" rx="30" fill="url(#g3)"/></g></svg>
-        </div>
-
-        <div class="titol-portada">
+        <div class="hero-content">
             <h1>Països Baixos</h1>
             <p>La nostra gran aventura!</p>
         </div>
 
-        <div class="fletxa-baixar">⬇️</div>
-    </header>
+        <button class="skip-btn" onclick="saltarIntro()">Saltar ⏭️</button>
+    </div>
 
-    <div class="container">
-        <!-- BOTONS GIGANTS QUE OBRIN ELS ARXIUS DELS DIES -->
-        <div class="botones-dias">
-            <a href="dia1.html" class="btn-gigante btn-1">🧳 DIA 1: Ja marxem!</a>
-            <a href="dia2.html" class="btn-gigante btn-2">🚲 DIA 2</a>
-            <a href="dia3.html" class="btn-gigante btn-3">🌷 DIA 3</a>
-            <a href="dia4.html" class="btn-gigante btn-4">🏠 DIA 4: Tornada a casa</a>
+    <!-- LLISTA DE DIES -->
+    <div class="days-wrapper" id="dies">
+        <h1 class="days-title">Tria el dia del viatge 🗓️</h1>
+        <div class="days-grid">
+            
+            <a href="dia1.html" class="day-card d1">
+                <div class="day-emoji">🧳</div>
+                <div class="day-info">
+                    <h2>Dia 1: Ja marxem!</h2>
+                    <p>Arribada a Amsterdam, canals i Barri Roig.</p>
+                </div>
+            </a>
+
+            <a href="dia2.html" class="day-card d2">
+                <div class="day-emoji">🚲</div>
+                <div class="day-info">
+                    <h2>Dia 2: Museus i Parcs</h2>
+                    <p>Rembrandt, mercat de flors i bicis al Vondelpark.</p>
+                </div>
+            </a>
+
+            <a href="dia3.html" class="day-card d3">
+                <div class="day-emoji">🚗</div>
+                <div class="day-info">
+                    <h2>Dia 3: Castells i Heusden</h2>
+                    <p>Recollida de cotxes, Arena i Castillo de De Haar.</p>
+                </div>
+            </a>
+
+            <a href="dia4.html" class="day-card d4">
+                <div class="day-emoji">🎡</div>
+                <div class="day-info">
+                    <h2>Dia 4: Màgia a Efteling</h2>
+                    <p>Arribada al parc, Symbolica i Bosc dels Contes.</p>
+                </div>
+            </a>
+
+            <a href="dia5.html" class="day-card d5">
+                <div class="day-emoji">🎢</div>
+                <div class="day-info">
+                    <h2>Dia 5: Adrenalina a Efteling</h2>
+                    <p>Muntanyes russes, Fata Morgana i Aquanura.</p>
+                </div>
+            </a>
+
+            <a href="dia6.html" class="day-card d6">
+                <div class="day-emoji">🛫</div>
+                <div class="day-info">
+                    <h2>Dia 6: Tornada a Eindhoven</h2>
+                    <p>Última volta al parc i ruta a l'aeroport.</p>
+                </div>
+            </a>
+
+            <a href="dia7.html" class="day-card d7">
+                <div class="day-emoji">🏠</div>
+                <div class="day-info">
+                    <h2>Dia 7: Arribada a casa</h2>
+                    <p>Vol a Barcelona i bus fins a Tortosa.</p>
+                </div>
+            </a>
+
         </div>
     </div>
 
     <footer>
-        ¡Bon viatge als Països Baixos! 🇳🇱✈️
+        Bon viatge als Països Baixos! 🇳🇱✈️
     </footer>
 
     <script>
+        // Funció per revelar els dies automàticament als 4 segons
         window.onload = function() {
             setTimeout(function() {
-                document.body.classList.add('loaded');
-            }, 500);
-
-            setTimeout(function() {
                 document.body.classList.add('unlocked');
-            }, 3500);
+            }, 4000); // 4000 ms = 4 segons
         };
+
+        // Funció per saltar la animació clicant el botó
+        function saltarIntro() {
+            document.body.classList.add('unlocked');
+        }
     </script>
 
 </body>
