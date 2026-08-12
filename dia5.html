@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 5: Adrenalina a Efteling</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; font-family: 'Nunito', sans-serif; background-color: #E0F7FA; color: #333; }
+        .header { background: #5E35B1; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000; }
+        .header h1 { font-family: 'Baloo 2', cursive; margin: 0; font-size: 1.2rem; }
+        .btn-tornar { background: white; color: #5E35B1; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-weight: 800; font-family: 'Baloo 2', cursive; font-size: 0.9rem; }
+        #map { height: 400px; min-height: 300px; width: 100%; z-index: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .map-card { text-align: center; font-family: 'Nunito', sans-serif; max-width: 220px; }
+        .map-card h3 { font-family: 'Baloo 2', cursive; color: #5E35B1; margin: 5px 0; font-size: 1.1rem; }
+        .map-card .hora { display: inline-block; background: #FF9800; color: white; padding: 3px 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 800; margin-bottom: 5px; }
+        .map-card img { width: 100%; height: 100px; object-fit: cover; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .map-card p { font-size: 0.9rem; color: #555; line-height: 1.4; margin-bottom: 10px; }
+        .map-btn { display: block; background: #FF9800; color: white; padding: 8px; border-radius: 10px; text-decoration: none; font-weight: bold; font-family: 'Baloo 2', cursive; box-shadow: 0 3px 0 #E65100; }
+        .container { max-width: 800px; margin: 0 auto; padding: 30px 15px; position: relative; }
+        .timeline-container { position: relative; padding-left: 45px; }
+        .timeline-container::before { content: ''; position: absolute; left: 12px; top: 10px; bottom: 10px; width: 6px; background-image: linear-gradient(#5E35B1 50%, rgba(255,255,255,0) 0%); background-size: 6px 20px; background-repeat: repeat-y; }
+        .timeline-item { position: relative; margin-bottom: 30px; }
+        .timeline-item::before { content: '📍'; position: absolute; left: -38px; top: -10px; width: 36px; height: 36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 3px solid #5E35B1; z-index: 2; }
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid #f0f0f0; cursor: pointer; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); border-color: #5E35B1; }
+        .card img { width: 100%; height: 160px; object-fit: cover; }
+        .card-body { padding: 15px; }
+        .time-badge { display: inline-block; background: #FF9800; color: white; padding: 4px 12px; border-radius: 15px; font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; box-shadow: 0 3px 0 #E65100; font-family: 'Baloo 2', cursive; }
+        .card-body h3 { font-family: 'Baloo 2', cursive; margin: 0 0 8px 0; color: #4527A0; font-size: 1.2rem; }
+        .card-body p { margin: 0; color: #555; line-height: 1.4; font-size: 0.95rem; }
+        .info-card { background: white; border-radius: 15px; padding: 20px; margin: 30px auto; max-width: 800px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-left: 6px solid #5E35B1; }
+        .info-card h2 { font-family: 'Baloo 2', cursive; color: #4527A0; font-size: 1.4rem; margin-top: 0; }
+        .info-card p { font-size: 0.9rem; margin-bottom: 10px; }
+        .alert-box { background: #FFF9C4; border: 2px solid #FBC02D; border-radius: 12px; padding: 12px; margin: 12px 0; font-weight: 700; font-size: 0.9rem; }
+        .link-box { background: #EDE7F6; border: 2px solid #5E35B1; border-radius: 12px; padding: 12px; margin: 12px 0; font-size: 0.9rem; }
+        .link-box a { color: #4527A0; font-weight: 800; text-decoration: none; }
+        .btn-flotant { position: fixed; bottom: 15px; right: 15px; background: #03A9F4; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; }
+    </style>
+</head>
+<body>
+
+    <div class="header" id="top">
+        <h1>🎢 Dia 5: Adrenalina a Efteling</h1>
+        <a href="index.html" class="btn-tornar">⬅ Tornar</a>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="container">
+        <div class="timeline-container">
+
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('entrada')"><img src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=800&auto=format&fit=crop" alt="Early Access"><div class="card-body"><span class="time-badge">09:30</span><h3>🎟️ Early Access</h3><p>Entrada anticipada (30 min abans). Creuar el parc a pas ràpid fins al fons a la dreta (zona Ruigrijk).</p></div></div></div>
+
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('quadrat')"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Cuadrado del Terror"><div class="card-body"><span class="time-badge">09:40 - 11:30</span><h3>🎢 El Quadrat del Terror</h3><p>Les 4 muntanyes russes fortes a la mateixa plaça. Ordre ideal:<br>1. Baron 1898 (La més lenta de carregar).<br>2. Joris en de Draak.<br>3. Python.<br>4. De Vliegende Hollander.<br><em>(Piraña??)</em></p></div></div></div>
+
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('dinar')"><img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=800&auto=format&fit=crop" alt="Dinar"><div class="card-body"><span class="time-badge">12:45</span><h3>🍔 Dinar: Station de Oost</h3><p>Al centre geomètric de les 4 muntanyes rusas. Menjar abans que es saturi a les 13:00h. <strong>Opció:</strong> De Likkebaerd (Hamburgueses per emportar, molt bones).</p></div></div></div>
+
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('reizenrijk')"><img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="Caminata Nord"><div class="card-body"><span class="time-badge">12:45</span><h3>🚶 Caminada Nord (Reizenrijk)</h3><p>Pugeu pel marge del llac. Passejada plana de 5-7 minuts.</p></div></div></div>
+
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('vogelrok')"><img src="https://images.unsplash.com/photo-1531971589569-0d9370cbe1e5?q=80&w=800&auto=format&fit=crop" alt="Vogel Rok"><div class="card-body"><span class="time-badge">13:00</span><h3>🐦 Vogel Rok</h3><p>Muntanya russa indoor en la foscor.</p></div></div></div>
+
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('carnaval')"><img src="https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=800&auto=format&fit=crop" alt="Carnaval Festival"><div class="card-body"><span class="time-badge">14:00</span><h3>🎪 Carnaval Festival / Speelweide</h3><p>Porta amb porta amb Vogel Rok. Cua zero, 8 persones en carrets. <strong>Opció millor:</strong> Anar al Speelweide (entrada contigua) per gaudir de l'ambient del Zomerstrand i fer un "tardeo" o sopar aviat.</p></div></div></div>
+
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('pagode')"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Pagode"><div class="card-body"><span class="time-badge">17:30</span><h3>🏯 Pagode</h3><p>Descens al sud del parc (Anderrijk Sur). Pujar a la Pagode per veure el parc des de l'aire a la posta de sol.</p></div></div></div>
+
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('fata')"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Fata Morgana"><div class="card-body"><span class="time-badge">18:00</span><h3>⛵ Fata Morgana</h3><p>Pugeu a les barques. A aquesta hora, aquesta cantonada del parc està molt tranquil·la.</p></div></div></div>
+
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('oase')"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop" alt="Sopar"><div class="card-body"><span class="time-badge">19:00</span><h3>🥙 Sopar: Oase</h3><p>A la mateixa plaça de Fata Morgana. Kebabs i pizzes turqueses ràpides. Compreu el sopar i seieu a la vora del llac per agafar lloc de primera fila per l'Aquanura. <strong>Hi ha taules si anem aviat!</strong></p></div></div></div>
+
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('aquanura')"><img src="https://images.unsplash.com/photo-1542315192-1f61a1792f33?q=80&w=800&auto=format&fit=crop" alt="Aquanura"><div class="card-body"><span class="time-badge">21:00</span><h3>💧 Aquanura</h3><p>Final de l'espectacle d'aigua i llums. Caminada curta a dormir.</p></div></div></div>
+
+        </div>
+
+        <!-- ENLLAÇOS I AVISOS -->
+        <div class="info-card">
+            <h2>📱 Avisos i Enllaços</h2>
+            <div class="link-box">
+                ⏱️ <a href="https://www.efteling.com/en/overnight-stays/enjoy-extra-early" target="_blank">Informació Early Access (Efteling)</a>
+            </div>
+            <div class="alert-box">
+                🥡 <strong>Estratègia Sopar:</strong> Oase és la opció més ràpida. Compreu menjar ràpid i mengeu de manera informal als bancs o al mur del llag per assegurar-vos bona vista per l'Aquanura de les 21:00h.
+            </div>
+            <div class="alert-box">
+                🏖️ <strong>Speelweide (Zomerstrand):</strong> Si voleu relaxar-vos a la tarda, l'entrada contigua al Carnaval Festival porta directe al cor del parc, envoltat d'arbres. Ideal per un "tardeo" abans de les atraccions del sud.
+            </div>
+        </div>
+
+    </div>
+
+    <a href="index.html" class="btn-flotant">🏠</a>
+
+    <script>
+        var map = L.map('map').setView([51.6495, 5.0430], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+        setTimeout(function(){ map.invalidateSize(); }, 500);
+
+        function crearIcona(emoji) {
+            return L.divIcon({
+                className: 'custom-pin',
+                html: `<div style="font-size: 28px;">${emoji}</div>`,
+                iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
+            });
+        }
+
+        function crearTargeta(hora, titol, foto, descripcio, lat, lng) {
+            let gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+            return `
+                <div class="map-card">
+                    <img src="${foto}" alt="${titol}">
+                    <span class="hora">${hora}</span>
+                    <h3>${titol}</h3>
+                    <p>${descripcio}</p>
+                    <a href="${gmapsUrl}" target="_blank" class="map-btn">📍 Ruta a Google Maps</a>
+                </div>
+            `;
+        }
+
+        var markers = {};
+
+        markers['entrada'] = L.marker([51.6502, 5.0441], {icon: crearIcona('🎟️')}).addTo(map)
+            .bindPopup(crearTargeta('09:30', 'Early Access', 'https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=400&auto=format&fit=crop', 'Entrada 30 min abans.', 51.6502, 5.0441));
+
+        markers['quadrat'] = L.marker([51.6488, 5.0415], {icon: crearIcona('🎢')}).addTo(map)
+            .bindPopup(crearTargeta('09:40', 'Quadrat del Terror', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Ruigrijk: Baron, Joris, Python, Vliegende Hollander.', 51.6488, 5.0415));
+
+        markers['dinar'] = L.marker([51.6489, 5.0422], {icon: crearIcona('🍔')}).addTo(map)
+            .bindPopup(crearTargeta('12:45', 'Station de Oost', 'https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=400&auto=format&fit=crop', 'Menjar ràpid abans de les 13h.', 51.6489, 5.0422));
+
+        markers['reizenrijk'] = L.marker([51.6495, 5.0429], {icon: crearIcona('🚶')}).addTo(map)
+            .bindPopup(crearTargeta('12:45', 'Caminata Nord', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=400&auto=format&fit=crop', 'Passejada vora el llac.', 51.6495, 5.0429));
+
+        markers['vogelrok'] = L.marker([51.6496, 5.0432], {icon: crearIcona('🐦')}).addTo(map)
+            .bindPopup(crearTargeta('13:00', 'Vogel Rok', 'https://images.unsplash.com/photo-1531971589569-0d9370cbe1e5?q=80&w=400&auto=format&fit=crop', 'Muntanya russa indoor.', 51.6496, 5.0432));
+
+        markers['carnaval'] = L.marker([51.6500, 5.0435], {icon: crearIcona('🎪')}).addTo(map)
+            .bindPopup(crearTargeta('14:00', 'Carnaval Festival', 'https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=400&auto=format&fit=crop', 'Cua zero. Accés a Speelweide.', 51.6500, 5.0435));
+
+        markers['pagode'] = L.marker([51.6491, 5.0446], {icon: crearIcona('🏯')}).addTo(map)
+            .bindPopup(crearTargeta('17:30', 'Pagode', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Vistes des de l\'aire al sud.', 51.6491, 5.0446));
+
+        markers['fata'] = L.marker([51.6485, 5.0452], {icon: crearIcona('⛵')}).addTo(map)
+            .bindPopup(crearTargeta('18:00', 'Fata Morgana', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Barques pel desert.', 51.6485, 5.0452));
+
+        markers['oase'] = L.marker([51.6486, 5.0451], {icon: crearIcona('🥙')}).addTo(map)
+            .bindPopup(crearTargeta('19:00', 'Oase (Sopar)', 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=400&auto=format&fit=crop', 'Kebab ràpid. Agafar taula!', 51.6486, 5.0451));
+
+        markers['aquanura'] = L.marker([51.6490, 5.0448], {icon: crearIcona('💧')}).addTo(map)
+            .bindPopup(crearTargeta('21:00', 'Aquanura', 'https://images.unsplash.com/photo-1542315192-1f61a1792f33?q=80&w=400&auto=format&fit=crop', 'Espectacle d\'aigua final.', 51.6490, 5.0448));
+
+        function centrarMapa(id) {
+            var marker = markers[id];
+            if (marker) {
+                map.setView(marker.getLatLng(), 17);
+                setTimeout(function() {
+                    marker.openPopup();
+                    map.invalidateSize();
+                }, 300);
+            }
+            document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>
