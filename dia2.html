@@ -17,7 +17,8 @@
         .map-card h3 { font-family: 'Baloo 2', cursive; color: #4CAF50; margin: 5px 0; font-size: 1.1rem; }
         .map-card .hora { display: inline-block; background: #FF9800; color: white; padding: 3px 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 800; margin-bottom: 5px; }
         .map-card img { width: 100%; height: 100px; object-fit: cover; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .map-card p { font-size: 0.9rem; color: #555; line-height: 1.4; }
+        .map-card p { font-size: 0.9rem; color: #555; line-height: 1.4; margin-bottom: 10px; }
+        .map-btn { display: block; background: #FF9800; color: white; padding: 8px; border-radius: 10px; text-decoration: none; font-weight: bold; font-family: 'Baloo 2', cursive; box-shadow: 0 3px 0 #E65100; }
         .container { max-width: 800px; margin: 0 auto; padding: 30px 15px; position: relative; }
         .timeline-container { position: relative; padding-left: 45px; }
         .timeline-container::before { content: ''; position: absolute; left: 12px; top: 10px; bottom: 10px; width: 6px; background-image: linear-gradient(#4CAF50 50%, rgba(255,255,255,0) 0%); background-size: 6px 20px; background-repeat: repeat-y; }
@@ -48,95 +49,23 @@
     <div class="container">
         <div class="timeline-container">
 
-            <div class="timeline-item">
-                <div class="card" onclick="centrarMapa('rembrandt')">
-                    <img src="https://images.unsplash.com/photo-1604147495798-57beb5d6af73?q=80&w=800&auto=format&fit=crop" alt="Rembrandtplein">
-                    <div class="card-body">
-                        <span class="time-badge">11:30</span>
-                        <h3>🎨 Rembrandtplein</h3>
-                        <p>La plaça Rembrandt és un bell homenatge a aquest pintor i dibuixant originari dels Països Baixos. Aquesta bonica plaça, plena de restaurants i bars, és un lloc turístic imprescindible. Podeu menjar per la zona les famoses tortites (Pannenkoeken) o patates fregides.</p>
-                    </div>
-                </div>
-            </div>
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('rembrandt')"><img src="https://images.unsplash.com/photo-1604147495798-57beb5d6af73?q=80&w=800&auto=format&fit=crop" alt="Rembrandtplein"><div class="card-body"><span class="time-badge">11:30</span><h3>🎨 Rembrandtplein</h3><p>La plaça Rembrandt és un bell homenatge a aquest pintor i dibuixant originari dels Països Baixos. Aquesta bonica plaça, plena de restaurants i bars, és un lloc turístic imprescindible. Podeu menjar per la zona les famoses tortites (Pannenkoeken) o patates fregides.</p></div></div></div>
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('bloemenmarkt')"><img src="https://images.unsplash.com/photo-1591851633816-cca5d83a0e8e?q=80&w=800&auto=format&fit=crop" alt="Bloemenmarkt"><div class="card-body"><span class="time-badge">12:00</span><h3>🌷 Bloemenmarkt</h3><p>El famós mercat flotant de flors d'Amsterdam, ubicat al canal Singel des de 1862. Els seus parats de fusta estan sobre barcasses amarrades al canal, on trobaràs des de bulbs de tulipà (el seu producte estrella) fins a souvenirs i flors fresques. Una de les postals més icòniques del centre històric.</p></div></div></div>
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('gouden')"><img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="De Gouden Bocht"><div class="card-body"><span class="time-badge">12:30</span><h3>🏛️ De Gouden Bocht</h3><p>La "Corba d'Or" és el tram més elegant i majestuós del canal Herengracht. Durant el Segle d'Or holandès (segle XVII), els comerciants i alcaldes més rics d'Amsterdam van construir aquí les seves opulentes mansions amb façanes de pedra esculpida i blasons familiars. Avui és un dels passejos fotogràfics més impressionants.</p></div></div></div>
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('pannenkoek')"><img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=800&auto=format&fit=crop" alt="Pannenkoeken"><div class="card-body"><span class="time-badge">13:00</span><h3>🥞 Dinar: Pannenkoeken</h3><p>A prop del riu o per la zona de l'espill d'aigua del Rijksmuseum, atureu-vos a menjar en un restaurant tradicional de Pannenkoeken (tortites holandeses gegants dolces i salades, èxit segur amb nens).</p></div></div></div>
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('museumplein')"><img src="https://images.unsplash.com/photo-1573043468237-2966b18b4fde?q=80&w=800&auto=format&fit=crop" alt="Museumplein"><div class="card-body"><span class="time-badge">15:00</span><h3>🖼️ Museumplein</h3><p>La Plaça dels Museos és un enorme parc públic i centre cultural. És el cor artístic d'Amsterdam, famós per albergar els museus més importants: el Rijksmuseum (Museu Nacional), el Museu Van Gogh, el Stedelijk i el Concertgebouw. Compta amb prades i àrees de joc infantils.</p></div></div></div>
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('vondelpark')"><img src="https://images.unsplash.com/photo-1581922815291-cb0fc0f3e0d2?q=80&w=800&auto=format&fit=crop" alt="Vondelpark"><div class="card-body"><span class="time-badge">16:30 - 18:30</span><h3>🚲 Bicis al Vondelpark</h3><p>Anem cap a la zona dels museus i lloguem les bicicletes junt al Vondelpark per fer un recorregut de 2 hores en un entorn 100% segur per als nens. (A-Bike Vondelpark o Black Bikes Leidseplein: tenen bicis infantils, cascos i cadenats).</p></div></div></div>
+            <div class="timeline-item"><div class="card" onclick="centrarMapa('leidseplein')"><img src="https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=800&auto=format&fit=crop" alt="Leidseplein"><div class="card-body"><span class="time-badge">20:30</span><h3>🍔 Sopar: Leidseplein / Foodhallen</h3><p>Sopar relaxat per la zona abans de tornar a l'hotel. Al Leidseplein hi ha moltes pizzeries i hamburgueseries. Opció: Foodhallen (mercat gastronòmic a 10 min a peu) on cadascú pot demanar el que vulgui (sushi, tacos, gofres) i seure junts en taules grans. Als nens els encantarà!</p></div></div></div>
 
-            <div class="timeline-item">
-                <div class="card" onclick="centrarMapa('bloemenmarkt')">
-                    <img src="https://images.unsplash.com/photo-1591851633816-cca5d83a0e8e?q=80&w=800&auto=format&fit=crop" alt="Bloemenmarkt">
-                    <div class="card-body">
-                        <span class="time-badge">12:00</span>
-                        <h3>🌷 Bloemenmarkt</h3>
-                        <p>El famós mercat flotant de flors d'Amsterdam, ubicat al canal Singel des de 1862. Els seus parats de fusta estan sobre barcasses amarrades al canal, on trobaràs des de bulbs de tulipà (el seu producte estrella) fins a souvenirs i flors fresques. Una de les postals més icòniques del centre històric.</p>
-                    </div>
-                </div>
-            </div>
+        </div>
 
-            <div class="timeline-item">
-                <div class="card" onclick="centrarMapa('gouden')">
-                    <img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="De Gouden Bocht">
-                    <div class="card-body">
-                        <span class="time-badge">12:30</span>
-                        <h3>🏛️ De Gouden Bocht</h3>
-                        <p>La "Corba d'Or" és el tram més elegant i majestuós del canal Herengracht. Durant el Segle d'Or holandès (segle XVII), els comerciants i alcaldes més rics d'Amsterdam van construir aquí les seves opulentes mansions amb façanes de pedra esculpida i blasons familiars. Avui és un dels passejos fotogràfics més impressionants.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="card" onclick="centrarMapa('pannenkoek')">
-                    <img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=800&auto=format&fit=crop" alt="Pannenkoeken">
-                    <div class="card-body">
-                        <span class="time-badge">13:00</span>
-                        <h3>🥞 Dinar: Pannenkoeken</h3>
-                        <p>A prop del riu o per la zona de l'espill d'aigua del Rijksmuseum, atureu-vos a menjar en un restaurant tradicional de Pannenkoeken (tortites holandeses gegants dolces i salades, èxit segur amb nens).</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="card" onclick="centrarMapa('museumplein')">
-                    <img src="https://images.unsplash.com/photo-1573043468237-2966b18b4fde?q=80&w=800&auto=format&fit=crop" alt="Museumplein">
-                    <div class="card-body">
-                        <span class="time-badge">15:00</span>
-                        <h3>🖼️ Museumplein</h3>
-                        <p>La Plaça dels Museos és un enorme parc públic i centre cultural. És el cor artístic d'Amsterdam, famós per albergar els museus més importants: el Rijksmuseum (Museu Nacional), el Museu Van Gogh, el Stedelijk i el Concertgebouw. Compta amb prades i àrees de joc infantils.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="card" onclick="centrarMapa('vondelpark')">
-                    <img src="https://images.unsplash.com/photo-1581922815291-cb0fc0f3e0d2?q=80&w=800&auto=format&fit=crop" alt="Vondelpark">
-                    <div class="card-body">
-                        <span class="time-badge">16:30 - 18:30</span>
-                        <h3>🚲 Bicis al Vondelpark</h3>
-                        <p>Anem cap a la zona dels museus i lloguem les bicicletes junt al Vondelpark per fer un recorregut de 2 hores en un entorn 100% segur per als nens. (A-Bike Vondelpark o Black Bikes Leidseplein: tenen bicis infantils, cascos i cadenats).</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="card" onclick="centrarMapa('leidseplein')">
-                    <img src="https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=800&auto=format&fit=crop" alt="Leidseplein">
-                    <div class="card-body">
-                        <span class="time-badge">20:30</span>
-                        <h3>🍔 Sopar: Leidseplein / Foodhallen</h3>
-                        <p>Sopar relaxat per la zona abans de tornar a l'hotel. Al Leidseplein hi ha moltes pizzeries i hamburgueseries. Opció: Foodhallen (mercat gastronòmic a 10 min a peu) on cadascú pot demanar el que vulgui (sushi, tacos, gofres) i seure junts en taules grans. Als nens els encantarà!</p>
-                    </div>
-                </div>
-            </div>
-
-        </div><!-- Fi Timeline -->
-
-        <!-- TORNAR AL CENTRE -->
         <div class="info-card">
             <h2>🚋 Tornar al Centre</h2>
             <p><strong>En Tramvia (Línia 2, 12 o 17):</strong> Fins a les 12:30. Surts de tornar les bicis, camineu a la parada de Leidseplein i en 8-10 minuts de tramvia esteu de vuelta a la Plaça Dam o Estació Central.</p>
             <p><strong>Dada curiosa:</strong> La línia 2 de tramvia està considerada per la revista National Geographic com una de les rutes de tramvia urbà més maques del món pels canals que creua.</p>
         </div>
-
     </div>
 
-    <!-- Botó flotant per tornar a la portada -->
     <a href="index.html" class="btn-flotant">🏠</a>
 
     <script>
@@ -144,45 +73,49 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
         setTimeout(function(){ map.invalidateSize(); }, 500);
 
-        var customIcon = L.divIcon({
-            className: 'custom-pin',
-            html: '<div style="font-size: 28px;">📍</div>',
-            iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
-        });
+        function crearIcona(emoji) {
+            return L.divIcon({
+                className: 'custom-pin',
+                html: `<div style="font-size: 28px;">${emoji}</div>`,
+                iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
+            });
+        }
 
-        function crearTargeta(hora, titol, foto, descripcio) {
+        function crearTargeta(hora, titol, foto, descripcio, lat, lng) {
+            let gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
             return `
                 <div class="map-card">
                     <img src="${foto}" alt="${titol}">
                     <span class="hora">${hora}</span>
                     <h3>${titol}</h3>
                     <p>${descripcio}</p>
+                    <a href="${gmapsUrl}" target="_blank" class="map-btn">📍 Ruta a Google Maps</a>
                 </div>
             `;
         }
 
         var markers = {};
 
-        markers['rembrandt'] = L.marker([52.3661, 4.8959], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('11:30', 'Rembrandtplein', 'https://images.unsplash.com/photo-1604147495798-57beb5d6af73?q=80&w=400&auto=format&fit=crop', 'Plaça amb estàtues i restaurants.'));
+        markers['rembrandt'] = L.marker([52.3661, 4.8959], {icon: crearIcona('🎨')}).addTo(map)
+            .bindPopup(crearTargeta('11:30', 'Rembrandtplein', 'https://images.unsplash.com/photo-1604147495798-57beb5d6af73?q=80&w=400&auto=format&fit=crop', 'Plaça amb estàtues i restaurants.', 52.3661, 4.8959));
 
-        markers['bloemenmarkt'] = L.marker([52.3674, 4.8915], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('12:00', 'Bloemenmarkt', 'https://images.unsplash.com/photo-1591851633816-cca5d83a0e8e?q=80&w=400&auto=format&fit=crop', 'Mercat flotant de flors.'));
+        markers['bloemenmarkt'] = L.marker([52.3674, 4.8915], {icon: crearIcona('🌷')}).addTo(map)
+            .bindPopup(crearTargeta('12:00', 'Bloemenmarkt', 'https://images.unsplash.com/photo-1591851633816-cca5d83a0e8e?q=80&w=400&auto=format&fit=crop', 'Mercat flotant de flors.', 52.3674, 4.8915));
 
-        markers['gouden'] = L.marker([52.3668, 4.8856], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('12:30', 'De Gouden Bocht', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=400&auto=format&fit=crop', 'Mansions del Segle d\'Or.'));
+        markers['gouden'] = L.marker([52.3668, 4.8856], {icon: crearIcona('🏛️')}).addTo(map)
+            .bindPopup(crearTargeta('12:30', 'De Gouden Bocht', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=400&auto=format&fit=crop', 'Mansions del Segle d\'Or.', 52.3668, 4.8856));
 
-        markers['pannenkoek'] = L.marker([52.3600, 4.8852], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('13:00', 'Dinar Pannenkoeken', 'https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=400&auto=format&fit=crop', 'Tortites holandeses gegants.'));
+        markers['pannenkoek'] = L.marker([52.3600, 4.8852], {icon: crearIcona('🥞')}).addTo(map)
+            .bindPopup(crearTargeta('13:00', 'Dinar Pannenkoeken', 'https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=400&auto=format&fit=crop', 'Tortites holandeses gegants.', 52.3600, 4.8852));
 
-        markers['museumplein'] = L.marker([52.3560, 4.8795], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('15:00', 'Museumplein', 'https://images.unsplash.com/photo-1573043468237-2966b18b4fde?q=80&w=400&auto=format&fit=crop', 'Plaça dels Museus (Rijks, Van Gogh).'));
+        markers['museumplein'] = L.marker([52.3560, 4.8795], {icon: crearIcona('🖼️')}).addTo(map)
+            .bindPopup(crearTargeta('15:00', 'Museumplein', 'https://images.unsplash.com/photo-1573043468237-2966b18b4fde?q=80&w=400&auto=format&fit=crop', 'Plaça dels Museus.', 52.3560, 4.8795));
 
-        markers['vondelpark'] = L.marker([52.3580, 4.8686], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('16:30', 'Bicis Vondelpark', 'https://images.unsplash.com/photo-1581922815291-cb0fc0f3e0d2?q=80&w=400&auto=format&fit=crop', 'Passejada en bici de 2h.'));
+        markers['vondelpark'] = L.marker([52.3580, 4.8686], {icon: crearIcona('🚲')}).addTo(map)
+            .bindPopup(crearTargeta('16:30', 'Bicis Vondelpark', 'https://images.unsplash.com/photo-1581922815291-cb0fc0f3e0d2?q=80&w=400&auto=format&fit=crop', 'Passejada en bici de 2h.', 52.3580, 4.8686));
 
-        markers['leidseplein'] = L.marker([52.3651, 4.8825], {icon: customIcon}).addTo(map)
-            .bindPopup(crearTargeta('20:30', 'Sopar Leidseplein', 'https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=400&auto=format&fit=crop', 'Sopar i Foodhallen.'));
+        markers['leidseplein'] = L.marker([52.3651, 4.8825], {icon: crearIcona('🍔')}).addTo(map)
+            .bindPopup(crearTargeta('20:30', 'Sopar Leidseplein', 'https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=400&auto=format&fit=crop', 'Sopar i Foodhallen.', 52.3651, 4.8825));
 
         function centrarMapa(id) {
             var marker = markers[id];
