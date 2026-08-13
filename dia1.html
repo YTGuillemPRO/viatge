@@ -5,104 +5,506 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dia 1: Mapa Amsterdam</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Llibreria del Mapa (Leaflet) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        body { margin: 0; font-family: 'Nunito', sans-serif; background-color: #E0F7FA; color: #333; }
-        .header { background: #03A9F4; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000; }
-        .header h1 { font-family: 'Baloo 2', cursive; margin: 0; font-size: 1.2rem; }
-        .btn-tornar { background: white; color: #03A9F4; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-weight: 800; font-family: 'Baloo 2', cursive; font-size: 0.9rem; }
-        #map { height: 400px; min-height: 300px; width: 100%; z-index: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .map-card { text-align: center; font-family: 'Nunito', sans-serif; max-width: 220px; }
+        body {
+            margin: 0;
+            font-family: 'Nunito', sans-serif;
+            background-color: #E0F7FA;
+            color: #333;
+        }
+
+        /* Barra superior */
+        .header {
+            background: #03A9F4;
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header h1 {
+            font-family: 'Baloo 2', cursive;
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .punts-box { background: white; padding: 6px 12px; border-radius: 20px; color: #FF9800; font-weight: 800; font-family: 'Baloo 2', cursive; font-size: 1rem; border: 2px solid #FF9800; white-space: nowrap; }
+
+        .btn-tornar {
+            background: white;
+            color: #03A9F4;
+            padding: 6px 12px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 800;
+            font-family: 'Baloo 2', cursive;
+            font-size: 0.9rem;
+        }
+
+        /* El Mapa */
+        #map {
+            height: 400px; 
+            min-height: 300px;
+            width: 100%;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .map-card {
+            text-align: center;
+            font-family: 'Nunito', sans-serif;
+            max-width: 220px;
+        }
         .map-card h3 { font-family: 'Baloo 2', cursive; color: #03A9F4; margin: 5px 0; font-size: 1.1rem; }
         .map-card .hora { display: inline-block; background: #FF9800; color: white; padding: 3px 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 800; margin-bottom: 5px; }
         .map-card img { width: 100%; height: 100px; object-fit: cover; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .map-card p { font-size: 0.9rem; color: #555; line-height: 1.4; margin-bottom: 10px; }
         .map-btn { display: block; background: #FF9800; color: white; padding: 8px; border-radius: 10px; text-decoration: none; font-weight: bold; font-family: 'Baloo 2', cursive; box-shadow: 0 3px 0 #E65100; }
-        .container { max-width: 800px; margin: 0 auto; padding: 30px 15px; position: relative; }
-        .timeline-container { position: relative; padding-left: 45px; }
-        .timeline-container::before { content: ''; position: absolute; left: 12px; top: 10px; bottom: 10px; width: 6px; background-image: linear-gradient(#0288D1 50%, rgba(255,255,255,0) 0%); background-size: 6px 20px; background-repeat: repeat-y; }
-        .timeline-item { position: relative; margin-bottom: 30px; }
-        .timeline-item::before { content: '📍'; position: absolute; left: -38px; top: -10px; width: 36px; height: 36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 3px solid #03A9F4; z-index: 2; }
-        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid #f0f0f0; cursor: pointer; }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); border-color: #03A9F4; }
-        .card img { width: 100%; height: 160px; object-fit: cover; }
-        .card-body { padding: 15px; }
-        .time-badge { display: inline-block; background: #FF9800; color: white; padding: 4px 12px; border-radius: 15px; font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; box-shadow: 0 3px 0 #E65100; font-family: 'Baloo 2', cursive; }
-        .card-body h3 { font-family: 'Baloo 2', cursive; margin: 0 0 8px 0; color: #0277BD; font-size: 1.2rem; }
-        .card-body p { margin: 0; color: #555; line-height: 1.4; font-size: 0.95rem; }
-        .info-card { background: white; border-radius: 15px; padding: 20px; margin: 30px auto; max-width: 800px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-left: 6px solid #FF5252; }
-        .info-card.coffeeshop { border-left-color: #9C27B0; }
-        .info-card h2 { font-family: 'Baloo 2', cursive; color: #0288D1; font-size: 1.4rem; margin-top: 0; }
-        .alert-box { background: #FFF9C4; border: 2px solid #FBC02D; border-radius: 12px; padding: 12px; margin: 12px 0; font-weight: 700; font-size: 0.9rem; }
-        .turn-box { background: #E1F5FE; border: 2px solid #0288D1; border-radius: 12px; padding: 12px; margin: 12px 0; font-size: 0.9rem; }
-        .info-card p { font-size: 0.9rem; }
-        .btn-flotant { position: fixed; bottom: 15px; right: 15px; background: #4CAF50; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; }
+
+        /* CONTENIDOR DE TARGETES TIPUS CANVA */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 15px;
+            position: relative;
+        }
+
+        /* LA LÍNIA DE PUNTS SUPER COOL (Vertical) */
+        .timeline-container {
+            position: relative;
+            padding-left: 45px;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 10px;
+            bottom: 10px;
+            width: 6px;
+            background-image: linear-gradient(#0288D1 50%, rgba(255,255,255,0) 0%);
+            background-size: 6px 20px;
+            background-repeat: repeat-y;
+        }
+
+        /* TARGETA INDIVIDUAL */
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '📍';
+            position: absolute;
+            left: -38px;
+            top: -10px;
+            width: 36px; 
+            height: 36px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border: 3px solid #03A9F4;
+            z-index: 2;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid #f0f0f0;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+            border-color: #03A9F4;
+        }
+
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        /* CLASSE ESPECIAL PER A LES FOTOS VERTICALS SENCERES */
+        .img-sencera {
+            object-fit: contain !important; 
+            background-color: #f8f9fa;
+        }
+
+        /* TICK BOX */
+        .tick-box {
+            position: absolute; top: 15px; right: 15px; width: 40px; height: 40px;
+            background: rgba(255,255,255,0.9); border: 3px solid #03A9F4; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+            color: #b0bec5; transition: all 0.3s; z-index: 10; cursor: pointer;
+        }
+        .tick-box:hover { transform: scale(1.1); border-color: #4CAF50; color: #4CAF50; }
+        .card.visited { border-color: #4CAF50; background: #F1F8E9; box-shadow: 0 0 15px rgba(76, 175, 80, 0.4); }
+        .card.visited .tick-box { background: #4CAF50; border-color: #4CAF50; color: white; animation: pop 0.4s ease; pointer-events: none; cursor: default; }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+        .sparkle { position: absolute; font-size: 1.5rem; pointer-events: none; animation: volar 1s ease-out forwards; z-index: 20; }
+        @keyframes volar { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-40px) scale(0); } }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .time-badge {
+            display: inline-block;
+            background: #FF9800;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            box-shadow: 0 3px 0 #E65100;
+            font-family: 'Baloo 2', cursive;
+        }
+
+        .card-body h3 {
+            font-family: 'Baloo 2', cursive;
+            margin: 0 0 8px 0;
+            color: #0277BD;
+            font-size: 1.2rem;
+        }
+
+        .card-body p {
+            margin: 0;
+            color: #555;
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+
+        /* SECCIONS ESPECIALS (BARRI ROIG I COFFEESHOPS) */
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 800px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-left: 6px solid #FF5252;
+        }
+
+        .info-card.coffeeshop {
+            border-left-color: #9C27B0;
+        }
+
+        .info-card h2 {
+            font-family: 'Baloo 2', cursive;
+            color: #0288D1;
+            font-size: 1.4rem;
+            margin-top: 0;
+        }
+
+        .alert-box {
+            background: #FFF9C4;
+            border: 2px solid #FBC02D;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 12px 0;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .turn-box {
+            background: #E1F5FE;
+            border: 2px solid #0288D1;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 12px 0;
+            font-size: 0.9rem;
+        }
+
+        .info-card p {
+            font-size: 0.9rem;
+        }
+
+        /* QUIZ FINAL */
+        .game-section { background: #FFF3E0; border: 3px dashed #FF9800; border-radius: 20px; padding: 25px; margin: 40px auto; max-width: 800px; text-align: center; }
+        .game-section h2 { font-family: 'Baloo 2', cursive; color: #E65100; font-size: 1.8rem; margin-top: 0; }
+        .btn-joc { background: #4CAF50; color: white; border: none; padding: 15px 30px; font-size: 1.2rem; font-family: 'Baloo 2', cursive; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #1B5E20; margin: 10px; transition: all 0.2s; }
+        .btn-joc:active { transform: translateY(4px); box-shadow: 0 0px 0 #1B5E20; }
+        .btn-joc:disabled { background: #BDBDBD; box-shadow: 0 4px 0 #757575; cursor: not-allowed; }
+        .quiz-form { margin-top: 20px; text-align: left; }
+        .quiz-question { font-weight: 700; margin-bottom: 10px; color: #333; }
+        .quiz-option { display: block; margin: 5px 0; padding: 10px; background: white; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
+        .quiz-option:hover { border-color: #FF9800; }
+        .feedback { font-weight: 800; margin-top: 15px; font-size: 1.2rem; }
+
+        /* Botó flotant */
+        .btn-flotant {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: #4CAF50;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
 
     <div class="header" id="top">
         <h1>🧳 Dia 1: Amsterdam</h1>
-        <a href="index.html" class="btn-tornar">⬅ Tornar</a>
+        <div class="header-right">
+            <div class="punts-box">⭐ <span id="puntsTotals">0</span> Punts</div>
+            <a href="index.html" class="btn-tornar">⬅ Tornar</a>
+        </div>
     </div>
 
+    <!-- MAPA INTERACTIU -->
     <div id="map"></div>
 
+    <!-- LÍNIA DE TEMPS AMB TARGETES TIPUS CANVA -->
     <div class="container">
         <div class="timeline-container">
 
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('bus')"><img src="https://images.unsplash.com/photo-1546945651-aeb9e0d3a3b9?q=80&w=800&auto=format&fit=crop" alt="Bus"><div class="card-body"><span class="time-badge">05:20 - 07:30</span><h3>🚌 Bus a l'aeroport</h3><p>Comença l'aventura! Ens trobem per agafar el bus.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('avio')"><img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop" alt="Avió"><div class="card-body"><span class="time-badge">10:10</span><h3>🛫 Vol a Amsterdam</h3><p>Enlairem! Ens esperen els Països Baixos.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('schiphol')"><img src="https://images.unsplash.com/photo-1566516248807-8f1b9c7e8c2c?q=80&w=800&auto=format&fit=crop" alt="Schiphol"><div class="card-body"><span class="time-badge">12:40</span><h3>🛬 Arribada a Schiphol</h3><p>Aterrem. Tren subterrani a Sloterdijk/Centraal (Andana 3).</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('hotel')"><img src="https://z-cdn-media.chatglm.cn/files/98626f39-9be9-4e49-ba8a-374f03a78e0e.png?auth_key=1886454897-e9a971023f5049c5b68c5b92cbd44d9c-0-3754b982fb0a2c3f6dcf8906b7f3fc22" alt="Hotel"><div class="card-body"><span class="time-badge">15:00</span><h3>🏨 Hotel MEININGER</h3><p>Aquest hotel d'estil desenfadat es troba a la intersecció de les autopistes A5 i A10, a 6 minuts a peu de l'estació de metro de Sloterdijk i a 7 km de l'animada plaça Dam i del Palau Reial.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('estacio')"><img src="https://z-cdn-media.chatglm.cn/files/5cd8905b-400c-43f5-895b-74b663dedb6d.png?auth_key=1886454897-dfe0302ec7ec40058cb7f355b8c59010-0-2c6ae38e096705c8da79e971c6f9ad34" alt="Estació"><div class="card-body"><span class="time-badge">13:30</span><h3>🚆 Estació Central</h3><p>La terminal més gran de la ciutat, d'estil gòtic renaixentista (1889), amb botigues i restaurants.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('barco')"><img src="https://z-cdn-media.chatglm.cn/files/274da9ea-3648-4d1c-988d-e5465bcd9165.png?auth_key=1886454897-d13cc625ce44439792d43891ed7ede8d-0-28898bf1e24ac24dc10adb0ebba9176a" alt="Barco"><div class="card-body"><span class="time-badge">17:00</span><h3>🚤 Barco Canals (1h)</h3><p>Passejada d'una hora en vaixell pels canals per gaudir de les cases històriques, les cases flotants i els ponts clàssics des de l'aigua.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('anne')"><img src="https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=800&auto=format&fit=crop" alt="Casa Anne Frank"><div class="card-body"><span class="time-badge">18:30</span><h3>🏡 Casa Anne Frank</h3><p>Casa museu on Anne Frank i la seva família es van amagar dels nazis durant la Segona Guerra Mundial.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('westerkerk')"><img src="https://images.unsplash.com/photo-1542640244-7e672d6cef4e?q=80&w=800&auto=format&fit=crop" alt="Westerkerk"><div class="card-body"><span class="time-badge">18:45</span><h3>⛪ Westerkerk</h3><p>Església protestant del Renaixement, on està enterrat Rembrandt, amb un capitel adornat amb una corona a la part superior.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('berenar')"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop" alt="Patates"><div class="card-body"><span class="time-badge">19:00</span><h3>🍟 Berenar</h3><p>Fabel Friet/Manneken Pis (patates) o Stroopwafels calentes.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('carrers')"><img src="https://z-cdn-media.chatglm.cn/files/70b878b6-e351-4a5d-a9d0-db39c4a04c58.png?auth_key=1886455503-29858d1ae0454fcf97d1ca7430becfab-0-cd4186dc2c3fe420df97e7775af844f8" alt="Las 9 calles"><div class="card-body"><span class="time-badge">19:30</span><h3>🌉 Las 9 calles</h3><p>Zona pintoresca vora un canal, amb botigues de dissenyadors, tendes vintage i cafeteries acollidores.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('dam')"><img src="https://z-cdn-media.chatglm.cn/files/96f3a927-bfa5-4143-a73b-721914b93b37.png?auth_key=1886455503-694c5d9796fb49b59de511fbc621f567-0-4b4d3368b07892cce19a55c6db19c592" alt="Plaça Dam"><div class="card-body"><span class="time-badge">20:30</span><h3>🏛️ Plaça Dam</h3><p>La Plaça Dam és el cor històric i el punt neuràlgic d'Amsterdam. Situada a uns 750 metres al sud de l'Estació Central, el seu nom prové del dic o presa (dam) construït al segle XIII sobre el riu Amstel, origen del nom de la pròpia ciutat.</p></div></div></div>
+            <div class="timeline-item">
+                <div class="card" id="card_bus" onclick="centrarMapa('bus')">
+                    <div class="tick-box" onclick="marcarVisitat(event, 'bus')" title="Marcar com a visitat">✓</div>
+                    <img src="https://images.unsplash.com/photo-1546945651-aeb9e0d3a3b9?q=80&w=800&auto=format&fit=crop" alt="Bus">
+                    <div class="card-body">
+                        <span class="time-badge">05:20 - 07:30</span>
+                        <h3>🚌 Bus a l'aeroport</h3>
+                        <p>Comença l'aventura! Ens trobem per agafar el bus.</p>
+                    </div>
+                </div>
+            </div>
 
-        </div>
+            <div class="timeline-item">
+                <div class="card" id="card_avio" onclick="centrarMapa('avio')">
+                    <div class="tick-box" onclick="marcarVisitat(event, 'avio')" title="Marcar com a visitat">✓</div>
+                    <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop" alt="Avió">
+                    <div class="card-body">
+                        <span class="time-badge">10:10</span>
+                        <h3>🛫 Vol a Amsterdam</h3>
+                        <p>Enlairem! Ens esperen els Països Baixos.</p>
+                    </div>
+                </div>
+            </div>
 
+            <div class="timeline-item">
+                <div class="card" id="card_schiphol" onclick="centrarMapa('schiphol')">
+                    <div class="tick-box" onclick="marcarVisitat(event, 'schiphol')" title="Marcar com a visitat">✓</div>
+                    <img src="https://images.unsplash.com/photo-1566516248807-8f1b9c7e8c2c?q=80&w=800&auto=format&fit=crop" alt="Schiphol">
+                    <div class="card-body">
+                        <span class="time-badge">12:40</span>
+                        <h3>🛬 Arribada a Schiphol</h3>
+                        <p>Aterrem. Tren subterrani a Sloterdijk/Centraal (Andana 3).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card" id="card_hotel" onclick="centrarMapa('hotel')">
+                    <div class="tick-box" onclick="marcarVisitat(event, 'hotel')" title="Marcar com a visitat">✓</div>
+                    <img src="https://z-cdn-media.chatglm.cn/files/98626f39-9be9-4e49-ba8a-374f03a78e0e.png?auth_key=1886454897-e9a971023f5049c5b68c5b92cbd44d9c-0-3754b982fb0a2c3f6dcf8906b7f3fc22" alt="Hotel">
+                    <div class="card-body">
+                        <span class="time-badge">15:00</span>
+                        <h3>🏨 Hotel MEININGER</h3>
+                        <p>Aquest hotel d'estil desenfadat es troba a la intersecció de les autopistes A5 i A10, a 6 minuts a peu de l'estació de metro de Sloterdijk i a 7 km de l'animada plaça Dam i del Palau Reial.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card" id="card_estacio" onclick="centrarMapa('estacio')">
+                    <div class="tick-box" onclick="marcarVisitat(event, 'estacio')" title="Marcar com a visitat">✓</div>
+                    <img src="https://z-cdn-media.chatglm.cn/files/5cd8905b-400c-43f5-895b-74b663dedb6d.png?auth_key=1886454897-dfe0302ec7ec40058cb7f355b8c59010-0-2c6ae38e096705c8da79e971c6f9ad34" alt="Estació">
+                    <div class="card-body">
+                        <span class="time-badge">13:30</span>
+                        <h3>🚆 Estació Central</h3>
+                        <p>La terminal més gran de la ciutat, d'estil gòtic renaixentista (1889), amb botigues i restaurants.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card" id="card_barco" onclick="centrarMapa('barco')">
+                    <div class="tick-box" onclick="marcarVisitat(event, 'barco')" title="Marcar com a visitat">✓</div>
+                    <img src="https://z-cdn-media.chatglm.cn/files/274da9ea-3648-4d1c-988d-e5465bcd9165.png?auth_key=1886454897-d13cc625ce44439792d43891ed7ede8d-0-28898bf1e24ac24dc10adb0ebba9176a" alt="Barco">
+                    <div class="card-body">
+                        <span class="time-badge">17:00</span>
+                        <h3>🚤 Barco Canals (1h)</h3>
+                        <p>Passejada d'una hora en vaixell pels canals per gaudir de les cases històriques, les cases flotants i els ponts clàssics des de l'aigua.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card" id="card_anne" onclick="centrarMapa('anne')">
+                    <div class="tick-box" onclick="marcarVisitat(event, 'anne')" title="Marcar com a visitat">✓</div>
+                    <img class="img-sencera" src="https://z-cdn-media.chatglm.cn/files/970e16e6-a907-403a-a339-e331ce6569f9.png?auth_key=1886456022-9ee06f73c098438c8fb554383f1a2b79-0-9fa55cccfb2e193bb0d0d416cab695ac" alt="Casa Anne Frank">
+                    <div class="card-body">
+                        <span class="time-badge">18:30</span>
+                        <h3>🏡 Casa Anne Frank</h3>
+                        <p>Casa museu on Anne Frank i la seva família es van amagar dels nazis durant la Segona Guerra Mundial.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card" id="card_westerkerk" onclick="centrarMapa('westerkerk')">
+                    <div class="tick-box" onclick="marcarVisitat(event, 'westerkerk')" title="Marcar com a visitat">✓</div>
+                    <img class="img-sencera" src="https://z-cdn-media.chatglm.cn/files/0b6fbf03-d4c6-4d2f-ac0a-803f273807a1.png?auth_key=1886456022-ca351aea754b4037a437ac71f31eb178-0-7ae7a43450e06aa16017566ee71fa78e" alt="Westerkerk">
+                    <div class="card-body">
+                        <span class="time-badge">18:45</span>
+                        <h3>⛪ Westerkerk</h3>
+                        <p>Església protestant del Renaixement, on està enterrat Rembrandt, amb un capitel adornat amb una corona a la part superior.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card" id="card_berenar" onclick="centrarMapa('berenar')">
+                    <div class="tick-box" onclick="marcarVisitat(event, 'berenar')" title="Marcar com a visitat">✓</div>
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop" alt="Patates">
+                    <div class="card-body">
+                        <span class="time-badge">19:00</span>
+                        <h3>🍟 Berenar</h3>
+                        <p>Fabel Friet/Manneken Pis (patates) o Stroopwafels calentes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card" id="card_carrers" onclick="centrarMapa('carrers')">
+                    <div class="tick-box" onclick="marcarVisitat(event, 'carrers')" title="Marcar com a visitat">✓</div>
+                    <img src="https://z-cdn-media.chatglm.cn/files/70b878b6-e351-4a5d-a9d0-db39c4a04c58.png?auth_key=1886455503-29858d1ae0454fcf97d1ca7430becfab-0-cd4186dc2c3fe420df97e7775af844f8" alt="Las 9 calles">
+                    <div class="card-body">
+                        <span class="time-badge">19:30</span>
+                        <h3>🌉 Las 9 calles</h3>
+                        <p>Zona pintoresca vora un canal, amb botigues de dissenyadors, tendes vintage i cafeteries acollidores.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="card" id="card_dam" onclick="centrarMapa('dam')">
+                    <div class="tick-box" onclick="marcarVisitat(event, 'dam')" title="Marcar com a visitat">✓</div>
+                    <img src="https://z-cdn-media.chatglm.cn/files/96f3a927-bfa5-4143-a73b-721914b93b37.png?auth_key=1886455503-694c5d9796fb49b59de511fbc621f567-0-4b4d3368b07892cce19a55c6db19c592" alt="Plaça Dam">
+                    <div class="card-body">
+                        <span class="time-badge">20:30</span>
+                        <h3>🏛️ Plaça Dam</h3>
+                        <p>La Plaça Dam és el cor històric i el punt neuràlgic d'Amsterdam. Situada a uns 750 metres al sud de l'Estació Central, el seu nom prové del dic o presa (dam) construït al segle XIII sobre el riu Amstel, origen del nom de la pròpia ciutat.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- Fi Timeline -->
+
+        <!-- BARRI ROIG -->
         <div class="info-card">
             <h2>🔴 Barri Roig</h2>
-            <div class="alert-box">⚠️ <strong>PROHIBIT FER FOTOS:</strong> Està prohibit fotografiar els aparadors.</div>
-            <div class="turn-box">👨‍👩‍👧‍👦 <strong>ESTRATÈGIA NENS:</strong><ul style="margin: 5px 0; padding-left: 20px;"><li><strong>Torn 1:</strong> 2 adults amb els 4 nens (gelat/gofre). Els altres 2 adults passegen 30 min.</li><li><strong>Torn 2:</strong> Es canvien els papers.</li></ul></div>
+            
+            <div class="alert-box">
+                ⚠️ <strong>PROHIBIT FER FOTOS:</strong> Està prohibit fotografiar els aparadors.
+            </div>
+
+            <div class="turn-box">
+                👨‍👩‍👧‍👦 <strong>ESTRATÈGIA NENS:</strong>
+                <ul style="margin: 5px 0; padding-left: 20px;">
+                    <li><strong>Torn 1:</strong> 2 adults amb els 4 nens (gelat/gofre). Els altres 2 adults passegen 30 min.</li>
+                    <li><strong>Torn 2:</strong> Es canvien els papers.</li>
+                </ul>
+            </div>
         </div>
 
+        <!-- COFFEESHOPS -->
         <div class="info-card coffeeshop">
             <h2>🌿 Coffeeshops</h2>
             <p><strong>Bulldog The First</strong> (Oudezijds V. 218) - El més famós.</p>
             <p><strong>Dampkring</strong> (Handboogstraat 29) - Famos per Ocean's Twelve.</p>
             <p><strong>Green House Center</strong> (Oudezijds V. 191) - Qualitat premium.</p>
-            <div class="alert-box">ℹ️ <strong>Normativa 2023:</strong> Prohibit fumar tabac a l'interior.</div>
+            <div class="alert-box">
+                ℹ️ <strong>Normativa 2023:</strong> Prohibit fumar tabac a l'interior.
+            </div>
         </div>
+
+        <!-- QUIZ FINAL -->
+        <div class="game-section">
+            <h2>🏆 Repte del Dia 1</h2>
+            
+            <button id="btnVisitat" class="btn-joc" onclick="marcarVisitat(event, 'quiz1')">📍 Ja hem acabat el dia! (+50 Punts)</button>
+
+            <div id="quizArea" style="display:none;">
+                <form class="quiz-form" id="formQuiz1">
+                    <div class="quiz-question">1. Quin número d'andana sol ser el tren a Schiphol?</div>
+                    <label class="quiz-option"><input type="radio" name="q1" value="1"> Andana 1</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="3"> Andana 3</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="5"> Andana 5</label>
+
+                    <div class="quiz-question" style="margin-top:15px;">2. Què està estrictament prohibit fer al Barri Roig?</div>
+                    <label class="quiz-option"><input type="radio" name="q2" value="caminar"> Caminar lentament</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="fotos"> Fer fotos als aparadors</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="menjar"> Menjar patates</label>
+                </form>
+                <button class="btn-joc" id="btnValidar" onclick="validarQuiz(1)" style="background:#03A9F4; box-shadow:0 4px 0 #0277BD;">Validar Quiz (+50 Punts)</button>
+                <div id="feedbackQuiz" class="feedback"></div>
+            </div>
+        </div>
+
     </div>
 
+    <!-- Botó flotant Dia 2 -->
     <a href="dia2.html" class="btn-flotant">➡</a>
 
     <script>
+        // Inicialitzem el mapa
         var map = L.map('map').setView([52.3731, 4.8926], 14);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Força el mapa a recalcular la seva mida (soluciona errors de pantalla en blanc)
         setTimeout(function(){ map.invalidateSize(); }, 500);
 
-        // Funció per crear icones amb l'emoji que toqui
-        function crearIcona(emoji) {
-            return L.divIcon({
-                className: 'custom-pin',
-                html: `<div style="font-size: 28px;">${emoji}</div>`,
-                iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
-            });
-        }
+        // Icona del mapa
+        var customIcon = L.divIcon({
+            className: 'custom-pin',
+            html: '<div style="font-size: 28px;">📍</div>',
+            iconSize: [30, 30],
+            iconAnchor: [15, 30],
+            popupAnchor: [0, -30]
+        });
 
-        // Funció amb el botó de Google Maps
-        function crearTargeta(hora, titol, foto, descripcio, lat, lng) {
-            let gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+        // Funció actualitzada per admetre imatges verticals (senceres) i Google Maps
+        function crearTargeta(hora, titol, foto, descripcio, esSencera, lat, lng) {
+            var classeCss = esSencera ? 'class="img-sencera"' : '';
+            var gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
             return `
                 <div class="map-card">
-                    <img src="${foto}" alt="${titol}">
+                    <img src="${foto}" alt="${titol}" ${classeCss}>
                     <span class="hora">${hora}</span>
                     <h3>${titol}</h3>
                     <p>${descripcio}</p>
@@ -111,41 +513,43 @@
             `;
         }
 
+        // GUARDEM TOTS ELS MARCADORS EN UNA LLISTA PER PODER OBRIR-LOS
         var markers = {};
 
-        markers['bus'] = L.marker([52.3105, 4.7683], {icon: crearIcona('🚌')}).addTo(map)
-            .bindPopup(crearTargeta('05:20', 'Bus a l\'aeroport', 'https://images.unsplash.com/photo-1546945651-aeb9e0d3a3b9?q=80&w=400&auto=format&fit=crop', 'Ens trobem per agafar el bus.', 52.3105, 4.7683));
+        markers['bus'] = L.marker([52.3105, 4.7683], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('05:20', 'Bus a l\'aeroport', 'https://images.unsplash.com/photo-1546945651-aeb9e0d3a3b9?q=80&w=400&auto=format&fit=crop', 'Ens trobem per agafar el bus.', false, 52.3105, 4.7683));
 
-        markers['avio'] = L.marker([52.3105, 4.7683], {icon: crearIcona('✈️')}).addTo(map)
-            .bindPopup(crearTargeta('10:10', 'Vol a Amsterdam', 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=400&auto=format&fit=crop', 'Enlairem cap als Països Baixos.', 52.3105, 4.7683));
+        markers['avio'] = L.marker([52.3105, 4.7683], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('10:10', 'Vol a Amsterdam', 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=400&auto=format&fit=crop', 'Enlairem cap als Països Baixos.', false, 52.3105, 4.7683));
 
-        markers['schiphol'] = L.marker([52.3105, 4.7683], {icon: crearIcona('🛬')}).addTo(map)
-            .bindPopup(crearTargeta('12:40', 'Aeroport Schiphol', 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=400&auto=format&fit=crop', 'Arribada. Tren andana 3.', 52.3105, 4.7683));
+        markers['schiphol'] = L.marker([52.3105, 4.7683], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('12:40', 'Aeroport Schiphol', 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=400&auto=format&fit=crop', 'Arribada. Tren andana 3.', false, 52.3105, 4.7683));
 
-        markers['hotel'] = L.marker([52.3892, 4.8244], {icon: crearIcona('🏨')}).addTo(map)
-            .bindPopup(crearTargeta('15:00', 'Hotel MEININGER', 'https://z-cdn-media.chatglm.cn/files/98626f39-9be9-4e49-ba8a-374f03a78e0e.png?auth_key=1886454897-e9a971023f5049c5b68c5b92cbd44d9c-0-3754b982fb0a2c3f6dcf8906b7f3fc22', 'Hotel a la intersecció A5/A10.', 52.3892, 4.8244));
+        markers['hotel'] = L.marker([52.3892, 4.8244], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('15:00', 'Hotel MEININGER', 'https://z-cdn-media.chatglm.cn/files/98626f39-9be9-4e49-ba8a-374f03a78e0e.png?auth_key=1886454897-e9a971023f5049c5b68c5b92cbd44d9c-0-3754b982fb0a2c3f6dcf8906b7f3fc22', 'Hotel a la intersecció A5/A10, a 6 min de Sloterdijk.', false, 52.3892, 4.8244));
 
-        markers['estacio'] = L.marker([52.3791, 4.9003], {icon: crearIcona('🚉')}).addTo(map)
-            .bindPopup(crearTargeta('13:30', 'Estació Central', 'https://z-cdn-media.chatglm.cn/files/5cd8905b-400c-43f5-895b-74b663dedb6d.png?auth_key=1886454897-dfe0302ec7ec40058cb7f355b8c59010-0-2c6ae38e096705c8da79e971c6f9ad34', 'Terminal gòtic renaixentista.', 52.3791, 4.9003));
+        markers['estacio'] = L.marker([52.3791, 4.9003], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('13:30', 'Estació Central', 'https://z-cdn-media.chatglm.cn/files/5cd8905b-400c-43f5-895b-74b663dedb6d.png?auth_key=1886454897-dfe0302ec7ec40058cb7f355b8c59010-0-2c6ae38e096705c8da79e971c6f9ad34', 'Terminal gòtic renaixentista (1889).', false, 52.3791, 4.9003));
 
-        markers['barco'] = L.marker([52.3745, 4.8965], {icon: crearIcona('🚤')}).addTo(map)
-            .bindPopup(crearTargeta('17:00', 'Barco Canals', 'https://z-cdn-media.chatglm.cn/files/274da9ea-3648-4d1c-988d-e5465bcd9165.png?auth_key=1886454897-d13cc625ce44439792d43891ed7ede8d-0-28898bf1e24ac24dc10adb0ebba9176a', 'Passejada d\'1 hora.', 52.3745, 4.8965));
+        markers['barco'] = L.marker([52.3745, 4.8965], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('17:00', 'Barco Canals', 'https://z-cdn-media.chatglm.cn/files/274da9ea-3648-4d1c-988d-e5465bcd9165.png?auth_key=1886454897-d13cc625ce44439792d43891ed7ede8d-0-28898bf1e24ac24dc10adb0ebba9176a', 'Passejada d\'1 hora pels canals.', false, 52.3745, 4.8965));
 
-        markers['anne'] = L.marker([52.3752, 4.8839], {icon: crearIcona('🏡')}).addTo(map)
-            .bindPopup(crearTargeta('18:30', 'Casa Anne Frank', 'https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=400&auto=format&fit=crop', 'Casa museu.', 52.3752, 4.8839));
+        markers['anne'] = L.marker([52.3752, 4.8839], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('18:30', 'Casa Anne Frank', 'https://z-cdn-media.chatglm.cn/files/970e16e6-a907-403a-a339-e331ce6569f9.png?auth_key=1886456022-9ee06f73c098438c8fb554383f1a2b79-0-9fa55cccfb2e193bb0d0d416cab695ac', 'Casa museu on es va amagar durant la Segona Guerra Mundial.', true, 52.3752, 4.8839));
 
-        markers['westerkerk'] = L.marker([52.3745, 4.8838], {icon: crearIcona('⛪')}).addTo(map)
-            .bindPopup(crearTargeta('18:45', 'Westerkerk', 'https://images.unsplash.com/photo-1542640244-7e672d6cef4e?q=80&w=400&auto=format&fit=crop', 'Església amb torre més alta.', 52.3745, 4.8838));
+        markers['westerkerk'] = L.marker([52.3745, 4.8838], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('18:45', 'Westerkerk', 'https://z-cdn-media.chatglm.cn/files/0b6fbf03-d4c6-4d2f-ac0a-803f273807a1.png?auth_key=1886456022-ca351aea754b4037a437ac71f31eb178-0-7ae7a43450e06aa16017566ee71fa78e', 'Església on està enterrat Rembrandt.', true, 52.3745, 4.8838));
 
-        markers['berenar'] = L.marker([52.3740, 4.8870], {icon: crearIcona('🍟')}).addTo(map)
-            .bindPopup(crearTargeta('19:00', 'Berenar', 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400&auto=format&fit=crop', 'Patates i Stroopwafels.', 52.3740, 4.8870));
+        markers['berenar'] = L.marker([52.3740, 4.8870], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('19:00', 'Berenar', 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400&auto=format&fit=crop', 'Patates fregides i Stroopwafels.', false, 52.3740, 4.8870));
 
-        markers['carrers'] = L.marker([52.3697, 4.8886], {icon: crearIcona('🌉')}).addTo(map)
-            .bindPopup(crearTargeta('19:30', 'Las 9 calles', 'https://z-cdn-media.chatglm.cn/files/70b878b6-e351-4a5d-a9d0-db39c4a04c58.png?auth_key=1886455503-29858d1ae0454fcf97d1ca7430becfab-0-cd4186dc2c3fe420df97e7775af844f8', 'Zona pintoresca.', 52.3697, 4.8886));
+        markers['carrers'] = L.marker([52.3697, 4.8886], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('19:30', 'Las 9 calles', 'https://z-cdn-media.chatglm.cn/files/70b878b6-e351-4a5d-a9d0-db39c4a04c58.png?auth_key=1886455503-29858d1ae0454fcf97d1ca7430becfab-0-cd4186dc2c3fe420df97e7775af844f8', 'Zona pintoresca amb botigues vintage.', false, 52.3697, 4.8886));
 
-        markers['dam'] = L.marker([52.3731, 4.8926], {icon: crearIcona('🏛️')}).addTo(map)
-            .bindPopup(crearTargeta('20:30', 'Plaça Dam', 'https://z-cdn-media.chatglm.cn/files/96f3a927-bfa5-4143-a73b-721914b93b37.png?auth_key=1886455503-694c5d9796fb49b59de511fbc621f567-0-4b4d3368b07892cce19a55c6db19c592', 'Cor històric.', 52.3731, 4.8926));
+        markers['dam'] = L.marker([52.3731, 4.8926], {icon: customIcon}).addTo(map)
+            .bindPopup(crearTargeta('20:30', 'Plaça Dam', 'https://z-cdn-media.chatglm.cn/files/96f3a927-bfa5-4143-a73b-721914b93b37.png?auth_key=1886455503-694c5d9796fb49b59de511fbc621f567-0-4b4d3368b07892cce19a55c6db19c592', 'Cor històric d\'Amsterdam.', false, 52.3731, 4.8926));
 
+        // FUNCIÓ PER CENTRAR EL MAPA I OBRIR LA TARGETA AL CLICAR
         function centrarMapa(id) {
             var marker = markers[id];
             if (marker) {
@@ -156,6 +560,120 @@
                 }, 300);
             }
             document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // JOC, TICKS I PUNTS LOGIC
+        function carregarEstatJoc() {
+            let punts = parseInt(localStorage.getItem('puntsViatge') || '0');
+            document.getElementById('puntsTotals').innerText = punts;
+
+            let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}');
+            for (let id in visitats) {
+                if (visitats[id] && id !== 'quiz1') {
+                    let card = document.getElementById('card_' + id);
+                    if (card) card.classList.add('visited');
+                }
+            }
+
+            let diaCompletat = localStorage.getItem('dia1_complet');
+            if (diaCompletat === 'true') {
+                let btn = document.getElementById('btnVisitat');
+                btn.innerText = "✅ Dia Completat!";
+                btn.disabled = true;
+                document.getElementById('quizArea').style.display = 'block';
+                
+                // Bloquejar formulari del quiz perquè no es pugui tornar a fer
+                document.querySelectorAll('#formQuiz1 input').forEach(input => input.disabled = true);
+                document.getElementById('btnValidar').disabled = true;
+            }
+        }
+        carregarEstatJoc();
+
+        function marcarVisitat(ev, id) {
+            if (ev && ev.stopPropagation) ev.stopPropagation();
+
+            if (id === 'quiz1') {
+                let jaVisitat = localStorage.getItem('dia1_btnVisitat');
+                if (jaVisitat !== 'true') {
+                    let punts = parseInt(localStorage.getItem('puntsViatge') || '0');
+                    punts += 50;
+                    localStorage.setItem('puntsViatge', punts);
+                    localStorage.setItem('dia1_btnVisitat', 'true');
+                    document.getElementById('puntsTotals').innerText = punts;
+                }
+                let btn = document.getElementById('btnVisitat');
+                btn.innerText = "✅ Estàs aquí! Ara fes el Quiz:";
+                btn.disabled = true; // Bloquegem el botó perquè no es pugui clicar més
+                document.getElementById('quizArea').style.display = 'block';
+                return;
+            }
+
+            let card = document.getElementById('card_' + id);
+            if (!card || card.classList.contains('visited')) return;
+
+            card.classList.add('visited');
+            let punts = parseInt(localStorage.getItem('puntsViatge') || '0');
+            punts += 10;
+            localStorage.setItem('puntsViatge', punts);
+            document.getElementById('puntsTotals').innerText = punts;
+
+            let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}');
+            visitats[id] = true;
+            localStorage.setItem('llocsVisitats', JSON.stringify(visitats));
+
+            crearEspurnes(card);
+        }
+
+        function validarQuiz(dia) {
+            let respostesCorrectes = 0;
+            let q1 = document.querySelector('input[name="q1"]:checked');
+            if (q1 && q1.value === '3') respostesCorrectes++;
+            let q2 = document.querySelector('input[name="q2"]:checked');
+            if (q2 && q2.value === 'fotos') respostesCorrectes++;
+
+            let feedback = document.getElementById('feedbackQuiz');
+
+            if (respostesCorrectes === 2) {
+                let jaQuiz = localStorage.getItem('dia' + dia + '_quiz');
+                if (jaQuiz !== 'true') {
+                    let punts = parseInt(localStorage.getItem('puntsViatge') || '0');
+                    punts += 50;
+                    localStorage.setItem('puntsViatge', punts);
+                    localStorage.setItem('dia' + dia + '_quiz', 'true');
+                    localStorage.setItem('dia' + dia + '_complet', 'true');
+                    document.getElementById('puntsTotals').innerText = punts;
+                }
+
+                feedback.style.color = '#4CAF50';
+                feedback.innerHTML = "🎉 PERFECTE! 50 punts més! Dia completat!";
+
+                let btn = document.getElementById('btnVisitat');
+                btn.innerText = "✅ Dia Completat!";
+                btn.disabled = true;
+                
+                // BLOQUEJEM EL FORMULARI I EL BOTÓ PERQUÈ NOMÉS ES PUGUI FER UN COP
+                document.querySelectorAll('#formQuiz1 input').forEach(input => input.disabled = true);
+                document.getElementById('btnValidar').disabled = true;
+            } else if (respostesCorrectes > 0) {
+                feedback.style.color = '#FF9800';
+                feedback.innerHTML = "🤔 Gairebé! Tens " + respostesCorrectes + "/2 correctes. Torna-ho a provar!";
+            } else {
+                feedback.style.color = '#FF5252';
+                feedback.innerHTML = "❌ Cap de correcte! Repassa la ruta del dia i torna-ho a intentar.";
+            }
+        }
+
+        function crearEspurnes(card) {
+            let emojis = ['✨', '🎉', '⭐', '🌟', '💫'];
+            for(let i=0; i<8; i++) {
+                let s = document.createElement('div');
+                s.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                s.className = 'sparkle';
+                s.style.left = (40 + Math.random() * 20) + '%';
+                s.style.top = (40 + Math.random() * 20) + '%';
+                card.appendChild(s);
+                setTimeout(() => s.remove(), 1000);
+            }
         }
     </script>
 </body>
