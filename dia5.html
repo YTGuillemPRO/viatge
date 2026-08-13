@@ -9,8 +9,10 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         body { margin: 0; font-family: 'Nunito', sans-serif; background-color: #E0F7FA; color: #333; }
-        .header { background: #5E35B1; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000; }
+        .header { background: #5E35B1; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000; }
         .header h1 { font-family: 'Baloo 2', cursive; margin: 0; font-size: 1.2rem; }
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .punts-box { background: white; padding: 6px 12px; border-radius: 20px; color: #FF9800; font-weight: 800; font-family: 'Baloo 2', cursive; font-size: 1rem; border: 2px solid #FF9800; white-space: nowrap; }
         .btn-tornar { background: white; color: #5E35B1; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-weight: 800; font-family: 'Baloo 2', cursive; font-size: 0.9rem; }
         #map { height: 400px; min-height: 300px; width: 100%; z-index: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .map-card { text-align: center; font-family: 'Nunito', sans-serif; max-width: 220px; }
@@ -24,9 +26,16 @@
         .timeline-container::before { content: ''; position: absolute; left: 12px; top: 10px; bottom: 10px; width: 6px; background-image: linear-gradient(#5E35B1 50%, rgba(255,255,255,0) 0%); background-size: 6px 20px; background-repeat: repeat-y; }
         .timeline-item { position: relative; margin-bottom: 30px; }
         .timeline-item::before { content: '📍'; position: absolute; left: -38px; top: -10px; width: 36px; height: 36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 3px solid #5E35B1; z-index: 2; }
-        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid #f0f0f0; cursor: pointer; }
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid #f0f0f0; cursor: pointer; position: relative; }
         .card:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); border-color: #5E35B1; }
         .card img { width: 100%; height: 160px; object-fit: cover; }
+        .tick-box { position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; background: rgba(255,255,255,0.9); border: 3px solid #5E35B1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #b0bec5; transition: all 0.3s; z-index: 10; cursor: pointer; }
+        .tick-box:hover { transform: scale(1.1); border-color: #4CAF50; color: #4CAF50; }
+        .card.visited { border-color: #4CAF50; background: #F1F8E9; box-shadow: 0 0 15px rgba(76, 175, 80, 0.4); }
+        .card.visited .tick-box { background: #4CAF50; border-color: #4CAF50; color: white; animation: pop 0.4s ease; pointer-events: none; cursor: default; }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+        .sparkle { position: absolute; font-size: 1.5rem; pointer-events: none; animation: volar 1s ease-out forwards; z-index: 20; }
+        @keyframes volar { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-40px) scale(0); } }
         .card-body { padding: 15px; }
         .time-badge { display: inline-block; background: #FF9800; color: white; padding: 4px 12px; border-radius: 15px; font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; box-shadow: 0 3px 0 #E65100; font-family: 'Baloo 2', cursive; }
         .card-body h3 { font-family: 'Baloo 2', cursive; margin: 0 0 8px 0; color: #4527A0; font-size: 1.2rem; }
@@ -35,132 +44,113 @@
         .info-card h2 { font-family: 'Baloo 2', cursive; color: #4527A0; font-size: 1.4rem; margin-top: 0; }
         .info-card p { font-size: 0.9rem; margin-bottom: 10px; }
         .alert-box { background: #FFF9C4; border: 2px solid #FBC02D; border-radius: 12px; padding: 12px; margin: 12px 0; font-weight: 700; font-size: 0.9rem; }
-        .link-box { background: #EDE7F6; border: 2px solid #5E35B1; border-radius: 12px; padding: 12px; margin: 12px 0; font-size: 0.9rem; }
-        .link-box a { color: #4527A0; font-weight: 800; text-decoration: none; }
+        .game-section { background: #FFF3E0; border: 3px dashed #FF9800; border-radius: 20px; padding: 25px; margin: 40px auto; max-width: 800px; text-align: center; }
+        .game-section h2 { font-family: 'Baloo 2', cursive; color: #E65100; font-size: 1.8rem; margin-top: 0; }
+        .btn-joc { background: #4CAF50; color: white; border: none; padding: 15px 30px; font-size: 1.2rem; font-family: 'Baloo 2', cursive; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #1B5E20; margin: 10px; transition: all 0.2s; }
+        .btn-joc:active { transform: translateY(4px); box-shadow: 0 0px 0 #1B5E20; }
+        .btn-joc:disabled { background: #BDBDBD; box-shadow: 0 4px 0 #757575; cursor: not-allowed; }
+        .quiz-form { margin-top: 20px; text-align: left; }
+        .quiz-question { font-weight: 700; margin-bottom: 10px; color: #333; }
+        .quiz-option { display: block; margin: 5px 0; padding: 10px; background: white; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
+        .quiz-option:hover { border-color: #FF9800; }
+        .feedback { font-weight: 800; margin-top: 15px; font-size: 1.2rem; }
         .btn-flotant { position: fixed; bottom: 15px; right: 15px; background: #03A9F4; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; }
     </style>
 </head>
 <body>
-
     <div class="header" id="top">
         <h1>🎢 Dia 5: Adrenalina a Efteling</h1>
-        <a href="index.html" class="btn-tornar">⬅ Tornar</a>
+        <div class="header-right">
+            <div class="punts-box">⭐ <span id="puntsTotals">0</span> Punts</div>
+            <a href="index.html" class="btn-tornar">⬅ Tornar</a>
+        </div>
     </div>
-
     <div id="map"></div>
-
     <div class="container">
         <div class="timeline-container">
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('entrada')"><img src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=800&auto=format&fit=crop" alt="Early Access"><div class="card-body"><span class="time-badge">09:30</span><h3>🎟️ Early Access</h3><p>Entrada anticipada (30 min abans). Creuar el parc a pas ràpid fins al fons a la dreta (zona Ruigrijk).</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('quadrat')"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Cuadrado del Terror"><div class="card-body"><span class="time-badge">09:40 - 11:30</span><h3>🎢 El Quadrat del Terror</h3><p>Les 4 muntanyes russes fortes a la mateixa plaça. Ordre ideal:<br>1. Baron 1898 (La més lenta de carregar).<br>2. Joris en de Draak.<br>3. Python.<br>4. De Vliegende Hollander.<br><em>(Piraña??)</em></p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('dinar')"><img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=800&auto=format&fit=crop" alt="Dinar"><div class="card-body"><span class="time-badge">12:45</span><h3>🍔 Dinar: Station de Oost</h3><p>Al centre geomètric de les 4 muntanyes rusas. Menjar abans que es saturi a les 13:00h. <strong>Opció:</strong> De Likkebaerd (Hamburgueses per emportar, molt bones).</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('reizenrijk')"><img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="Caminata Nord"><div class="card-body"><span class="time-badge">12:45</span><h3>🚶 Caminada Nord (Reizenrijk)</h3><p>Pugeu pel marge del llac. Passejada plana de 5-7 minuts.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('vogelrok')"><img src="https://images.unsplash.com/photo-1531971589569-0d9370cbe1e5?q=80&w=800&auto=format&fit=crop" alt="Vogel Rok"><div class="card-body"><span class="time-badge">13:00</span><h3>🐦 Vogel Rok</h3><p>Muntanya russa indoor en la foscor.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('carnaval')"><img src="https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=800&auto=format&fit=crop" alt="Carnaval Festival"><div class="card-body"><span class="time-badge">14:00</span><h3>🎪 Carnaval Festival / Speelweide</h3><p>Porta amb porta amb Vogel Rok. Cua zero, 8 persones en carrets. <strong>Opció millor:</strong> Anar al Speelweide (entrada contigua) per gaudir de l'ambient del Zomerstrand i fer un "tardeo" o sopar aviat.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('pagode')"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Pagode"><div class="card-body"><span class="time-badge">17:30</span><h3>🏯 Pagode</h3><p>Descens al sud del parc (Anderrijk Sur). Pujar a la Pagode per veure el parc des de l'aire a la posta de sol.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('fata')"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Fata Morgana"><div class="card-body"><span class="time-badge">18:00</span><h3>⛵ Fata Morgana</h3><p>Pugeu a les barques. A aquesta hora, aquesta cantonada del parc està molt tranquil·la.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('oase')"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop" alt="Sopar"><div class="card-body"><span class="time-badge">19:00</span><h3>🥙 Sopar: Oase</h3><p>A la mateixa plaça de Fata Morgana. Kebabs i pizzes turqueses ràpides. Compreu el sopar i seieu a la vora del llac per agafar lloc de primera fila per l'Aquanura. <strong>Hi ha taules si anem aviat!</strong></p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('aquanura')"><img src="https://images.unsplash.com/photo-1542315192-1f61a1792f33?q=80&w=800&auto=format&fit=crop" alt="Aquanura"><div class="card-body"><span class="time-badge">21:00</span><h3>💧 Aquanura</h3><p>Final de l'espectacle d'aigua i llums. Caminada curta a dormir.</p></div></div></div>
-
+            <div class="timeline-item"><div class="card" id="card_entrada" onclick="centrarMapa('entrada')"><div class="tick-box" onclick="marcarVisitat(event, 'entrada')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=800&auto=format&fit=crop" alt="Early Access"><div class="card-body"><span class="time-badge">09:30</span><h3>🎟️ Early Access</h3><p>Entrada anticipada (30 min abans). Creuar el parc a pas ràpid fins al fons a la dreta (zona Ruigrijk).</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_quadrat" onclick="centrarMapa('quadrat')"><div class="tick-box" onclick="marcarVisitat(event, 'quadrat')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Cuadrado del Terror"><div class="card-body"><span class="time-badge">09:40 - 11:30</span><h3>🎢 El Quadrat del Terror</h3><p>Les 4 muntanyes russes fortes a la mateixa plaça. Ordre ideal:<br>1. Baron 1898 (La més lenta de carregar).<br>2. Joris en de Draak.<br>3. Python.<br>4. De Vliegende Hollander.<br><em>(Piraña??)</em></p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_dinar" onclick="centrarMapa('dinar')"><div class="tick-box" onclick="marcarVisitat(event, 'dinar')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=800&auto=format&fit=crop" alt="Dinar"><div class="card-body"><span class="time-badge">12:45</span><h3>🍔 Dinar: Station de Oost</h3><p>Al centre geomètric de les 4 muntanyes rusas. Menjar abans que es saturi a les 13:00h. <strong>Opció:</strong> De Likkebaerd (Hamburgueses per emportar, molt bones).</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_reizenrijk" onclick="centrarMapa('reizenrijk')"><div class="tick-box" onclick="marcarVisitat(event, 'reizenrijk')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="Caminata Nord"><div class="card-body"><span class="time-badge">12:45</span><h3>🚶 Caminada Nord (Reizenrijk)</h3><p>Pugeu pel marge del llac. Passejada plana de 5-7 minuts.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_vogelrok" onclick="centrarMapa('vogelrok')"><div class="tick-box" onclick="marcarVisitat(event, 'vogelrok')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1531971589569-0d9370cbe1e5?q=80&w=800&auto=format&fit=crop" alt="Vogel Rok"><div class="card-body"><span class="time-badge">13:00</span><h3>🐦 Vogel Rok</h3><p>Muntanya russa indoor en la foscor.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_carnaval" onclick="centrarMapa('carnaval')"><div class="tick-box" onclick="marcarVisitat(event, 'carnaval')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=800&auto=format&fit=crop" alt="Carnaval Festival"><div class="card-body"><span class="time-badge">14:00</span><h3>🎪 Carnaval Festival / Speelweide</h3><p>Porta amb porta amb Vogel Rok. Cua zero, 8 persones en carrets. <strong>Opció millor:</strong> Anar al Speelweide (entrada contigua) per gaudir de l'ambient del Zomerstrand i fer un "tardeo" o sopar aviat.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_pagode" onclick="centrarMapa('pagode')"><div class="tick-box" onclick="marcarVisitat(event, 'pagode')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Pagode"><div class="card-body"><span class="time-badge">17:30</span><h3>🏯 Pagode</h3><p>Descens al sud del parc (Anderrijk Sur). Pujar a la Pagode per veure el parc des de l'aire a la posta de sol.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_fata" onclick="centrarMapa('fata')"><div class="tick-box" onclick="marcarVisitat(event, 'fata')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Fata Morgana"><div class="card-body"><span class="time-badge">18:00</span><h3>⛵ Fata Morgana</h3><p>Pugeu a les barques. A aquesta hora, aquesta cantonada del parc està molt tranquil·la.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_oase" onclick="centrarMapa('oase')"><div class="tick-box" onclick="marcarVisitat(event, 'oase')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop" alt="Sopar"><div class="card-body"><span class="time-badge">19:00</span><h3>🥙 Sopar: Oase</h3><p>A la mateixa plaça de Fata Morgana. Kebabs i pizzes turqueses ràpides. Compreu el sopar i seieu a la vora del llac per agafar lloc de primera fila per l'Aquanura. <strong>Hi ha taules si anem aviat!</strong></p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_aquanura" onclick="centrarMapa('aquanura')"><div class="tick-box" onclick="marcarVisitat(event, 'aquanura')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1542315192-1f61a1792f33?q=80&w=800&auto=format&fit=crop" alt="Aquanura"><div class="card-body"><span class="time-badge">21:00</span><h3>💧 Aquanura</h3><p>Final de l'espectacle d'aigua i llums. Caminada curta a dormir.</p></div></div></div>
         </div>
-
-        <!-- ENLLAÇOS I AVISOS -->
-        <div class="info-card">
-            <h2>📱 Avisos i Enllaços</h2>
-            <div class="link-box">
-                ⏱️ <a href="https://www.efteling.com/en/overnight-stays/enjoy-extra-early" target="_blank">Informació Early Access (Efteling)</a>
-            </div>
-            <div class="alert-box">
-                🥡 <strong>Estratègia Sopar:</strong> Oase és la opció més ràpida. Compreu menjar ràpid i mengeu de manera informal als bancs o al mur del llag per assegurar-vos bona vista per l'Aquanura de les 21:00h.
-            </div>
-            <div class="alert-box">
-                🏖️ <strong>Speelweide (Zomerstrand):</strong> Si voleu relaxar-vos a la tarda, l'entrada contigua al Carnaval Festival porta directe al cor del parc, envoltat d'arbres. Ideal per un "tardeo" abans de les atraccions del sud.
+        <div class="game-section">
+            <h2>🏆 Repte del Dia 5</h2>
+            <button id="btnVisitat" class="btn-joc" onclick="marcarVisitat(event, 'quiz5')">📍 Ja hem acabat el dia! (+50 Punts)</button>
+            <div id="quizArea" style="display:none;">
+                <form class="quiz-form" id="formQuiz5">
+                    <div class="quiz-question">1. Quin avantatge tenim amb l'entrada al parc avui?</div>
+                    <label class="quiz-option"><input type="radio" name="q1" value="gratis"> Entrada gratuïta</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="early"> Early Access (30 min abans)</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="skip"> Salten les cues</label>
+                    <div class="quiz-question" style="margin-top:15px;">2. Quina atracció és una muntanya russa indoor a les fosques?</div>
+                    <label class="quiz-option"><input type="radio" name="q2" value="baron"> Baron 1898</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="python"> Python</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="vogelrok"> Vogel Rok</label>
+                </form>
+                <button class="btn-joc" id="btnValidar" onclick="validarQuiz(5)" style="background:#03A9F4; box-shadow:0 4px 0 #0277BD;">Validar Quiz (+50 Punts)</button>
+                <div id="feedbackQuiz" class="feedback"></div>
             </div>
         </div>
-
     </div>
-
-    <a href="index.html" class="btn-flotant">🏠</a>
-
+    <a href="dia6.html" class="btn-flotant">➡</a>
     <script>
         var map = L.map('map').setView([51.6495, 5.0430], 16);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
         setTimeout(function(){ map.invalidateSize(); }, 500);
-
-        function crearIcona(emoji) {
-            return L.divIcon({
-                className: 'custom-pin',
-                html: `<div style="font-size: 28px;">${emoji}</div>`,
-                iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
-            });
-        }
-
+        var customIcon = L.divIcon({ className: 'custom-pin', html: '<div style="font-size: 28px;">📍</div>', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] });
         function crearTargeta(hora, titol, foto, descripcio, lat, lng) {
             let gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-            return `
-                <div class="map-card">
-                    <img src="${foto}" alt="${titol}">
-                    <span class="hora">${hora}</span>
-                    <h3>${titol}</h3>
-                    <p>${descripcio}</p>
-                    <a href="${gmapsUrl}" target="_blank" class="map-btn">📍 Ruta a Google Maps</a>
-                </div>
-            `;
+            return `<div class="map-card"><img src="${foto}" alt="${titol}"><span class="hora">${hora}</span><h3>${titol}</h3><p>${descripcio}</p><a href="${gmapsUrl}" target="_blank" class="map-btn">📍 Ruta a Google Maps</a></div>`;
         }
-
         var markers = {};
-
-        markers['entrada'] = L.marker([51.6502, 5.0441], {icon: crearIcona('🎟️')}).addTo(map)
-            .bindPopup(crearTargeta('09:30', 'Early Access', 'https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=400&auto=format&fit=crop', 'Entrada 30 min abans.', 51.6502, 5.0441));
-
-        markers['quadrat'] = L.marker([51.6488, 5.0415], {icon: crearIcona('🎢')}).addTo(map)
-            .bindPopup(crearTargeta('09:40', 'Quadrat del Terror', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Ruigrijk: Baron, Joris, Python, Vliegende Hollander.', 51.6488, 5.0415));
-
-        markers['dinar'] = L.marker([51.6489, 5.0422], {icon: crearIcona('🍔')}).addTo(map)
-            .bindPopup(crearTargeta('12:45', 'Station de Oost', 'https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=400&auto=format&fit=crop', 'Menjar ràpid abans de les 13h.', 51.6489, 5.0422));
-
-        markers['reizenrijk'] = L.marker([51.6495, 5.0429], {icon: crearIcona('🚶')}).addTo(map)
-            .bindPopup(crearTargeta('12:45', 'Caminata Nord', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=400&auto=format&fit=crop', 'Passejada vora el llac.', 51.6495, 5.0429));
-
-        markers['vogelrok'] = L.marker([51.6496, 5.0432], {icon: crearIcona('🐦')}).addTo(map)
-            .bindPopup(crearTargeta('13:00', 'Vogel Rok', 'https://images.unsplash.com/photo-1531971589569-0d9370cbe1e5?q=80&w=400&auto=format&fit=crop', 'Muntanya russa indoor.', 51.6496, 5.0432));
-
-        markers['carnaval'] = L.marker([51.6500, 5.0435], {icon: crearIcona('🎪')}).addTo(map)
-            .bindPopup(crearTargeta('14:00', 'Carnaval Festival', 'https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=400&auto=format&fit=crop', 'Cua zero. Accés a Speelweide.', 51.6500, 5.0435));
-
-        markers['pagode'] = L.marker([51.6491, 5.0446], {icon: crearIcona('🏯')}).addTo(map)
-            .bindPopup(crearTargeta('17:30', 'Pagode', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Vistes des de l\'aire al sud.', 51.6491, 5.0446));
-
-        markers['fata'] = L.marker([51.6485, 5.0452], {icon: crearIcona('⛵')}).addTo(map)
-            .bindPopup(crearTargeta('18:00', 'Fata Morgana', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Barques pel desert.', 51.6485, 5.0452));
-
-        markers['oase'] = L.marker([51.6486, 5.0451], {icon: crearIcona('🥙')}).addTo(map)
-            .bindPopup(crearTargeta('19:00', 'Oase (Sopar)', 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=400&auto=format&fit=crop', 'Kebab ràpid. Agafar taula!', 51.6486, 5.0451));
-
-        markers['aquanura'] = L.marker([51.6490, 5.0448], {icon: crearIcona('💧')}).addTo(map)
-            .bindPopup(crearTargeta('21:00', 'Aquanura', 'https://images.unsplash.com/photo-1542315192-1f61a1792f33?q=80&w=400&auto=format&fit=crop', 'Espectacle d\'aigua final.', 51.6490, 5.0448));
-
-        function centrarMapa(id) {
-            var marker = markers[id];
-            if (marker) {
-                map.setView(marker.getLatLng(), 17);
-                setTimeout(function() {
-                    marker.openPopup();
-                    map.invalidateSize();
-                }, 300);
-            }
-            document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        markers['entrada'] = L.marker([51.6502, 5.0441], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('09:30', 'Early Access', 'https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=400&auto=format&fit=crop', 'Entrada 30 min abans.', 51.6502, 5.0441));
+        markers['quadrat'] = L.marker([51.6488, 5.0415], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('09:40', 'Quadrat del Terror', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Ruigrijk: Baron, Joris, Python, Vliegende Hollander.', 51.6488, 5.0415));
+        markers['dinar'] = L.marker([51.6489, 5.0422], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('12:45', 'Station de Oost', 'https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=400&auto=format&fit=crop', 'Menjar ràpid abans de les 13h.', 51.6489, 5.0422));
+        markers['reizenrijk'] = L.marker([51.6495, 5.0429], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('12:45', 'Caminata Nord', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=400&auto=format&fit=crop', 'Passejada vora el llac.', 51.6495, 5.0429));
+        markers['vogelrok'] = L.marker([51.6496, 5.0432], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('13:00', 'Vogel Rok', 'https://images.unsplash.com/photo-1531971589569-0d9370cbe1e5?q=80&w=400&auto=format&fit=crop', 'Muntanya russa indoor.', 51.6496, 5.0432));
+        markers['carnaval'] = L.marker([51.6500, 5.0435], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('14:00', 'Carnaval Festival', 'https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=400&auto=format&fit=crop', 'Cua zero. Accés a Speelweide.', 51.6500, 5.0435));
+        markers['pagode'] = L.marker([51.6491, 5.0446], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('17:30', 'Pagode', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Vistes des de l\'aire al sud.', 51.6491, 5.0446));
+        markers['fata'] = L.marker([51.6485, 5.0452], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('18:00', 'Fata Morgana', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Barques pel desert.', 51.6485, 5.0452));
+        markers['oase'] = L.marker([51.6486, 5.0451], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('19:00', 'Oase (Sopar)', 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=400&auto=format&fit=crop', 'Kebab ràpid. Agafar taula!', 51.6486, 5.0451));
+        markers['aquanura'] = L.marker([51.6490, 5.0448], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('21:00', 'Aquanura', 'https://images.unsplash.com/photo-1542315192-1f61a1792f33?q=80&w=400&auto=format&fit=crop', 'Espectacle d\'aigua final.', 51.6490, 5.0448));
+        function centrarMapa(id) { var marker = markers[id]; if (marker) { map.setView(marker.getLatLng(), 17); setTimeout(function() { marker.openPopup(); map.invalidateSize(); }, 300); } document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        function carregarEstatJoc() {
+            let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); document.getElementById('puntsTotals').innerText = punts;
+            let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}');
+            for (let id in visitats) { if (visitats[id] && id !== 'quiz5') { let card = document.getElementById('card_' + id); if (card) card.classList.add('visited'); } }
+            let diaCompletat = localStorage.getItem('dia5_complet');
+            if (diaCompletat === 'true') { let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Dia Completat!"; btn.disabled = true; document.getElementById('quizArea').style.display = 'block'; document.querySelectorAll('#formQuiz5 input').forEach(input => input.disabled = true); document.getElementById('btnValidar').disabled = true; }
         }
+        carregarEstatJoc();
+        function marcarVisitat(ev, id) {
+            if (ev && ev.stopPropagation) ev.stopPropagation();
+            if (id === 'quiz5') {
+                let jaVisitat = localStorage.getItem('dia5_btnVisitat');
+                if (jaVisitat !== 'true') { let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 50; localStorage.setItem('puntsViatge', punts); localStorage.setItem('dia5_btnVisitat', 'true'); document.getElementById('puntsTotals').innerText = punts; }
+                let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Estàs aquí! Ara fes el Quiz:"; btn.disabled = true; document.getElementById('quizArea').style.display = 'block'; return;
+            }
+            let card = document.getElementById('card_' + id); if (!card || card.classList.contains('visited')) return;
+            card.classList.add('visited'); let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 10; localStorage.setItem('puntsViatge', punts); document.getElementById('puntsTotals').innerText = punts;
+            let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}'); visitats[id] = true; localStorage.setItem('llocsVisitats', JSON.stringify(visitats));
+            crearEspurnes(card);
+        }
+        function validarQuiz(dia) {
+            let respostesCorrectes = 0; let q1 = document.querySelector('input[name="q1"]:checked'); if (q1 && q1.value === 'early') respostesCorrectes++;
+            let q2 = document.querySelector('input[name="q2"]:checked'); if (q2 && q2.value === 'vogelrok') respostesCorrectes++;
+            let feedback = document.getElementById('feedbackQuiz');
+            if (respostesCorrectes === 2) {
+                let jaQuiz = localStorage.getItem('dia' + dia + '_quiz'); if (jaQuiz !== 'true') { let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 50; localStorage.setItem('puntsViatge', punts); localStorage.setItem('dia' + dia + '_quiz', 'true'); localStorage.setItem('dia' + dia + '_complet', 'true'); document.getElementById('puntsTotals').innerText = punts; }
+                feedback.style.color = '#4CAF50'; feedback.innerHTML = "🎉 PERFECTE! 50 punts més! Dia completat!"; let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Dia Completat!"; btn.disabled = true; document.querySelectorAll('#formQuiz5 input').forEach(input => input.disabled = true); document.getElementById('btnValidar').disabled = true;
+            } else if (respostesCorrectes > 0) { feedback.style.color = '#FF9800'; feedback.innerHTML = "🤔 Gairebé! Tens " + respostesCorrectes + "/2 correctes. Torna-ho a provar!"; }
+            else { feedback.style.color = '#FF5252'; feedback.innerHTML = "❌ Cap de correcte! Repassa la ruta del dia i torna-ho a intentar."; }
+        }
+        function crearEspurnes(card) { let emojis = ['✨', '🎉', '⭐', '🌟', '💫']; for(let i=0; i<8; i++) { let s = document.createElement('div'); s.innerText = emojis[Math.floor(Math.random() * emojis.length)]; s.className = 'sparkle'; s.style.left = (40 + Math.random() * 20) + '%'; s.style.top = (40 + Math.random() * 20) + '%'; card.appendChild(s); setTimeout(() => s.remove(), 1000); } }
     </script>
 </body>
 </html>
