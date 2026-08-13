@@ -9,8 +9,10 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         body { margin: 0; font-family: 'Nunito', sans-serif; background-color: #E0F7FA; color: #333; }
-        .header { background: #4CAF50; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000; }
+        .header { background: #4CAF50; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000; }
         .header h1 { font-family: 'Baloo 2', cursive; margin: 0; font-size: 1.2rem; }
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .punts-box { background: white; padding: 6px 12px; border-radius: 20px; color: #FF9800; font-weight: 800; font-family: 'Baloo 2', cursive; font-size: 1rem; border: 2px solid #FF9800; white-space: nowrap; }
         .btn-tornar { background: white; color: #4CAF50; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-weight: 800; font-family: 'Baloo 2', cursive; font-size: 0.9rem; }
         #map { height: 400px; min-height: 300px; width: 100%; z-index: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .map-card { text-align: center; font-family: 'Nunito', sans-serif; max-width: 220px; }
@@ -24,110 +26,129 @@
         .timeline-container::before { content: ''; position: absolute; left: 12px; top: 10px; bottom: 10px; width: 6px; background-image: linear-gradient(#4CAF50 50%, rgba(255,255,255,0) 0%); background-size: 6px 20px; background-repeat: repeat-y; }
         .timeline-item { position: relative; margin-bottom: 30px; }
         .timeline-item::before { content: '📍'; position: absolute; left: -38px; top: -10px; width: 36px; height: 36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 3px solid #4CAF50; z-index: 2; }
-        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid #f0f0f0; cursor: pointer; }
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid #f0f0f0; cursor: pointer; position: relative; }
         .card:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); border-color: #4CAF50; }
         .card img { width: 100%; height: 160px; object-fit: cover; }
+        .tick-box { position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; background: rgba(255,255,255,0.9); border: 3px solid #4CAF50; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #b0bec5; transition: all 0.3s; z-index: 10; cursor: pointer; }
+        .tick-box:hover { transform: scale(1.1); border-color: #4CAF50; color: #4CAF50; }
+        .card.visited { border-color: #4CAF50; background: #F1F8E9; box-shadow: 0 0 15px rgba(76, 175, 80, 0.4); }
+        .card.visited .tick-box { background: #4CAF50; border-color: #4CAF50; color: white; animation: pop 0.4s ease; pointer-events: none; cursor: default; }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+        .sparkle { position: absolute; font-size: 1.5rem; pointer-events: none; animation: volar 1s ease-out forwards; z-index: 20; }
+        @keyframes volar { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-40px) scale(0); } }
         .card-body { padding: 15px; }
         .time-badge { display: inline-block; background: #FF9800; color: white; padding: 4px 12px; border-radius: 15px; font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; box-shadow: 0 3px 0 #E65100; font-family: 'Baloo 2', cursive; }
         .card-body h3 { font-family: 'Baloo 2', cursive; margin: 0 0 8px 0; color: #2E7D32; font-size: 1.2rem; }
         .card-body p { margin: 0; color: #555; line-height: 1.4; font-size: 0.95rem; }
         .info-card { background: white; border-radius: 15px; padding: 20px; margin: 30px auto; max-width: 800px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-left: 6px solid #03A9F4; }
         .info-card h2 { font-family: 'Baloo 2', cursive; color: #0288D1; font-size: 1.4rem; margin-top: 0; }
-        .info-card p { font-size: 0.9rem; }
+        .info-card p { font-size: 0.9rem; margin-bottom: 10px; }
+        .game-section { background: #FFF3E0; border: 3px dashed #FF9800; border-radius: 20px; padding: 25px; margin: 40px auto; max-width: 800px; text-align: center; }
+        .game-section h2 { font-family: 'Baloo 2', cursive; color: #E65100; font-size: 1.8rem; margin-top: 0; }
+        .btn-joc { background: #4CAF50; color: white; border: none; padding: 15px 30px; font-size: 1.2rem; font-family: 'Baloo 2', cursive; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #1B5E20; margin: 10px; transition: all 0.2s; }
+        .btn-joc:active { transform: translateY(4px); box-shadow: 0 0px 0 #1B5E20; }
+        .btn-joc:disabled { background: #BDBDBD; box-shadow: 0 4px 0 #757575; cursor: not-allowed; }
+        .quiz-form { margin-top: 20px; text-align: left; }
+        .quiz-question { font-weight: 700; margin-bottom: 10px; color: #333; }
+        .quiz-option { display: block; margin: 5px 0; padding: 10px; background: white; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
+        .quiz-option:hover { border-color: #FF9800; }
+        .feedback { font-weight: 800; margin-top: 15px; font-size: 1.2rem; }
         .btn-flotant { position: fixed; bottom: 15px; right: 15px; background: #03A9F4; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; }
     </style>
 </head>
 <body>
-
     <div class="header" id="top">
         <h1>🚲 Dia 2: Museus i Parcs</h1>
-        <a href="index.html" class="btn-tornar">⬅ Tornar</a>
+        <div class="header-right">
+            <div class="punts-box">⭐ <span id="puntsTotals">0</span> Punts</div>
+            <a href="index.html" class="btn-tornar">⬅ Tornar</a>
+        </div>
     </div>
-
     <div id="map"></div>
-
     <div class="container">
         <div class="timeline-container">
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('rembrandt')"><img src="https://images.unsplash.com/photo-1604147495798-57beb5d6af73?q=80&w=800&auto=format&fit=crop" alt="Rembrandtplein"><div class="card-body"><span class="time-badge">11:30</span><h3>🎨 Rembrandtplein</h3><p>La plaça Rembrandt és un bell homenatge a aquest pintor i dibuixant originari dels Països Baixos. Aquesta bonica plaça, plena de restaurants i bars, és un lloc turístic imprescindible. Podeu menjar per la zona les famoses tortites (Pannenkoeken) o patates fregides.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('bloemenmarkt')"><img src="https://images.unsplash.com/photo-1591851633816-cca5d83a0e8e?q=80&w=800&auto=format&fit=crop" alt="Bloemenmarkt"><div class="card-body"><span class="time-badge">12:00</span><h3>🌷 Bloemenmarkt</h3><p>El famós mercat flotant de flors d'Amsterdam, ubicat al canal Singel des de 1862. Els seus parats de fusta estan sobre barcasses amarrades al canal, on trobaràs des de bulbs de tulipà (el seu producte estrella) fins a souvenirs i flors fresques. Una de les postals més icòniques del centre històric.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('gouden')"><img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="De Gouden Bocht"><div class="card-body"><span class="time-badge">12:30</span><h3>🏛️ De Gouden Bocht</h3><p>La "Corba d'Or" és el tram més elegant i majestuós del canal Herengracht. Durant el Segle d'Or holandès (segle XVII), els comerciants i alcaldes més rics d'Amsterdam van construir aquí les seves opulentes mansions amb façanes de pedra esculpida i blasons familiars. Avui és un dels passejos fotogràfics més impressionants.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('pannenkoek')"><img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=800&auto=format&fit=crop" alt="Pannenkoeken"><div class="card-body"><span class="time-badge">13:00</span><h3>🥞 Dinar: Pannenkoeken</h3><p>A prop del riu o per la zona de l'espill d'aigua del Rijksmuseum, atureu-vos a menjar en un restaurant tradicional de Pannenkoeken (tortites holandeses gegants dolces i salades, èxit segur amb nens).</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('museumplein')"><img src="https://images.unsplash.com/photo-1573043468237-2966b18b4fde?q=80&w=800&auto=format&fit=crop" alt="Museumplein"><div class="card-body"><span class="time-badge">15:00</span><h3>🖼️ Museumplein</h3><p>La Plaça dels Museos és un enorme parc públic i centre cultural. És el cor artístic d'Amsterdam, famós per albergar els museus més importants: el Rijksmuseum (Museu Nacional), el Museu Van Gogh, el Stedelijk i el Concertgebouw. Compta amb prades i àrees de joc infantils.</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('vondelpark')"><img src="https://images.unsplash.com/photo-1581922815291-cb0fc0f3e0d2?q=80&w=800&auto=format&fit=crop" alt="Vondelpark"><div class="card-body"><span class="time-badge">16:30 - 18:30</span><h3>🚲 Bicis al Vondelpark</h3><p>Anem cap a la zona dels museus i lloguem les bicicletes junt al Vondelpark per fer un recorregut de 2 hores en un entorn 100% segur per als nens. (A-Bike Vondelpark o Black Bikes Leidseplein: tenen bicis infantils, cascos i cadenats).</p></div></div></div>
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('leidseplein')"><img src="https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=800&auto=format&fit=crop" alt="Leidseplein"><div class="card-body"><span class="time-badge">20:30</span><h3>🍔 Sopar: Leidseplein / Foodhallen</h3><p>Sopar relaxat per la zona abans de tornar a l'hotel. Al Leidseplein hi ha moltes pizzeries i hamburgueseries. Opció: Foodhallen (mercat gastronòmic a 10 min a peu) on cadascú pot demanar el que vulgui (sushi, tacos, gofres) i seure junts en taules grans. Als nens els encantarà!</p></div></div></div>
-
+            <div class="timeline-item"><div class="card" id="card_rembrandt" onclick="centrarMapa('rembrandt')"><div class="tick-box" onclick="marcarVisitat(event, 'rembrandt')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1604147495798-57beb5d6af73?q=80&w=800&auto=format&fit=crop" alt="Rembrandtplein"><div class="card-body"><span class="time-badge">11:30</span><h3>🎨 Rembrandtplein</h3><p>La plaça Rembrandt és un bell homenatge a aquest pintor i dibuixant originari dels Països Baixos. Aquesta bonica plaça, plena de restaurants i bars, és un lloc turístic imprescindible. Podeu menjar per la zona les famoses tortites (Pannenkoeken) o patates fregides.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_bloemenmarkt" onclick="centrarMapa('bloemenmarkt')"><div class="tick-box" onclick="marcarVisitat(event, 'bloemenmarkt')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1591851633816-cca5d83a0e8e?q=80&w=800&auto=format&fit=crop" alt="Bloemenmarkt"><div class="card-body"><span class="time-badge">12:00</span><h3>🌷 Bloemenmarkt</h3><p>El famós mercat flotant de flors d'Amsterdam, ubicat al canal Singel des de 1862. Els seus parats de fusta estan sobre barcasses amarrades al canal, on trobaràs des de bulbs de tulipà (el seu producte estrella) fins a souvenirs i flors fresques. Una de les postals més icòniques del centre històric.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_gouden" onclick="centrarMapa('gouden')"><div class="tick-box" onclick="marcarVisitat(event, 'gouden')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="De Gouden Bocht"><div class="card-body"><span class="time-badge">12:30</span><h3>🏛️ De Gouden Bocht</h3><p>La "Corba d'Or" és el tram més elegant i majestuós del canal Herengracht. Durant el Segle d'Or holandès (segle XVII), els comerciants i alcaldes més rics d'Amsterdam van construir aquí les seves opulentes mansions amb façanes de pedra esculpida i blasons familiars. Avui és un dels passejos fotogràfics més impressionants.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_pannenkoek" onclick="centrarMapa('pannenkoek')"><div class="tick-box" onclick="marcarVisitat(event, 'pannenkoek')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=800&auto=format&fit=crop" alt="Pannenkoeken"><div class="card-body"><span class="time-badge">13:00</span><h3>🥞 Dinar: Pannenkoeken</h3><p>A prop del riu o per la zona de l'espill d'aigua del Rijksmuseum, atureu-vos a menjar en un restaurant tradicional de Pannenkoeken (tortites holandeses gegants dolces i salades, èxit segur amb nens).</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_museumplein" onclick="centrarMapa('museumplein')"><div class="tick-box" onclick="marcarVisitat(event, 'museumplein')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1573043468237-2966b18b4fde?q=80&w=800&auto=format&fit=crop" alt="Museumplein"><div class="card-body"><span class="time-badge">15:00</span><h3>🖼️ Museumplein</h3><p>La Plaça dels Museus és un enorme parc públic i centre cultural. És el cor artístic d'Amsterdam, famós per albergar els museus més importants: el Rijksmuseum (Museu Nacional), el Museu Van Gogh, el Stedelijk i el Concertgebouw. Compta amb prades i àrees de joc infantils.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_vondelpark" onclick="centrarMapa('vondelpark')"><div class="tick-box" onclick="marcarVisitat(event, 'vondelpark')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1581922815291-cb0fc0f3e0d2?q=80&w=800&auto=format&fit=crop" alt="Vondelpark"><div class="card-body"><span class="time-badge">16:30 - 18:30</span><h3>🚲 Bicis al Vondelpark</h3><p>Anem cap a la zona dels museus i lloguem les bicicletes junt al Vondelpark per fer un recorregut de 2 hores en un entorn 100% segur per als nens. (A-Bike Vondelpark o Black Bikes Leidseplein: tenen bicis infantils, cascos i cadenats).</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_leidseplein" onclick="centrarMapa('leidseplein')"><div class="tick-box" onclick="marcarVisitat(event, 'leidseplein')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=800&auto=format&fit=crop" alt="Leidseplein"><div class="card-body"><span class="time-badge">20:30</span><h3>🍔 Sopar: Leidseplein / Foodhallen</h3><p>Sopar relaxat per la zona abans de tornar a l'hotel. Al Leidseplein hi ha moltes pizzeries i hamburgueseries. Opció: Foodhallen (mercat gastronòmic a 10 min a peu) on cadascú pot demanar el que vulgui (sushi, tacos, gofres) i seure junts en taules grans. Als nens els encantarà!</p></div></div></div>
         </div>
-
         <div class="info-card">
             <h2>🚋 Tornar al Centre</h2>
             <p><strong>En Tramvia (Línia 2, 12 o 17):</strong> Fins a les 12:30. Surts de tornar les bicis, camineu a la parada de Leidseplein i en 8-10 minuts de tramvia esteu de vuelta a la Plaça Dam o Estació Central.</p>
             <p><strong>Dada curiosa:</strong> La línia 2 de tramvia està considerada per la revista National Geographic com una de les rutes de tramvia urbà més maques del món pels canals que creua.</p>
         </div>
+        <div class="game-section">
+            <h2>🏆 Repte del Dia 2</h2>
+            <button id="btnVisitat" class="btn-joc" onclick="marcarVisitat(event, 'quiz2')">📍 Ja hem acabat el dia! (+50 Punts)</button>
+            <div id="quizArea" style="display:none;">
+                <form class="quiz-form" id="formQuiz2">
+                    <div class="quiz-question">1. Què és el que podeu menjar per la zona de Rembrandtplein?</div>
+                    <label class="quiz-option"><input type="radio" name="q1" value="sushi"> Sushi</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="pannenkoeken"> Pannenkoeken (Tortites)</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="tacos"> Tacos</label>
+                    <div class="quiz-question" style="margin-top:15px;">2. Des de quin any està el mercat flotant de flors (Bloemenmarkt) al canal Singel?</div>
+                    <label class="quiz-option"><input type="radio" name="q2" value="1500"> 1500</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="1862"> 1862</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="1990"> 1990</label>
+                </form>
+                <button class="btn-joc" id="btnValidar" onclick="validarQuiz(2)" style="background:#03A9F4; box-shadow:0 4px 0 #0277BD;">Validar Quiz (+50 Punts)</button>
+                <div id="feedbackQuiz" class="feedback"></div>
+            </div>
+        </div>
     </div>
-
-    <a href="index.html" class="btn-flotant">🏠</a>
-
+    <a href="dia3.html" class="btn-flotant">➡</a>
     <script>
         var map = L.map('map').setView([52.3580, 4.8815], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
         setTimeout(function(){ map.invalidateSize(); }, 500);
-
-        function crearIcona(emoji) {
-            return L.divIcon({
-                className: 'custom-pin',
-                html: `<div style="font-size: 28px;">${emoji}</div>`,
-                iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
-            });
-        }
-
+        var customIcon = L.divIcon({ className: 'custom-pin', html: '<div style="font-size: 28px;">📍</div>', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] });
         function crearTargeta(hora, titol, foto, descripcio, lat, lng) {
             let gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-            return `
-                <div class="map-card">
-                    <img src="${foto}" alt="${titol}">
-                    <span class="hora">${hora}</span>
-                    <h3>${titol}</h3>
-                    <p>${descripcio}</p>
-                    <a href="${gmapsUrl}" target="_blank" class="map-btn">📍 Ruta a Google Maps</a>
-                </div>
-            `;
+            return `<div class="map-card"><img src="${foto}" alt="${titol}"><span class="hora">${hora}</span><h3>${titol}</h3><p>${descripcio}</p><a href="${gmapsUrl}" target="_blank" class="map-btn">📍 Ruta a Google Maps</a></div>`;
         }
-
         var markers = {};
-
-        markers['rembrandt'] = L.marker([52.3661, 4.8959], {icon: crearIcona('🎨')}).addTo(map)
-            .bindPopup(crearTargeta('11:30', 'Rembrandtplein', 'https://images.unsplash.com/photo-1604147495798-57beb5d6af73?q=80&w=400&auto=format&fit=crop', 'Plaça amb estàtues i restaurants.', 52.3661, 4.8959));
-
-        markers['bloemenmarkt'] = L.marker([52.3674, 4.8915], {icon: crearIcona('🌷')}).addTo(map)
-            .bindPopup(crearTargeta('12:00', 'Bloemenmarkt', 'https://images.unsplash.com/photo-1591851633816-cca5d83a0e8e?q=80&w=400&auto=format&fit=crop', 'Mercat flotant de flors.', 52.3674, 4.8915));
-
-        markers['gouden'] = L.marker([52.3668, 4.8856], {icon: crearIcona('🏛️')}).addTo(map)
-            .bindPopup(crearTargeta('12:30', 'De Gouden Bocht', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=400&auto=format&fit=crop', 'Mansions del Segle d\'Or.', 52.3668, 4.8856));
-
-        markers['pannenkoek'] = L.marker([52.3600, 4.8852], {icon: crearIcona('🥞')}).addTo(map)
-            .bindPopup(crearTargeta('13:00', 'Dinar Pannenkoeken', 'https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=400&auto=format&fit=crop', 'Tortites holandeses gegants.', 52.3600, 4.8852));
-
-        markers['museumplein'] = L.marker([52.3560, 4.8795], {icon: crearIcona('🖼️')}).addTo(map)
-            .bindPopup(crearTargeta('15:00', 'Museumplein', 'https://images.unsplash.com/photo-1573043468237-2966b18b4fde?q=80&w=400&auto=format&fit=crop', 'Plaça dels Museus.', 52.3560, 4.8795));
-
-        markers['vondelpark'] = L.marker([52.3580, 4.8686], {icon: crearIcona('🚲')}).addTo(map)
-            .bindPopup(crearTargeta('16:30', 'Bicis Vondelpark', 'https://images.unsplash.com/photo-1581922815291-cb0fc0f3e0d2?q=80&w=400&auto=format&fit=crop', 'Passejada en bici de 2h.', 52.3580, 4.8686));
-
-        markers['leidseplein'] = L.marker([52.3651, 4.8825], {icon: crearIcona('🍔')}).addTo(map)
-            .bindPopup(crearTargeta('20:30', 'Sopar Leidseplein', 'https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=400&auto=format&fit=crop', 'Sopar i Foodhallen.', 52.3651, 4.8825));
-
-        function centrarMapa(id) {
-            var marker = markers[id];
-            if (marker) {
-                map.setView(marker.getLatLng(), 16);
-                setTimeout(function() {
-                    marker.openPopup();
-                    map.invalidateSize();
-                }, 300);
-            }
-            document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        markers['rembrandt'] = L.marker([52.3661, 4.8959], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('11:30', 'Rembrandtplein', 'https://images.unsplash.com/photo-1604147495798-57beb5d6af73?q=80&w=400&auto=format&fit=crop', 'Plaça amb estàtues i restaurants.', 52.3661, 4.8959));
+        markers['bloemenmarkt'] = L.marker([52.3674, 4.8915], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('12:00', 'Bloemenmarkt', 'https://images.unsplash.com/photo-1591851633816-cca5d83a0e8e?q=80&w=400&auto=format&fit=crop', 'Mercat flotant de flors.', 52.3674, 4.8915));
+        markers['gouden'] = L.marker([52.3668, 4.8856], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('12:30', 'De Gouden Bocht', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=400&auto=format&fit=crop', 'Mansions del Segle d\'Or.', 52.3668, 4.8856));
+        markers['pannenkoek'] = L.marker([52.3600, 4.8852], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('13:00', 'Dinar Pannenkoeken', 'https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=400&auto=format&fit=crop', 'Tortites holandeses gegants.', 52.3600, 4.8852));
+        markers['museumplein'] = L.marker([52.3560, 4.8795], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('15:00', 'Museumplein', 'https://images.unsplash.com/photo-1573043468237-2966b18b4fde?q=80&w=400&auto=format&fit=crop', 'Plaça dels Museus.', 52.3560, 4.8795));
+        markers['vondelpark'] = L.marker([52.3580, 4.8686], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('16:30', 'Bicis Vondelpark', 'https://images.unsplash.com/photo-1581922815291-cb0fc0f3e0d2?q=80&w=400&auto=format&fit=crop', 'Passejada en bici de 2h.', 52.3580, 4.8686));
+        markers['leidseplein'] = L.marker([52.3651, 4.8825], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('20:30', 'Sopar Leidseplein', 'https://images.unsplash.com/photo-1583335647810-9f5b9e8a8a1a?q=80&w=400&auto=format&fit=crop', 'Sopar i Foodhallen.', 52.3651, 4.8825));
+        function centrarMapa(id) { var marker = markers[id]; if (marker) { map.setView(marker.getLatLng(), 16); setTimeout(function() { marker.openPopup(); map.invalidateSize(); }, 300); } document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        function carregarEstatJoc() {
+            let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); document.getElementById('puntsTotals').innerText = punts;
+            let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}');
+            for (let id in visitats) { if (visitats[id] && id !== 'quiz2') { let card = document.getElementById('card_' + id); if (card) card.classList.add('visited'); } }
+            let diaCompletat = localStorage.getItem('dia2_complet');
+            if (diaCompletat === 'true') { let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Dia Completat!"; btn.disabled = true; document.getElementById('quizArea').style.display = 'block'; document.querySelectorAll('#formQuiz2 input').forEach(input => input.disabled = true); document.getElementById('btnValidar').disabled = true; }
         }
+        carregarEstatJoc();
+        function marcarVisitat(ev, id) {
+            if (ev && ev.stopPropagation) ev.stopPropagation();
+            if (id === 'quiz2') {
+                let jaVisitat = localStorage.getItem('dia2_btnVisitat');
+                if (jaVisitat !== 'true') { let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 50; localStorage.setItem('puntsViatge', punts); localStorage.setItem('dia2_btnVisitat', 'true'); document.getElementById('puntsTotals').innerText = punts; }
+                let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Estàs aquí! Ara fes el Quiz:"; btn.disabled = true; document.getElementById('quizArea').style.display = 'block'; return;
+            }
+            let card = document.getElementById('card_' + id); if (!card || card.classList.contains('visited')) return;
+            card.classList.add('visited'); let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 10; localStorage.setItem('puntsViatge', punts); document.getElementById('puntsTotals').innerText = punts;
+            let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}'); visitats[id] = true; localStorage.setItem('llocsVisitats', JSON.stringify(visitats));
+            crearEspurnes(card);
+        }
+        function validarQuiz(dia) {
+            let respostesCorrectes = 0; let q1 = document.querySelector('input[name="q1"]:checked'); if (q1 && q1.value === 'pannenkoeken') respostesCorrectes++;
+            let q2 = document.querySelector('input[name="q2"]:checked'); if (q2 && q2.value === '1862') respostesCorrectes++;
+            let feedback = document.getElementById('feedbackQuiz');
+            if (respostesCorrectes === 2) {
+                let jaQuiz = localStorage.getItem('dia' + dia + '_quiz'); if (jaQuiz !== 'true') { let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 50; localStorage.setItem('puntsViatge', punts); localStorage.setItem('dia' + dia + '_quiz', 'true'); localStorage.setItem('dia' + dia + '_complet', 'true'); document.getElementById('puntsTotals').innerText = punts; }
+                feedback.style.color = '#4CAF50'; feedback.innerHTML = "🎉 PERFECTE! 50 punts més! Dia completat!"; let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Dia Completat!"; btn.disabled = true; document.querySelectorAll('#formQuiz2 input').forEach(input => input.disabled = true); document.getElementById('btnValidar').disabled = true;
+            } else if (respostesCorrectes > 0) { feedback.style.color = '#FF9800'; feedback.innerHTML = "🤔 Gairebé! Tens " + respostesCorrectes + "/2 correctes. Torna-ho a provar!"; }
+            else { feedback.style.color = '#FF5252'; feedback.innerHTML = "❌ Cap de correcte! Repassa la ruta del dia i torna-ho a intentar."; }
+        }
+        function crearEspurnes(card) { let emojis = ['✨', '🎉', '⭐', '🌟', '💫']; for(let i=0; i<8; i++) { let s = document.createElement('div'); s.innerText = emojis[Math.floor(Math.random() * emojis.length)]; s.className = 'sparkle'; s.style.left = (40 + Math.random() * 20) + '%'; s.style.top = (40 + Math.random() * 20) + '%'; card.appendChild(s); setTimeout(() => s.remove(), 1000); } }
     </script>
 </body>
 </html>
