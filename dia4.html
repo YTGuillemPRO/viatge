@@ -9,8 +9,10 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         body { margin: 0; font-family: 'Nunito', sans-serif; background-color: #E0F7FA; color: #333; }
-        .header { background: #E53935; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000; }
+        .header { background: #E53935; color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 1000; }
         .header h1 { font-family: 'Baloo 2', cursive; margin: 0; font-size: 1.2rem; }
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .punts-box { background: white; padding: 6px 12px; border-radius: 20px; color: #FF9800; font-weight: 800; font-family: 'Baloo 2', cursive; font-size: 1rem; border: 2px solid #FF9800; white-space: nowrap; }
         .btn-tornar { background: white; color: #E53935; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-weight: 800; font-family: 'Baloo 2', cursive; font-size: 0.9rem; }
         #map { height: 400px; min-height: 300px; width: 100%; z-index: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .map-card { text-align: center; font-family: 'Nunito', sans-serif; max-width: 220px; }
@@ -24,9 +26,16 @@
         .timeline-container::before { content: ''; position: absolute; left: 12px; top: 10px; bottom: 10px; width: 6px; background-image: linear-gradient(#E53935 50%, rgba(255,255,255,0) 0%); background-size: 6px 20px; background-repeat: repeat-y; }
         .timeline-item { position: relative; margin-bottom: 30px; }
         .timeline-item::before { content: '📍'; position: absolute; left: -38px; top: -10px; width: 36px; height: 36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 3px solid #E53935; z-index: 2; }
-        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid #f0f0f0; cursor: pointer; }
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid #f0f0f0; cursor: pointer; position: relative; }
         .card:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); border-color: #E53935; }
         .card img { width: 100%; height: 160px; object-fit: cover; }
+        .tick-box { position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; background: rgba(255,255,255,0.9); border: 3px solid #E53935; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #b0bec5; transition: all 0.3s; z-index: 10; cursor: pointer; }
+        .tick-box:hover { transform: scale(1.1); border-color: #4CAF50; color: #4CAF50; }
+        .card.visited { border-color: #4CAF50; background: #F1F8E9; box-shadow: 0 0 15px rgba(76, 175, 80, 0.4); }
+        .card.visited .tick-box { background: #4CAF50; border-color: #4CAF50; color: white; animation: pop 0.4s ease; pointer-events: none; cursor: default; }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+        .sparkle { position: absolute; font-size: 1.5rem; pointer-events: none; animation: volar 1s ease-out forwards; z-index: 20; }
+        @keyframes volar { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-40px) scale(0); } }
         .card-body { padding: 15px; }
         .time-badge { display: inline-block; background: #FF9800; color: white; padding: 4px 12px; border-radius: 15px; font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; box-shadow: 0 3px 0 #E65100; font-family: 'Baloo 2', cursive; }
         .card-body h3 { font-family: 'Baloo 2', cursive; margin: 0 0 8px 0; color: #C62828; font-size: 1.2rem; }
@@ -35,148 +44,124 @@
         .info-card h2 { font-family: 'Baloo 2', cursive; color: #C62828; font-size: 1.4rem; margin-top: 0; }
         .info-card p { font-size: 0.9rem; margin-bottom: 10px; }
         .alert-box { background: #FFF9C4; border: 2px solid #FBC02D; border-radius: 12px; padding: 12px; margin: 12px 0; font-weight: 700; font-size: 0.9rem; }
-        .link-box { background: #FFEBEE; border: 2px solid #E53935; border-radius: 12px; padding: 12px; margin: 12px 0; font-size: 0.9rem; }
-        .link-box a { color: #C62828; font-weight: 800; text-decoration: none; }
+        .game-section { background: #FFF3E0; border: 3px dashed #FF9800; border-radius: 20px; padding: 25px; margin: 40px auto; max-width: 800px; text-align: center; }
+        .game-section h2 { font-family: 'Baloo 2', cursive; color: #E65100; font-size: 1.8rem; margin-top: 0; }
+        .btn-joc { background: #4CAF50; color: white; border: none; padding: 15px 30px; font-size: 1.2rem; font-family: 'Baloo 2', cursive; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #1B5E20; margin: 10px; transition: all 0.2s; }
+        .btn-joc:active { transform: translateY(4px); box-shadow: 0 0px 0 #1B5E20; }
+        .btn-joc:disabled { background: #BDBDBD; box-shadow: 0 4px 0 #757575; cursor: not-allowed; }
+        .quiz-form { margin-top: 20px; text-align: left; }
+        .quiz-question { font-weight: 700; margin-bottom: 10px; color: #333; }
+        .quiz-option { display: block; margin: 5px 0; padding: 10px; background: white; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
+        .quiz-option:hover { border-color: #FF9800; }
+        .feedback { font-weight: 800; margin-top: 15px; font-size: 1.2rem; }
         .btn-flotant { position: fixed; bottom: 15px; right: 15px; background: #03A9F4; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; }
     </style>
 </head>
 <body>
-
     <div class="header" id="top">
         <h1>🎡 Dia 4: Màgia a Efteling</h1>
-        <a href="index.html" class="btn-tornar">⬅ Tornar</a>
+        <div class="header-right">
+            <div class="punts-box">⭐ <span id="puntsTotals">0</span> Punts</div>
+            <a href="index.html" class="btn-tornar">⬅ Tornar</a>
+        </div>
     </div>
-
     <div id="map"></div>
-
     <div class="container">
         <div class="timeline-container">
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('ruta')"><img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=800&auto=format&fit=crop" alt="Ruta"><div class="card-body"><span class="time-badge">09:30</span><h3>🚗 Ruta: Heusden a Efteling</h3><p>22 minuts de cotxe des de Heusden fins a Holiday Village Efteling Loonsche Land.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('cabanya')"><img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=800&auto=format&fit=crop" alt="Cabanya"><div class="card-body"><span class="time-badge">10:00</span><h3>🏨 Arribada a Loonsche Land</h3><p>Reserva L-054770 HOUSE 703. Anar directe al pàrquing. Check-in a les 16:00h, però podem descarregar maletes i anar al parc.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('entrada')"><img src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=800&auto=format&fit=crop" alt="Entrada"><div class="card-body"><span class="time-badge">10:00</span><h3>🎟️ Entrada al Parc</h3><p>Travessar els torns i girar directament a l'esquerra. Res d'anar al centre. Important: Guardar el codi de les fotos a l'App!</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('fabula')"><img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=800&auto=format&fit=crop" alt="Fabula"><div class="card-body"><span class="time-badge">10:15</span><h3>🎬 Fabula</h3><p>Cinema 4D enorme que absorbeix centenars de persones, la cua és rapidíssima al matí.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('maxmoritz')"><img src="https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=800&auto=format&fit=crop" alt="Max & Moritz"><div class="card-body"><span class="time-badge">11:00</span><h3>🎢 Max & Moritz</h3><p>Porta amb porta amb Fabula. Primer tren blau i després verd. Eviteu el pic del migdia.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('danse')"><img src="https://images.unsplash.com/photo-1531971589569-0d9370cbe1e5?q=80&w=800&auto=format&fit=crop" alt="Danse Macabre"><div class="card-body"><span class="time-badge">12:15</span><h3>🎃 Danse Macabre</h3><p>A la mateixa zona (a un minut a peu). La gent de les 10:00h ja ha passat el seu primer aluvió.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('menjar')"><img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=800&auto=format&fit=crop" alt="Menjar"><div class="card-body"><span class="time-badge">13:15</span><h3>🥞 Dinar: Bäckerei Krümel</h3><p>A la mateixa plaça. Menjar estil europeu (pans farcits, pizzes de massa plana). Per descansar sense caminar.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('aquanura')"><img src="https://images.unsplash.com/photo-1542315192-1f61a1792f33?q=80&w=800&auto=format&fit=crop" alt="Aquanura"><div class="card-body"><span class="time-badge">14:30</span><h3>💧 Aquanura</h3><p>Espectacle d'aigua i llums.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('symbolica')"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Symbolica"><div class="card-body"><span class="time-badge">15:30</span><h3>🏰 Symbolica</h3><p>Caminar pel Passeig Pardus. A aquesta hora, la enorme cua del matí s'ha esfumat.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('sprookjesbos')"><img src="https://images.unsplash.com/photo-1478147427282-58a87a120781?q=80&w=800&auto=format&fit=crop" alt="Sprookjesbos"><div class="card-body"><span class="time-badge">16:30</span><h3>🌲 Sprookjesbos (Bosc dels Contes)</h3><p>Entrada davant de la sortida de Symbolica. Recorregut sota els arbres cap al nord. <strong>Anada per la dreta, tornada per l'esquerra.</strong></p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('droomvlucht')"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Droomvlucht"><div class="card-body"><span class="time-badge">18:00</span><h3>✨ Droomvlucht</h3><p>El final del bosc deixa a la porta. Moment perfecte, les famílies amb nens petits ja marxen. (Pots veure Villa Volta?).</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('sortida')"><img src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=800&auto=format&fit=crop" alt="Sortida"><div class="card-body"><span class="time-badge">19:00</span><h3>🚶 Sortida en línia recta</h3><p>Des de Droomvlucht, agafeu el passeig principal. Sortir pel costat esquerre del parc.</p></div></div></div>
-
-            <div class="timeline-item"><div class="card" onclick="centrarMapa('cabanya')"><img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=800&auto=format&fit=crop" alt="Cabanya"><div class="card-body"><span class="time-badge">19:30</span><h3>🍽️ Sopar a Loonsche Land</h3><p>Retorn a la cabanya (caminant o llançadora). Mentre en Gerardo i jo anem al super. Sopar al restaurant De Proeve o demanar Pizza Delivery a la cabanya.</p></div></div></div>
-
+            <div class="timeline-item"><div class="card" id="card_ruta" onclick="centrarMapa('ruta')"><div class="tick-box" onclick="marcarVisitat(event, 'ruta')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=800&auto=format&fit=crop" alt="Ruta"><div class="card-body"><span class="time-badge">09:30</span><h3>🚗 Ruta: Heusden a Efteling</h3><p>22 minuts de cotxe des de Heusden fins a Holiday Village Efteling Loonsche Land.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_cabanya" onclick="centrarMapa('cabanya')"><div class="tick-box" onclick="marcarVisitat(event, 'cabanya')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=800&auto=format&fit=crop" alt="Cabanya"><div class="card-body"><span class="time-badge">10:00</span><h3>🏨 Arribada a Loonsche Land</h3><p>Reserva L-054770 HOUSE 703. Anar directe al pàrquing. Check-in a les 16:00h, però podem descarregar maletes i anar al parc.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_entrada" onclick="centrarMapa('entrada')"><div class="tick-box" onclick="marcarVisitat(event, 'entrada')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=800&auto=format&fit=crop" alt="Entrada"><div class="card-body"><span class="time-badge">10:00</span><h3>🎟️ Entrada al Parc</h3><p>Travessar els torns i girar directament a l'esquerra. Res d'anar al centre. Important: Guardar el codi de les fotos a l'App!</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_fabula" onclick="centrarMapa('fabula')"><div class="tick-box" onclick="marcarVisitat(event, 'fabula')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=800&auto=format&fit=crop" alt="Fabula"><div class="card-body"><span class="time-badge">10:15</span><h3>🎬 Fabula</h3><p>Cinema 4D enorme que absorbeix centenars de persones, la cua és rapidíssima al matí.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_maxmoritz" onclick="centrarMapa('maxmoritz')"><div class="tick-box" onclick="marcarVisitat(event, 'maxmoritz')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=800&auto=format&fit=crop" alt="Max & Moritz"><div class="card-body"><span class="time-badge">11:00</span><h3>🎢 Max & Moritz</h3><p>Porta amb porta amb Fabula. Primer tren blau i després verd. Eviteu el pic del migdia.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_danse" onclick="centrarMapa('danse')"><div class="tick-box" onclick="marcarVisitat(event, 'danse')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1531971589569-0d9370cbe1e5?q=80&w=800&auto=format&fit=crop" alt="Danse Macabre"><div class="card-body"><span class="time-badge">12:15</span><h3>🎃 Danse Macabre</h3><p>A la mateixa zona (a un minut a peu). La gent de les 10:00h ja ha passat el seu primer aluvió.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_menjar" onclick="centrarMapa('menjar')"><div class="tick-box" onclick="marcarVisitat(event, 'menjar')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=800&auto=format&fit=crop" alt="Menjar"><div class="card-body"><span class="time-badge">13:15</span><h3>🥞 Dinar: Bäckerei Krümel</h3><p>A la mateixa plaça. Menjar estil europeu (pans farcits, pizzes de massa plana). Per descansar sense caminar.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_aquanura" onclick="centrarMapa('aquanura')"><div class="tick-box" onclick="marcarVisitat(event, 'aquanura')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1542315192-1f61a1792f33?q=80&w=800&auto=format&fit=crop" alt="Aquanura"><div class="card-body"><span class="time-badge">14:30</span><h3>💧 Aquanura</h3><p>Espectacle d'aigua i llums.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_symbolica" onclick="centrarMapa('symbolica')"><div class="tick-box" onclick="marcarVisitat(event, 'symbolica')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Symbolica"><div class="card-body"><span class="time-badge">15:30</span><h3>🏰 Symbolica</h3><p>Caminar pel Passeig Pardus. A aquesta hora, la enorme cua del matí s'ha esfumat.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_sprookjesbos" onclick="centrarMapa('sprookjesbos')"><div class="tick-box" onclick="marcarVisitat(event, 'sprookjesbos')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1478147427282-58a87a120781?q=80&w=800&auto=format&fit=crop" alt="Sprookjesbos"><div class="card-body"><span class="time-badge">16:30</span><h3>🌲 Sprookjesbos (Bosc dels Contes)</h3><p>Entrada davant de la sortida de Symbolica. Recorregut sota els arbres cap al nord. <strong>Anada per la dreta, tornada per l'esquerra.</strong></p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_droomvlucht" onclick="centrarMapa('droomvlucht')"><div class="tick-box" onclick="marcarVisitat(event, 'droomvlucht')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=800&auto=format&fit=crop" alt="Droomvlucht"><div class="card-body"><span class="time-badge">18:00</span><h3>✨ Droomvlucht</h3><p>El final del bosc deixa a la porta. Moment perfecte, les famílies amb nens petits ja marxen. (Pots veure Villa Volta?).</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_sortida" onclick="centrarMapa('sortida')"><div class="tick-box" onclick="marcarVisitat(event, 'sortida')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=800&auto=format&fit=crop" alt="Sortida"><div class="card-body"><span class="time-badge">19:00</span><h3>🚶 Sortida en línia recta</h3><p>Des de Droomvlucht, agafeu el passeig principal. Sortir pel costat esquerre del parc.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_soparloonsche" onclick="centrarMapa('soparloonsche')"><div class="tick-box" onclick="marcarVisitat(event, 'soparloonsche')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=800&auto=format&fit=crop" alt="Cabanya"><div class="card-body"><span class="time-badge">19:30</span><h3>🍽️ Sopar a Loonsche Land</h3><p>Retorn a la cabanya (caminant o llançadora). Mentre en Gerardo i jo anem al super. Sopar al restaurant De Proeve o demanar Pizza Delivery a la cabanya.</p></div></div></div>
         </div>
-
-        <!-- ALLOTJAMENT I TRANSPORT -->
         <div class="info-card">
             <h2>🏨 Logística Loonsche Land</h2>
             <div class="alert-box">🔑 <strong>Check-in 16:00h:</strong> Anar directe a la cabanya amb la clau digital o matrícula. Podem descarregar maletes amb el cotxe.</div>
             <p><strong>Com anar al parc:</strong> Pel sender que creua el pàrquing (15 minuts a peu) o amb la llançadora (Shuttle). Tenim la parada "Wood stops" davant de casa! Passa cada 15-20 minuts.</p>
         </div>
-
-        <!-- ENLLAÇOS ÚTILS -->
-        <div class="info-card">
-            <h2>📱 Enllaços d'Interès</h2>
-            <div class="link-box">
-                <p>🎠 <a href="https://www.efteling.com/en/park/attractions" target="_blank">Atraccions d'Efteling</a></p>
-                <p>🗺️ <a href="https://www.efteling.com/en/park/map" target="_blank">Mapa del Parc</a></p>
-                <p>🎭 <a href="https://www.efteling.com/en/park/shows" target="_blank">Espectacles (Shows)</a></p>
-                <p>👶 <a href="https://www.efteling.com/en/loonsche-land/for-all-ages" target="_blank">Activitats per a nens</a></p>
+        <div class="game-section">
+            <h2>🏆 Repte del Dia 4</h2>
+            <button id="btnVisitat" class="btn-joc" onclick="marcarVisitat(event, 'quiz4')">📍 Ja hem acabat el dia! (+50 Punts)</button>
+            <div id="quizArea" style="display:none;">
+                <form class="quiz-form" id="formQuiz4">
+                    <div class="quiz-question">1. Quina és la primera atracció que fem al entrar al parc?</div>
+                    <label class="quiz-option"><input type="radio" name="q1" value="symbolica"> Symbolica</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="fabula"> Fabula</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="droomvlucht"> Droomvlucht</label>
+                    <div class="quiz-question" style="margin-top:15px;">2. Com es diu el Bosc dels Contes a Efteling?</div>
+                    <label class="quiz-option"><input type="radio" name="q2" value="sprookjesbos"> Sprookjesbos</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="vondelpark"> Vondelpark</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="amazone"> Amazone</label>
+                </form>
+                <button class="btn-joc" id="btnValidar" onclick="validarQuiz(4)" style="background:#03A9F4; box-shadow:0 4px 0 #0277BD;">Validar Quiz (+50 Punts)</button>
+                <div id="feedbackQuiz" class="feedback"></div>
             </div>
         </div>
-
     </div>
-
-    <a href="index.html" class="btn-flotant">🏠</a>
-
+    <a href="dia5.html" class="btn-flotant">➡</a>
     <script>
         var map = L.map('map').setView([51.6505, 5.0415], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
         setTimeout(function(){ map.invalidateSize(); }, 500);
-
-        function crearIcona(emoji) {
-            return L.divIcon({
-                className: 'custom-pin',
-                html: `<div style="font-size: 28px;">${emoji}</div>`,
-                iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
-            });
-        }
-
+        var customIcon = L.divIcon({ className: 'custom-pin', html: '<div style="font-size: 28px;">📍</div>', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] });
         function crearTargeta(hora, titol, foto, descripcio, lat, lng) {
             let gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-            return `
-                <div class="map-card">
-                    <img src="${foto}" alt="${titol}">
-                    <span class="hora">${hora}</span>
-                    <h3>${titol}</h3>
-                    <p>${descripcio}</p>
-                    <a href="${gmapsUrl}" target="_blank" class="map-btn">📍 Ruta a Google Maps</a>
-                </div>
-            `;
+            return `<div class="map-card"><img src="${foto}" alt="${titol}"><span class="hora">${hora}</span><h3>${titol}</h3><p>${descripcio}</p><a href="${gmapsUrl}" target="_blank" class="map-btn">📍 Ruta a Google Maps</a></div>`;
         }
-
         var markers = {};
-
-        markers['ruta'] = L.marker([51.7345, 5.1378], {icon: crearIcona('🚗')}).addTo(map)
-            .bindPopup(crearTargeta('09:30', 'Ruta a Efteling', 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=400&auto=format&fit=crop', '22 minuts de cotxe.', 51.7345, 5.1378));
-
-        markers['cabanya'] = L.marker([51.6519, 5.0412], {icon: crearIcona('🏨')}).addTo(map)
-            .bindPopup(crearTargeta('16:00', 'Loonsche Land', 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=400&auto=format&fit=crop', 'Cabanya 703.', 51.6519, 5.0412));
-
-        markers['entrada'] = L.marker([51.6502, 5.0441], {icon: crearIcona('🎟️')}).addTo(map)
-            .bindPopup(crearTargeta('10:00', 'Entrada Efteling', 'https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=400&auto=format&fit=crop', 'Girar a l\'esquerra.', 51.6502, 5.0441));
-
-        markers['fabula'] = L.marker([51.6500, 5.0438], {icon: crearIcona('🎬')}).addTo(map)
-            .bindPopup(crearTargeta('10:15', 'Fabula', 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=400&auto=format&fit=crop', 'Cinema 4D.', 51.6500, 5.0438));
-
-        markers['maxmoritz'] = L.marker([51.6498, 5.0436], {icon: crearIcona('🎢')}).addTo(map)
-            .bindPopup(crearTargeta('11:00', 'Max & Moritz', 'https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=400&auto=format&fit=crop', 'Tren blau i verd.', 51.6498, 5.0436));
-
-        markers['danse'] = L.marker([51.6496, 5.0440], {icon: crearIcona('🎃')}).addTo(map)
-            .bindPopup(crearTargeta('12:15', 'Danse Macabre', 'https://images.unsplash.com/photo-1531971589569-0d9370cbe1e5?q=80&w=400&auto=format&fit=crop', 'Atracció temàtica.', 51.6496, 5.0440));
-
-        markers['menjar'] = L.marker([51.6497, 5.0437], {icon: crearIcona('🥞')}).addTo(map)
-            .bindPopup(crearTargeta('13:15', 'Bäckerei Krümel', 'https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=400&auto=format&fit=crop', 'Dinar panes i pizzes.', 51.6497, 5.0437));
-
-        markers['aquanura'] = L.marker([51.6495, 5.0450], {icon: crearIcona('💧')}).addTo(map)
-            .bindPopup(crearTargeta('14:30', 'Aquanura', 'https://images.unsplash.com/photo-1542315192-1f61a1792f33?q=80&w=400&auto=format&fit=crop', 'Espectacle d\'aigua.', 51.6495, 5.0450));
-
-        markers['symbolica'] = L.marker([51.6499, 5.0419], {icon: crearIcona('🏰')}).addTo(map)
-            .bindPopup(crearTargeta('15:30', 'Symbolica', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Atracció principal del palau.', 51.6499, 5.0419));
-
-        markers['sprookjesbos'] = L.marker([51.6510, 5.0415], {icon: crearIcona('🌲')}).addTo(map)
-            .bindPopup(crearTargeta('16:30', 'Sprookjesbos', 'https://images.unsplash.com/photo-1478147427282-58a87a120781?q=80&w=400&auto=format&fit=crop', 'Bosc dels Contes.', 51.6510, 5.0415));
-
-        markers['droomvlucht'] = L.marker([51.6505, 5.0410], {icon: crearIcona('✨')}).addTo(map)
-            .bindPopup(crearTargeta('18:00', 'Droomvlucht', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Vol de Somni.', 51.6505, 5.0410));
-
-        markers['sortida'] = L.marker([51.6502, 5.0441], {icon: crearIcona('🚶')}).addTo(map)
-            .bindPopup(crearTargeta('19:00', 'Sortida', 'https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=400&auto=format&fit=crop', 'Passeig principal esquerra.', 51.6502, 5.0441));
-
-        function centrarMapa(id) {
-            var marker = markers[id];
-            if (marker) {
-                map.setView(marker.getLatLng(), 17);
-                setTimeout(function() {
-                    marker.openPopup();
-                    map.invalidateSize();
-                }, 300);
-            }
-            document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        markers['ruta'] = L.marker([51.7345, 5.1378], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('09:30', 'Ruta a Efteling', 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=400&auto=format&fit=crop', '22 minuts de cotxe.', 51.7345, 5.1378));
+        markers['cabanya'] = L.marker([51.6519, 5.0412], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('16:00', 'Loonsche Land', 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=400&auto=format&fit=crop', 'Cabanya 703.', 51.6519, 5.0412));
+        markers['entrada'] = L.marker([51.6502, 5.0441], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('10:00', 'Entrada Efteling', 'https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=400&auto=format&fit=crop', 'Girar a l\'esquerra.', 51.6502, 5.0441));
+        markers['fabula'] = L.marker([51.6500, 5.0438], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('10:15', 'Fabula', 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=400&auto=format&fit=crop', 'Cinema 4D.', 51.6500, 5.0438));
+        markers['maxmoritz'] = L.marker([51.6498, 5.0436], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('11:00', 'Max & Moritz', 'https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=400&auto=format&fit=crop', 'Tren blau i verd.', 51.6498, 5.0436));
+        markers['danse'] = L.marker([51.6496, 5.0440], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('12:15', 'Danse Macabre', 'https://images.unsplash.com/photo-1531971589569-0d9370cbe1e5?q=80&w=400&auto=format&fit=crop', 'Atracció temàtica.', 51.6496, 5.0440));
+        markers['menjar'] = L.marker([51.6497, 5.0437], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('13:15', 'Bäckerei Krümel', 'https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=400&auto=format&fit=crop', 'Dinar panes i pizzes.', 51.6497, 5.0437));
+        markers['aquanura'] = L.marker([51.6495, 5.0450], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('14:30', 'Aquanura', 'https://images.unsplash.com/photo-1542315192-1f61a1792f33?q=80&w=400&auto=format&fit=crop', 'Espectacle d\'aigua.', 51.6495, 5.0450));
+        markers['symbolica'] = L.marker([51.6499, 5.0419], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('15:30', 'Symbolica', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Atracció principal del palau.', 51.6499, 5.0419));
+        markers['sprookjesbos'] = L.marker([51.6510, 5.0415], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('16:30', 'Sprookjesbos', 'https://images.unsplash.com/photo-1478147427282-58a87a120781?q=80&w=400&auto=format&fit=crop', 'Bosc dels Contes.', 51.6510, 5.0415));
+        markers['droomvlucht'] = L.marker([51.6505, 5.0410], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('18:00', 'Droomvlucht', 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=400&auto=format&fit=crop', 'Vol de Somni.', 51.6505, 5.0410));
+        markers['sortida'] = L.marker([51.6502, 5.0441], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('19:00', 'Sortida', 'https://images.unsplash.com/photo-1518604666860-9ed391f76460?q=80&w=400&auto=format&fit=crop', 'Passeig principal esquerra.', 51.6502, 5.0441));
+        markers['soparloonsche'] = L.marker([51.6519, 5.0412], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('19:30', 'Sopar Loonsche', 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=400&auto=format&fit=crop', 'Sopar a la cabanya.', 51.6519, 5.0412));
+        function centrarMapa(id) { var marker = markers[id]; if (marker) { map.setView(marker.getLatLng(), 17); setTimeout(function() { marker.openPopup(); map.invalidateSize(); }, 300); } document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        function carregarEstatJoc() {
+            let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); document.getElementById('puntsTotals').innerText = punts;
+            let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}');
+            for (let id in visitats) { if (visitats[id] && id !== 'quiz4') { let card = document.getElementById('card_' + id); if (card) card.classList.add('visited'); } }
+            let diaCompletat = localStorage.getItem('dia4_complet');
+            if (diaCompletat === 'true') { let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Dia Completat!"; btn.disabled = true; document.getElementById('quizArea').style.display = 'block'; document.querySelectorAll('#formQuiz4 input').forEach(input => input.disabled = true); document.getElementById('btnValidar').disabled = true; }
         }
+        carregarEstatJoc();
+        function marcarVisitat(ev, id) {
+            if (ev && ev.stopPropagation) ev.stopPropagation();
+            if (id === 'quiz4') {
+                let jaVisitat = localStorage.getItem('dia4_btnVisitat');
+                if (jaVisitat !== 'true') { let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 50; localStorage.setItem('puntsViatge', punts); localStorage.setItem('dia4_btnVisitat', 'true'); document.getElementById('puntsTotals').innerText = punts; }
+                let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Estàs aquí! Ara fes el Quiz:"; btn.disabled = true; document.getElementById('quizArea').style.display = 'block'; return;
+            }
+            let card = document.getElementById('card_' + id); if (!card || card.classList.contains('visited')) return;
+            card.classList.add('visited'); let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 10; localStorage.setItem('puntsViatge', punts); document.getElementById('puntsTotals').innerText = punts;
+            let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}'); visitats[id] = true; localStorage.setItem('llocsVisitats', JSON.stringify(visitats));
+            crearEspurnes(card);
+        }
+        function validarQuiz(dia) {
+            let respostesCorrectes = 0; let q1 = document.querySelector('input[name="q1"]:checked'); if (q1 && q1.value === 'fabula') respostesCorrectes++;
+            let q2 = document.querySelector('input[name="q2"]:checked'); if (q2 && q2.value === 'sprookjesbos') respostesCorrectes++;
+            let feedback = document.getElementById('feedbackQuiz');
+            if (respostesCorrectes === 2) {
+                let jaQuiz = localStorage.getItem('dia' + dia + '_quiz'); if (jaQuiz !== 'true') { let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 50; localStorage.setItem('puntsViatge', punts); localStorage.setItem('dia' + dia + '_quiz', 'true'); localStorage.setItem('dia' + dia + '_complet', 'true'); document.getElementById('puntsTotals').innerText = punts; }
+                feedback.style.color = '#4CAF50'; feedback.innerHTML = "🎉 PERFECTE! 50 punts més! Dia completat!"; let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Dia Completat!"; btn.disabled = true; document.querySelectorAll('#formQuiz4 input').forEach(input => input.disabled = true); document.getElementById('btnValidar').disabled = true;
+            } else if (respostesCorrectes > 0) { feedback.style.color = '#FF9800'; feedback.innerHTML = "🤔 Gairebé! Tens " + respostesCorrectes + "/2 correctes. Torna-ho a provar!"; }
+            else { feedback.style.color = '#FF5252'; feedback.innerHTML = "❌ Cap de correcte! Repassa la ruta del dia i torna-ho a intentar."; }
+        }
+        function crearEspurnes(card) { let emojis = ['✨', '🎉', '⭐', '🌟', '💫']; for(let i=0; i<8; i++) { let s = document.createElement('div'); s.innerText = emojis[Math.floor(Math.random() * emojis.length)]; s.className = 'sparkle'; s.style.left = (40 + Math.random() * 20) + '%'; s.style.top = (40 + Math.random() * 20) + '%'; card.appendChild(s); setTimeout(() => s.remove(), 1000); } }
     </script>
 </body>
 </html>
