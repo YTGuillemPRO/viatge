@@ -13,9 +13,7 @@
             --color-green: #4CAF50;
             --color-purple: #9C27B0;
             --color-red: #FF5252;
-            --color-teal: #00897B;
-            --color-darkpurple: #5E35B1;
-            --color-sunset: #F4511E;
+            --text-color: #37474F;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,16 +27,12 @@
             background-size: 100px 100px;
             color: #333;
             line-height: 1.6;
-            overflow: hidden; /* BLOQUEIG DE SCROLL INICIAL */
+            overflow: hidden; 
             height: 100vh;
         }
 
-        body.unlocked {
-            overflow-y: auto; /* DESBLOQUEIG */
-            height: auto;
-        }
+        body.unlocked { overflow-y: auto; height: auto; }
 
-        /* PANTALLA COMPLETA DE CEL */
         .cel-portada {
             height: 100vh;
             width: 100%;
@@ -57,7 +51,7 @@
         }
 
         body.unlocked .cel-portada {
-            transform: translateY(-130vh); /* El cel surt disparat cap a dalt */
+            transform: translateY(-130vh); 
             opacity: 0;
             pointer-events: none;
         }
@@ -92,7 +86,6 @@
             50% { transform: translateY(-20px); }
         }
 
-        /* AVIONS 3D ESTÀTICS */
         .avio-3d {
             position: absolute;
             z-index: 5;
@@ -112,7 +105,6 @@
             50% { transform: translateY(-20px); }
         }
 
-        /* NÚVOLS GEGANTS I FOSCS (AMAGATS INICIALMENT) */
         .nube {
             position: absolute;
             bottom: -150px;
@@ -131,7 +123,6 @@
         .nube-2 .nube-inner { animation-duration: 5s; animation-direction: reverse; }
         .nube-3 .nube-inner { animation-duration: 6s; }
 
-        /* ANIMACIÓ AUTOMÀTICA DELS NÚVOLS CAP AMUNT */
         body.loaded .nube {
             animation: pujar-i-desapareixer 3s cubic-bezier(0.5, 0, 0.75, 0) forwards;
         }
@@ -146,11 +137,10 @@
             100% { transform: translateY(-130vh); opacity: 0; }
         }
 
-        /* BOTÓ SALTAR */
         .skip-btn {
             position: absolute;
-            bottom: 30px;
-            right: 30px;
+            bottom: 80px; /* PUJAT PERQUÈ ES VEGI AL MÒBIL */
+            right: 20px;
             background: white;
             color: #0288D1;
             border: none;
@@ -170,7 +160,6 @@
             background: #FFF9C4;
         }
 
-        /* CONTINGUT PRINCIPAL (ES REVELA) */
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -237,7 +226,6 @@
             font-weight: 600;
         }
 
-        /* COLORS PER CADA DIA */
         .d1 { border-left-color: var(--color-blue); } .d1 .day-info h2 { color: var(--color-blue); }
         .d2 { border-left-color: var(--color-green); } .d2 .day-info h2 { color: var(--color-green); }
         .d3 { border-left-color: var(--color-purple); } .d3 .day-info h2 { color: var(--color-purple); }
@@ -278,7 +266,7 @@
             .day-card { padding: 15px; }
             .day-emoji { font-size: 2rem; margin-right: 15px; }
             .day-info h2 { font-size: 1.2rem; }
-            .skip-btn { bottom: 15px; right: 15px; padding: 10px 20px; font-size: 1rem; }
+            .skip-btn { bottom: 60px; right: 15px; padding: 10px 20px; font-size: 1rem; }
             .avio-1 { width: 140px; top: 10%; left: 5%; }
             .avio-2 { width: 110px; right: 5%; }
             .avio-3 { width: 90px; top: 45%; left: 30%; }
@@ -290,10 +278,8 @@
 </head>
 <body>
 
-    <!-- PANTALLA DE CEL AMB AVIONS 3D I NÚVOLS GEGANTS -->
     <header class="cel-portada">
         
-        <!-- Avió 3D Vermell -->
         <div class="avio-3d avio-1">
             <div class="inner-float">
                 <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
@@ -310,7 +296,6 @@
             </div>
         </div>
 
-        <!-- Avió 3D Blau -->
         <div class="avio-3d avio-2">
             <div class="inner-float">
                 <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
@@ -327,7 +312,6 @@
             </div>
         </div>
 
-        <!-- Avió 3D Groc -->
         <div class="avio-3d avio-3">
             <div class="inner-float">
                 <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
@@ -344,7 +328,6 @@
             </div>
         </div>
 
-        <!-- Núvols grans i foscos (SVG) -->
         <div class="nube nube-1">
             <div class="nube-inner">
                 <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
@@ -389,7 +372,6 @@
         <button class="skip-btn" onclick="saltarIntro()">Saltar ⏭️</button>
     </header>
 
-    <!-- LLISTA DE DIES -->
     <div class="container">
         <h1 class="days-title">Tria el dia del viatge 🗓️</h1>
         <div class="days-grid">
@@ -458,20 +440,16 @@
     </footer>
 
     <script>
-        // Funció per revelar els dies automàticament
         window.onload = function() {
-            // Als 500ms, els núvols comencen a pujar
             setTimeout(function() {
                 document.body.classList.add('loaded');
             }, 500);
 
-            // Als 3500ms, el cel s'en va cap amunt i es desbloqueja el scroll
             setTimeout(function() {
                 document.body.classList.add('unlocked');
             }, 3500);
         };
 
-        // Funció per saltar la animació clicant el botó
         function saltarIntro() {
             document.body.classList.add('unlocked');
         }
