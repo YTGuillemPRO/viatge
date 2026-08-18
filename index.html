@@ -233,7 +233,7 @@
         .d5 { border-left-color: #5E35B1; } .d5 .day-info h2 { color: #5E35B1; }
         .d6 { border-left-color: #00897B; } .d6 .day-info h2 { color: #00897B; }
 
-        body.unlocked .day-card {
+        body.unloaded .day-card {
             animation: pujarDia 0.6s ease forwards;
             opacity: 0;
             transform: translateY(30px);
@@ -431,17 +431,29 @@
 
     <script>
         window.onload = function() {
-            setTimeout(function() {
+            // Comprovem si ja ha vist la animació en aquesta sessió
+            if (sessionStorage.getItem('introVista') === 'true') {
+                // Si ja l'ha vist, saltem directament al contingut
                 document.body.classList.add('loaded');
-            }, 500);
-
-            setTimeout(function() {
                 document.body.classList.add('unlocked');
-            }, 3500);
+            } else {
+                // Si és el primer cop que entra, fem la animació
+                setTimeout(function() {
+                    document.body.classList.add('loaded');
+                }, 500);
+
+                setTimeout(function() {
+                    document.body.classList.add('unlocked');
+                    // Marquem que ja l'ha vista per no repetir-la
+                    sessionStorage.setItem('introVista', 'true');
+                }, 3500);
+            }
         };
 
+        // Funció per saltar la animació clicant el botó
         function saltarIntro() {
             document.body.classList.add('unlocked');
+            sessionStorage.setItem('introVista', 'true');
         }
     </script>
 
