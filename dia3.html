@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dia 3: Cotxes, Futbol i Castells</title>
+    <title>Dia 3: Castells i Heusden</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -29,13 +29,6 @@
         .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid #f0f0f0; cursor: pointer; position: relative; }
         .card:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); border-color: #7E57C2; }
         .card img { width: 100%; height: 160px; object-fit: cover; }
-        .tick-box { position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; background: rgba(255,255,255,0.9); border: 3px solid #7E57C2; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #b0bec5; transition: all 0.3s; z-index: 10; cursor: pointer; }
-        .tick-box:hover { transform: scale(1.1); border-color: #4CAF50; color: #4CAF50; }
-        .card.visited { border-color: #4CAF50; background: #F1F8E9; box-shadow: 0 0 15px rgba(76, 175, 80, 0.4); }
-        .card.visited .tick-box { background: #4CAF50; border-color: #4CAF50; color: white; animation: pop 0.4s ease; pointer-events: none; cursor: default; }
-        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
-        .sparkle { position: absolute; font-size: 1.5rem; pointer-events: none; animation: volar 1s ease-out forwards; z-index: 20; }
-        @keyframes volar { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-40px) scale(0); } }
         .card-body { padding: 15px; }
         .time-badge { display: inline-block; background: #FF9800; color: white; padding: 4px 12px; border-radius: 15px; font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; box-shadow: 0 3px 0 #E65100; font-family: 'Baloo 2', cursive; }
         .card-body h3 { font-family: 'Baloo 2', cursive; margin: 0 0 8px 0; color: #5E35B1; font-size: 1.2rem; }
@@ -44,16 +37,20 @@
         .info-card h2 { font-family: 'Baloo 2', cursive; color: #5E35B1; font-size: 1.4rem; margin-top: 0; }
         .info-card p { font-size: 0.9rem; margin-bottom: 10px; }
         .alert-box { background: #FFF9C4; border: 2px solid #FBC02D; border-radius: 12px; padding: 12px; margin: 12px 0; font-weight: 700; font-size: 0.9rem; }
-        .game-section { background: #FFF3E0; border: 3px dashed #FF9800; border-radius: 20px; padding: 25px; margin: 40px auto; max-width: 800px; text-align: center; }
-        .game-section h2 { font-family: 'Baloo 2', cursive; color: #E65100; font-size: 1.8rem; margin-top: 0; }
-        .btn-joc { background: #4CAF50; color: white; border: none; padding: 15px 30px; font-size: 1.2rem; font-family: 'Baloo 2', cursive; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #1B5E20; margin: 10px; transition: all 0.2s; }
-        .btn-joc:active { transform: translateY(4px); box-shadow: 0 0px 0 #1B5E20; }
-        .btn-joc:disabled { background: #BDBDBD; box-shadow: 0 4px 0 #757575; cursor: not-allowed; }
-        .quiz-form { margin-top: 20px; text-align: left; }
-        .quiz-question { font-weight: 700; margin-bottom: 10px; color: #333; }
-        .quiz-option { display: block; margin: 5px 0; padding: 10px; background: white; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
-        .quiz-option:hover { border-color: #FF9800; }
-        .feedback { font-weight: 800; margin-top: 15px; font-size: 1.2rem; }
+        .tick-btn { display: block; width: 100%; padding: 12px; border: none; cursor: pointer; background: #f0f0f0; color: #7E57C2; border-top: 2px dashed #7E57C2; font-family: 'Baloo 2', cursive; font-size: 1.1rem; font-weight: 700; transition: all 0.3s; }
+        .tick-btn:hover { background: #ede7f6; }
+        .card.visited { border-color: #4CAF50; background: #F1F8E9; box-shadow: 0 0 15px rgba(76, 175, 80, 0.4); }
+        .card.visited .tick-btn { background: #4CAF50; color: white; border-top: 2px solid #1B5E20; }
+        .sparkle { position: absolute; font-size: 1.5rem; pointer-events: none; animation: volar 1s ease-out forwards; z-index: 20; }
+        @keyframes volar { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-40px) scale(0); } }
+        .hidden-object-section { background: #FFF3E0; border: 3px dashed #FF9800; border-radius: 20px; padding: 25px; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto; text-align: center; }
+        .hidden-object-section h2 { font-family: 'Baloo 2', cursive; color: #E65100; font-size: 1.8rem; margin-top: 0; margin-bottom: 20px; }
+        .hidden-object-item { background: white; border-radius: 15px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .hidden-object-item h3 { font-family: 'Baloo 2', cursive; color: #0277BD; font-size: 1.2rem; margin: 0 0 10px 0; }
+        .hidden-object-item p { font-size: 0.95rem; color: #555; line-height: 1.4; margin-bottom: 15px; text-align: left; }
+        .btn-hidden { background: #FF9800; color: white; border: none; padding: 12px 25px; font-size: 1.1rem; font-family: 'Baloo 2', cursive; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #E65100; transition: all 0.2s; }
+        .btn-hidden:active { transform: translateY(4px); box-shadow: 0 0px 0 #E65100; }
+        .btn-hidden:disabled { background: #4CAF50; box-shadow: 0 4px 0 #1B5E20; cursor: default; }
         .btn-flotant { position: fixed; bottom: 15px; right: 15px; background: #03A9F4; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; }
     </style>
 </head>
@@ -67,36 +64,26 @@
     </div>
     <div id="map"></div>
     <div class="container">
+        <div class="hidden-object-section">
+            <h2>🔍 Objecte Amagat del Dia 3</h2>
+            <div class="hidden-object-item">
+                <h3>L'estàtua de Johan Cruyff</h3>
+                <p>Al passejar per la gran plaça de l'Arena, busqueu l'estàtua de bronze del llegendari futbolista Johan Cruyff. Està situada just davant de l'entrada principal de l'estadi.</p>
+                <button id="btnObj1" class="btn-hidden" onclick="trobarObjecteFinal('obj3', 'L\'estàtua de Johan Cruyff', 'btnObj1')">🔍 L'hem trobat! (+50 Punts)</button>
+            </div>
+        </div>
         <div class="timeline-container">
-            <div class="timeline-item"><div class="card" id="card_overtoom" onclick="centrarMapa('overtoom')"><div class="tick-box" onclick="marcarVisitat(event, 'overtoom')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1506508854473-49d9e71b1e6e?q=80&w=800&auto=format&fit=crop" alt="Overtoom"><div class="card-body"><span class="time-badge">10:00</span><h3>🚙 Overtoom 197 (Recollida)</h3><p>Recollida del cotxe. Estratègia: 2 adults van amb transport públic o taxi a l'oficina, la resta espera pel Vondelpark. Càrrega de maletes i a la carretera!</p></div></div></div>
-            <div class="timeline-item"><div class="card" id="card_arena" onclick="centrarMapa('arena')"><div class="tick-box" onclick="marcarVisitat(event, 'arena')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=800&auto=format&fit=crop" alt="Johan Cruyff Arena"><div class="card-body"><span class="time-badge">11:00</span><h3>⚽ Johan Cruyff Arena</h3><p>Aparcament subterrani P1 ArenA. Passejada per la plaça, foto amb l'estàtua de Cruyff, murals, Walk of Fame i la botiga oficial de l'Ajax.</p></div></div></div>
-            <div class="timeline-item"><div class="card" id="card_castell" onclick="centrarMapa('castell')"><div class="tick-box" onclick="marcarVisitat(event, 'castell')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1464730868453-1d3644d9c3c8?q=80&w=800&auto=format&fit=crop" alt="Castillo de De Haar"><div class="card-body"><span class="time-badge">13:00</span><h3>🏰 Castillo de De Haar</h3><p>El castell més gran dels Països Baixos, sembla de Disney. Visita als jardins, fossat i dinar al Restaurant Laverie. Es recomana reservar entrades online.</p></div></div></div>
-            <div class="timeline-item"><div class="card" id="card_heusden" onclick="centrarMapa('heusden')"><div class="tick-box" onclick="marcarVisitat(event, 'heusden')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=800&auto=format&fit=crop" alt="Heusden"><div class="card-body"><span class="time-badge">18:00</span><h3>🌬️ Heusden</h3><p>Poble medieval emmurallat. Passejada a la posta de sol per la muralla per veure els molins tradicionals (Standaardmolen Heusden) sense moure el cotxe.</p></div></div></div>
-            <div class="timeline-item"><div class="card" id="card_sopar" onclick="centrarMapa('sopar')"><div class="tick-box" onclick="marcarVisitat(event, 'sopar')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop" alt="Sopar"><div class="card-body"><span class="time-badge">20:00</span><h3>🍽️ Eetcafé Havenzicht</h3><p>Sopar en aquest acollidor restaurant del poble medieval amb vistes al port.</p></div></div></div>
-            <div class="timeline-item"><div class="card" id="card_dormir" onclick="centrarMapa('dormir')"><div class="tick-box" onclick="marcarVisitat(event, 'dormir')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800&auto=format&fit=crop" alt="Dormir"><div class="card-body"><span class="time-badge">22:00</span><h3>🛏️ In den Verdwaalde Koogel</h3><p>Allotjament per dormir en ple casc antic de Heusden.</p></div></div></div>
+            <div class="timeline-item"><div class="card" id="card_overtoom" onclick="centrarMapa('overtoom')"><img src="https://images.unsplash.com/photo-1506508854473-49d9e71b1e6e?q=80=w=800&auto=format&fit=crop" alt="Overtoom"><div class="card-body"><span class="time-badge">10:00</span><h3>🚙 Overtoom 197 (Recollida)</h3><p>Recollida del cotxe. Estratègia: 2 adults van amb transport públic o taxi a l'oficina, la resta espera pel Vondelpark. Càrrega de maletes i a la carretera!</p></div><button class="tick-btn" onclick="toggleTick(event, 'overtoom')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_arena" onclick="centrarMapa('arena')"><img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80=w=800&auto=format&fit=crop" alt="Johan Cruyff Arena"><div class="card-body"><span class="time-badge">11:00</span><h3>⚽ Johan Cruyff Arena</h3><p>Aparcament subterrani P1 ArenA. Passejada per la plaça, foto amb l'estàtua de Cruyff, murals, Walk of Fame i la botiga oficial de l'Ajax.</p></div><button class="tick-btn" onclick="toggleTick(event, 'arena')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_castell" onclick="centrarMapa('castell')"><img src="https://images.unsplash.com/photo-1464730868453-1d3644d9c3c8?q=80=w=800&auto=format&fit=crop" alt="Castillo de De Haar"><div class="card-body"><span class="time-badge">13:00</span><h3>🏰 Castillo de De Haar</h3><p>El castell més gran dels Països Baixos, sembla de Disney. Visita als jardins, fossat i dinar al Restaurant Laverie. Es recomana reservar entrades online.</p></div><button class="tick-btn" onclick="toggleTick(event, 'castell')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_heusden" onclick="centrarMapa('heusden')"><img src="https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80=w=800&auto=format&fit=crop" alt="Heusden"><div class="card-body"><span class="time-badge">18:00</span><h3>🌬️ Heusden</h3><p>Poble medieval emmurallat. Passejada a la posta de sol per la muralla per veure els molins tradicionals (Standaardmolen Heusden) sense moure el cotxe.</p></div><button class="tick-btn" onclick="toggleTick(event, 'heusden')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_sopar" onclick="centrarMapa('sopar')"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80=w=800&auto=format&fit=crop" alt="Sopar"><div class="card-body"><span class="time-badge">20:00</span><h3>🍽️ Eetcafé Havenzicht</h3><p>Sopar en aquest acollidor restaurant del poble medieval amb vistes al port.</p></div><button class="tick-btn" onclick="toggleTick(event, 'sopar')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_dormir" onclick="centrarMapa('dormir')"><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80=w=800&auto=format&fit=crop" alt="Dormir"><div class="card-body"><span class="time-badge">22:00</span><h3>🛏️ In den Verdwaalde Koogel</h3><p>Allotjament per dormir en ple casc antic de Heusden.</p></div><button class="tick-btn" onclick="toggleTick(event, 'dormir')">✔️ Marcar com a visitat</button></div></div>
         </div>
         <div class="info-card">
             <h2>🏰 Detalls Castillo de De Haar</h2>
             <p><strong>Consell pràctic:</strong> Per accedir al Restaurant Laverie cal creuar els torns, per tant és necessari comprar al menos l'entrada de Jardins.</p>
             <div class="alert-box">📄 <strong>Menú Restaurant Laverie:</strong><br><a href="https://www.kasteeldehaar.nl/es/wp-content/uploads/2026/04/menukaart-apr26-kasteeldehaar-enne-web.pdf" target="_blank" style="color: #E65100; text-decoration: underline;">Clica aquí per veure el menú en PDF</a></div>
-        </div>
-        <div class="game-section">
-            <h2>🏆 Repte del Dia 3</h2>
-            <button id="btnVisitat" class="btn-joc" onclick="marcarVisitat(event, 'quiz3')">📍 Ja hem acabat el dia! (+50 Punts)</button>
-            <div id="quizArea" style="display:none;">
-                <form class="quiz-form" id="formQuiz3">
-                    <div class="quiz-question">1. Quin castell és el més gran dels Països Baixos?</div>
-                    <label class="quiz-option"><input type="radio" name="q1" value="haar"> Castillo de De Haar</label>
-                    <label class="quiz-option"><input type="radio" name="q1" value="buda"> Castell de Buda</label>
-                    <label class="quiz-option"><input type="radio" name="q1" value="neuschwanstein"> Neuschwanstein</label>
-                    <div class="quiz-question" style="margin-top:15px;">2. Quantes molins tradicionals hi ha a la muralla de Heusden?</div>
-                    <label class="quiz-option"><input type="radio" name="q2" value="1"> Un</label>
-                    <label class="quiz-option"><input type="radio" name="q2" value="3"> Tres</label>
-                    <label class="quiz-option"><input type="radio" name="q2" value="5"> Cinc</label>
-                </form>
-                <button class="btn-joc" id="btnValidar" onclick="validarQuiz(3)" style="background:#03A9F4; box-shadow:0 4px 0 #0277BD;">Validar Quiz (+50 Punts)</button>
-                <div id="feedbackQuiz" class="feedback"></div>
-            </div>
         </div>
     </div>
     <a href="dia4.html" class="btn-flotant">➡</a>
@@ -110,42 +97,38 @@
             return `<div class="map-card"><img src="${foto}" alt="${titol}"><span class="hora">${hora}</span><h3>${titol}</h3><p>${descripcio}</p><a href="${gmapsUrl}" target="_blank" class="map-btn">📍 Ruta a Google Maps</a></div>`;
         }
         var markers = {};
-        markers['overtoom'] = L.marker([52.3569, 4.8662], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('10:00', 'Overtoom 197', 'https://images.unsplash.com/photo-1506508854473-49d9e71b1e6e?q=80&w=400&auto=format&fit=crop', 'Recollida del cotxe.', 52.3569, 4.8662));
-        markers['arena'] = L.marker([52.3127, 4.9446], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('11:00', 'Johan Cruyff Arena', 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=400&auto=format&fit=crop', 'Estadi de l\'Ajax.', 52.3127, 4.9446));
-        markers['castell'] = L.marker([52.1176, 5.0480], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('13:00', 'Castillo de De Haar', 'https://images.unsplash.com/photo-1464730868453-1d3644d9c3c8?q=80&w=400&auto=format&fit=crop', 'El castell de conte de fades.', 52.1176, 5.0480));
-        markers['heusden'] = L.marker([51.7345, 5.1378], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('18:00', 'Heusden', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80&w=400&auto=format&fit=crop', 'Poble amb molins.', 51.7345, 5.1378));
-        markers['sopar'] = L.marker([51.7336, 5.1368], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('20:00', 'Eetcafé Havenzicht', 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=400&auto=format&fit=crop', 'Sopar al port.', 51.7336, 5.1368));
-        markers['dormir'] = L.marker([51.7342, 5.1364], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('22:00', 'In den Verdwaalde Koogel', 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=400&auto=format&fit=crop', 'Hotel a Heusden.', 51.7342, 5.1364));
+        markers['overtoom'] = L.marker([52.3569, 4.8662], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('10:00', 'Overtoom 197', 'https://images.unsplash.com/photo-1506508854473-49d9e71b1e6e?q=80=w=400&auto=format&fit=crop', 'Recollida del cotxe.', 52.3569, 4.8662));
+        markers['arena'] = L.marker([52.3127, 4.9446], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('11:00', 'Johan Cruyff Arena', 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80=w=400&auto=format&fit=crop', 'Estadi de l\'Ajax.', 52.3127, 4.9446));
+        markers['castell'] = L.marker([52.1176, 5.0480], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('13:00', 'Castillo de De Haar', 'https://images.unsplash.com/photo-1464730868453-1d3644d9c3c8?q=80=w=400&auto=format&fit=crop', 'El castell de conte de fades.', 52.1176, 5.0480));
+        markers['heusden'] = L.marker([51.7345, 5.1378], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('18:00', 'Heusden', 'https://images.unsplash.com/photo-1534351590666-13e3e96c5017?q=80=w=400&auto=format&fit=crop', 'Poble amb molins.', 51.7345, 5.1378));
+        markers['sopar'] = L.marker([51.7336, 5.1368], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('20:00', 'Eetcafé Havenzicht', 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80=w=400&auto=format&fit=crop', 'Sopar al port.', 51.7336, 5.1368));
+        markers['dormir'] = L.marker([51.7342, 5.1364], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('22:00', 'In den Verdwaalde Koogel', 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80=w=400&auto=format&fit=crop', 'Hotel a Heusden.', 51.7342, 5.1364));
         function centrarMapa(id) { var marker = markers[id]; if (marker) { map.setView(marker.getLatLng(), 14); setTimeout(function() { marker.openPopup(); map.invalidateSize(); }, 300); } document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         function carregarEstatJoc() {
             let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); document.getElementById('puntsTotals').innerText = punts;
             let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}');
-            for (let id in visitats) { if (visitats[id] && id !== 'quiz3') { let card = document.getElementById('card_' + id); if (card) card.classList.add('visited'); } }
-            let diaCompletat = localStorage.getItem('dia3_complet');
-            if (diaCompletat === 'true') { let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Dia Completat!"; btn.disabled = true; document.getElementById('quizArea').style.display = 'block'; document.querySelectorAll('#formQuiz3 input').forEach(input => input.disabled = true); document.getElementById('btnValidar').disabled = true; }
+            for (let id in visitats) { if (visitats[id]) { let card = document.getElementById('card_' + id); if (card) { card.classList.add('visited'); let btn = card.querySelector('.tick-btn'); if (btn) btn.innerText = "✅ Visitat!"; } } }
+            if (localStorage.getItem('obj3_found') === 'true') { let btn = document.getElementById('btnObj1'); btn.innerText = "✅ Estàtua de Cruyff trobada!"; btn.disabled = true; }
         }
         carregarEstatJoc();
-        function marcarVisitat(ev, id) {
+        function toggleTick(ev, id) {
             if (ev && ev.stopPropagation) ev.stopPropagation();
-            if (id === 'quiz3') {
-                let jaVisitat = localStorage.getItem('dia3_btnVisitat');
-                if (jaVisitat !== 'true') { let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 50; localStorage.setItem('puntsViatge', punts); localStorage.setItem('dia3_btnVisitat', 'true'); document.getElementById('puntsTotals').innerText = punts; }
-                let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Estàs aquí! Ara fes el Quiz:"; btn.disabled = true; document.getElementById('quizArea').style.display = 'block'; return;
-            }
-            let card = document.getElementById('card_' + id); if (!card || card.classList.contains('visited')) return;
-            card.classList.add('visited'); let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 10; localStorage.setItem('puntsViatge', punts); document.getElementById('puntsTotals').innerText = punts;
-            let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}'); visitats[id] = true; localStorage.setItem('llocsVisitats', JSON.stringify(visitats));
-            crearEspurnes(card);
+            let card = document.getElementById('card_' + id); if (!card) return;
+            let isVisited = card.classList.contains('visited');
+            let punts = parseInt(localStorage.getItem('puntsViatge') || '0');
+            let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}');
+            let btn = card.querySelector('.tick-btn');
+            if (isVisited) { card.classList.remove('visited'); punts -= 10; if (punts < 0) punts = 0; visitats[id] = false; if (btn) btn.innerText = "✔️ Marcar com a visitat"; }
+            else { card.classList.add('visited'); punts += 10; visitats[id] = true; if (btn) btn.innerText = "✅ Visitat!"; crearEspurnes(card); }
+            localStorage.setItem('puntsViatge', punts); localStorage.setItem('llocsVisitats', JSON.stringify(visitats)); document.getElementById('puntsTotals').innerText = punts;
         }
-        function validarQuiz(dia) {
-            let respostesCorrectes = 0; let q1 = document.querySelector('input[name="q1"]:checked'); if (q1 && q1.value === 'haar') respostesCorrectes++;
-            let q2 = document.querySelector('input[name="q2"]:checked'); if (q2 && q2.value === '3') respostesCorrectes++;
-            let feedback = document.getElementById('feedbackQuiz');
-            if (respostesCorrectes === 2) {
-                let jaQuiz = localStorage.getItem('dia' + dia + '_quiz'); if (jaQuiz !== 'true') { let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 50; localStorage.setItem('puntsViatge', punts); localStorage.setItem('dia' + dia + '_quiz', 'true'); localStorage.setItem('dia' + dia + '_complet', 'true'); document.getElementById('puntsTotals').innerText = punts; }
-                feedback.style.color = '#4CAF50'; feedback.innerHTML = "🎉 PERFECTE! 50 punts més! Dia completat!"; let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Dia Completat!"; btn.disabled = true; document.querySelectorAll('#formQuiz3 input').forEach(input => input.disabled = true); document.getElementById('btnValidar').disabled = true;
-            } else if (respostesCorrectes > 0) { feedback.style.color = '#FF9800'; feedback.innerHTML = "🤔 Gairebé! Tens " + respostesCorrectes + "/2 correctes. Torna-ho a provar!"; }
-            else { feedback.style.color = '#FF5252'; feedback.innerHTML = "❌ Cap de correcte! Repassa la ruta del dia i torna-ho a intentar."; }
+        function trobarObjecteFinal(idObj, nomObjecte, btnId) {
+            let found = localStorage.getItem(idObj + '_found'); if (found === 'true') return;
+            localStorage.setItem(idObj + '_found', 'true');
+            let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 50;
+            localStorage.setItem('puntsViatge', punts); document.getElementById('puntsTotals').innerText = punts;
+            let btn = document.getElementById(btnId); btn.innerText = "✅ " + nomObjecte + " trobada!"; btn.disabled = true;
+            alert("🎉 Has trobat: " + nomObjecte + "! +50 Punts!");
         }
         function crearEspurnes(card) { let emojis = ['✨', '🎉', '⭐', '🌟', '💫']; for(let i=0; i<8; i++) { let s = document.createElement('div'); s.innerText = emojis[Math.floor(Math.random() * emojis.length)]; s.className = 'sparkle'; s.style.left = (40 + Math.random() * 20) + '%'; s.style.top = (40 + Math.random() * 20) + '%'; card.appendChild(s); setTimeout(() => s.remove(), 1000); } }
     </script>
