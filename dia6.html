@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dia 6: Tornada a Eindhoven</title>
+    <title>Dia 6: Tornada a Casa</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -29,37 +29,34 @@
         .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid #f0f0f0; cursor: pointer; position: relative; }
         .card:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); border-color: #00897B; }
         .card img { width: 100%; height: 160px; object-fit: cover; }
-        .tick-box { position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; background: rgba(255,255,255,0.9); border: 3px solid #00897B; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #b0bec5; transition: all 0.3s; z-index: 10; cursor: pointer; }
-        .tick-box:hover { transform: scale(1.1); border-color: #4CAF50; color: #4CAF50; }
-        .card.visited { border-color: #4CAF50; background: #F1F8E9; box-shadow: 0 0 15px rgba(76, 175, 80, 0.4); }
-        .card.visited .tick-box { background: #4CAF50; border-color: #4CAF50; color: white; animation: pop 0.4s ease; pointer-events: none; cursor: default; }
-        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
-        .sparkle { position: absolute; font-size: 1.5rem; pointer-events: none; animation: volar 1s ease-out forwards; z-index: 20; }
-        @keyframes volar { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-40px) scale(0); } }
         .card-body { padding: 15px; }
         .time-badge { display: inline-block; background: #FF9800; color: white; padding: 4px 12px; border-radius: 15px; font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; box-shadow: 0 3px 0 #E65100; font-family: 'Baloo 2', cursive; }
         .card-body h3 { font-family: 'Baloo 2', cursive; margin: 0 0 8px 0; color: #00695C; font-size: 1.2rem; }
         .card-body p { margin: 0; color: #555; line-height: 1.4; font-size: 0.95rem; }
-        .info-card { background: white; border-radius: 15px; padding: 20px; margin: 30px auto; max-width: 800px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-left: 6px solid #00897B; }
-        .info-card h2 { font-family: 'Baloo 2', cursive; color: #00695C; font-size: 1.4rem; margin-top: 0; }
-        .info-card p { font-size: 0.9rem; margin-bottom: 10px; }
-        .alert-box { background: #E0F2F1; border: 2px solid #00897B; border-radius: 12px; padding: 12px; margin: 12px 0; font-weight: 700; font-size: 0.9rem; }
-        .game-section { background: #FFF3E0; border: 3px dashed #FF9800; border-radius: 20px; padding: 25px; margin: 40px auto; max-width: 800px; text-align: center; }
-        .game-section h2 { font-family: 'Baloo 2', cursive; color: #E65100; font-size: 1.8rem; margin-top: 0; }
-        .btn-joc { background: #4CAF50; color: white; border: none; padding: 15px 30px; font-size: 1.2rem; font-family: 'Baloo 2', cursive; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #1B5E20; margin: 10px; transition: all 0.2s; }
-        .btn-joc:active { transform: translateY(4px); box-shadow: 0 0px 0 #1B5E20; }
-        .btn-joc:disabled { background: #BDBDBD; box-shadow: 0 4px 0 #757575; cursor: not-allowed; }
-        .quiz-form { margin-top: 20px; text-align: left; }
-        .quiz-question { font-weight: 700; margin-bottom: 10px; color: #333; }
-        .quiz-option { display: block; margin: 5px 0; padding: 10px; background: white; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
-        .quiz-option:hover { border-color: #FF9800; }
-        .feedback { font-weight: 800; margin-top: 15px; font-size: 1.2rem; }
+        .info-card { background: white; border-radius: 15px; padding: 20px; margin: 30px auto; max-width: 800px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-left: 6px solid #00897B; text-align: center; }
+        .info-card h2 { font-family: 'Baloo 2', cursive; color: #00695C; font-size: 1.8rem; margin-top: 0; }
+        .info-card p { font-size: 1rem; margin-bottom: 10px; color: #555; }
+        .alert-box { background: #E0F2F1; border: 2px solid #00897B; border-radius: 12px; padding: 12px; margin: 12px 0; font-weight: 700; font-size: 0.9rem; text-align: left; }
+        .tick-btn { display: block; width: 100%; padding: 12px; border: none; cursor: pointer; background: #f0f0f0; color: #00897B; border-top: 2px dashed #00897B; font-family: 'Baloo 2', cursive; font-size: 1.1rem; font-weight: 700; transition: all 0.3s; }
+        .tick-btn:hover { background: #e0f2f1; }
+        .card.visited { border-color: #4CAF50; background: #F1F8E9; box-shadow: 0 0 15px rgba(76, 175, 80, 0.4); }
+        .card.visited .tick-btn { background: #4CAF50; color: white; border-top: 2px solid #1B5E20; }
+        .sparkle { position: absolute; font-size: 1.5rem; pointer-events: none; animation: volar 1s ease-out forwards; z-index: 20; }
+        @keyframes volar { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-40px) scale(0); } }
+        .hidden-object-section { background: #FFF3E0; border: 3px dashed #FF9800; border-radius: 20px; padding: 25px; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto; text-align: center; }
+        .hidden-object-section h2 { font-family: 'Baloo 2', cursive; color: #E65100; font-size: 1.8rem; margin-top: 0; margin-bottom: 20px; }
+        .hidden-object-item { background: white; border-radius: 15px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .hidden-object-item h3 { font-family: 'Baloo 2', cursive; color: #0277BD; font-size: 1.2rem; margin: 0 0 10px 0; }
+        .hidden-object-item p { font-size: 0.95rem; color: #555; line-height: 1.4; margin-bottom: 15px; text-align: left; }
+        .btn-hidden { background: #FF9800; color: white; border: none; padding: 12px 25px; font-size: 1.1rem; font-family: 'Baloo 2', cursive; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #E65100; transition: all 0.2s; }
+        .btn-hidden:active { transform: translateY(4px); box-shadow: 0 0px 0 #E65100; }
+        .btn-hidden:disabled { background: #4CAF50; box-shadow: 0 4px 0 #1B5E20; cursor: default; }
         .btn-flotant { position: fixed; bottom: 15px; right: 15px; background: #03A9F4; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; }
     </style>
 </head>
 <body>
     <div class="header" id="top">
-        <h1>🛫 Dia 6: Tornada a Eindhoven</h1>
+        <h1>🛫 Dia 6: Tornada a Casa</h1>
         <div class="header-right">
             <div class="punts-box">⭐ <span id="puntsTotals">0</span> Punts</div>
             <a href="index.html" class="btn-tornar">⬅ Tornar</a>
@@ -67,41 +64,34 @@
     </div>
     <div id="map"></div>
     <div class="container">
-        <div class="timeline-container">
-            <div class="timeline-item"><div class="card" id="card_checkout" onclick="centrarMapa('checkout')"><div class="tick-box" onclick="marcarVisitat(event, 'checkout')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=800&auto=format&fit=crop" alt="Check-out"><div class="card-body"><span class="time-badge">08:30 - 09:30</span><h3>🧳 Check-out Automàtic</h3><p>Recollida de la cabanya. Càrrega ràpida d'equipatge als cotxes (gràcies a la proximitat de l'aparcament). Cal deixar l'allotjament abans de les 10:30h. <strong>No cal anar a recepció.</strong></p></div></div></div>
-            <div class="timeline-item"><div class="card" id="card_parc" onclick="centrarMapa('parc')"><div class="tick-box" onclick="marcarVisitat(event, 'parc')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=800&auto=format&fit=crop" alt="Efteling"><div class="card-body"><span class="time-badge">09:30 - 13:00</span><h3>🎢 Última Volta al Parc</h3><p>Temps lliure per pujar a Vogel Rok (a les fosques), repetir el que més els hagi agradat i comprar records a la botiga principal (Efteldingen).</p></div></div></div>
-            <div class="timeline-item"><div class="card" id="card_dinar" onclick="centrarMapa('dinar')"><div class="tick-box" onclick="marcarVisitat(event, 'dinar')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=800&auto=format&fit=crop" alt="Dinar"><div class="card-body"><span class="time-badge">13:00</span><h3>🥞 Dinar Final</h3><p><strong>Bäckerei Krümel</strong> (plaça Max & Moritz): Panaderia rústica, pans plans i dolços. Opció ràpida: <strong>Station de Oost</strong> (zona Ruigrijk).</p></div></div></div>
-            <div class="timeline-item"><div class="card" id="card_cotxes" onclick="centrarMapa('cotxes')"><div class="tick-box" onclick="marcarVisitat(event, 'cotxes')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1506521781263-d8422e82f27a?q=80&w=800&auto=format&fit=crop" alt="Cotxes"><div class="card-body"><span class="time-badge">14:30 - 14:45</span><h3>🚶 Comiat i Cotxes</h3><p>Sortida del parc i caminada fins a Loonsche Land per pujar als vehicles. Acomodar els 4 nens porta el seu temps, millor anar amb marge.</p></div></div></div>
-            <div class="timeline-item"><div class="card" id="card_ruta" onclick="centrarMapa('ruta')"><div class="tick-box" onclick="marcarVisitat(event, 'ruta')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=800&auto=format&fit=crop" alt="Ruta"><div class="card-body"><span class="time-badge">15:15</span><h3>🚗 En Ruta</h3><p>Sortida en cotxe cap a l'aeroport. El trajecte dura uns 40 minuts sense trànsit pesat.</p></div></div></div>
-            <div class="timeline-item"><div class="card" id="card_aeroport" onclick="centrarMapa('aeroport')"><div class="tick-box" onclick="marcarVisitat(event, 'aeroport')" title="Marcar com a visitat">✓</div><img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop" alt="Aeroport"><div class="card-body"><span class="time-badge">16:00</span><h3>✈️ Aeroport d'Eindhoven</h3><p>Arribada per retornar els vehicles sense agobis. Fi del viatge als Països Baixos!</p></div></div></div>
-        </div>
-        <div class="info-card">
-            <h2>⏱️ Logística de Tornada</h2>
-            <div class="alert-box">⏰ <strong>Horari estret:</strong> Per ser a les 16:00h a Eindhoven entregant els cotxes sense estrès, cal sortir d'Efteling a les 15:15h com a màxim.</div>
-            <p><strong>Check-out (10:30h):</strong> És automàtic. Podeu deixar els cotxes aparcats al mateix lloc mentre feu l'última volta al parc, només cal assegurar-vos de treure l'equipatge de la cabanya al matí.</p>
-        </div>
-        <div class="game-section">
-            <h2>🏆 Repte del Dia 6</h2>
-            <button id="btnVisitat" class="btn-joc" onclick="marcarVisitat(event, 'quiz6')">📍 Ja hem acabat el dia! (+50 Punts)</button>
-            <div id="quizArea" style="display:none;">
-                <form class="quiz-form" id="formQuiz6">
-                    <div class="quiz-question">1. A quina hora hem de deixar l'allotjament (check-out)?</div>
-                    <label class="quiz-option"><input type="radio" name="q1" value="10:30"> 10:30h</label>
-                    <label class="quiz-option"><input type="radio" name="q1" value="12:00"> 12:00h</label>
-                    <label class="quiz-option"><input type="radio" name="q1" value="16:00"> 16:00h</label>
-                    <div class="quiz-question" style="margin-top:15px;">2. On arribem a les 16:00h per retornar els cotxes?</div>
-                    <label class="quiz-option"><input type="radio" name="q2" value="schiphol"> Aeroport de Schiphol</label>
-                    <label class="quiz-option"><input type="radio" name="q2" value="eindhoven"> Aeroport d'Eindhoven</label>
-                    <label class="quiz-option"><input type="radio" name="q2" value="amsterdam"> Estació d'Amsterdam</label>
-                </form>
-                <button class="btn-joc" id="btnValidar" onclick="validarQuiz(6)" style="background:#03A9F4; box-shadow:0 4px 0 #0277BD;">Validar Quiz (+50 Punts)</button>
-                <div id="feedbackQuiz" class="feedback"></div>
+        <div class="hidden-object-section">
+            <h2>🔍 Objecte Amagat del Dia 6</h2>
+            <div class="hidden-object-item">
+                <h3>El bitllet d'embarcament d'Eindhoven</h3>
+                <p>Abans de sortir cap a l'aeroport, assegureu-vos de tenir a la mà el bitllet d'embarcament imprès o a l'app per poder volar cap a Barcelona.</p>
+                <button id="btnObj1" class="btn-hidden" onclick="trobarObjecteFinal('obj6', 'El bitllet d\'embarcament', 'btnObj1')">🔍 El tenim a punt! (+50 Punts)</button>
             </div>
         </div>
+        <div class="timeline-container">
+            <div class="timeline-item"><div class="card" id="card_checkout" onclick="centrarMapa('checkout')"><img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80=w=800&auto=format&fit=crop" alt="Check-out"><div class="card-body"><span class="time-badge">08:30 - 09:30</span><h3>🧳 Check-out Automàtic</h3><p>Recollida de la cabanya. Càrrega ràpida d'equipatge als cotxes. Cal deixar l'allotjament abans de les 10:30h. <strong>No cal anar a recepció.</strong></p></div><button class="tick-btn" onclick="toggleTick(event, 'checkout')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_parc" onclick="centrarMapa('parc')"><img src="https://images.unsplash.com/photo-1549887534-1541e9326642?q=80=w=800&auto=format&fit=crop" alt="Efteling"><div class="card-body"><span class="time-badge">09:30 - 13:00</span><h3>🎢 Última Volta al Parc</h3><p>Temps lliure per pujar a Vogel Rok (a les fosques), repetir el que més els hagi agradat i comprar records a la botiga principal (Efteldingen).</p></div><button class="tick-btn" onclick="toggleTick(event, 'parc')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_dinar" onclick="centrarMapa('dinar')"><img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80=w=800&auto=format&fit=crop" alt="Dinar"><div class="card-body"><span class="time-badge">13:00</span><h3>🥞 Dinar Final</h3><p><strong>Bäckerei Krümel</strong> (plaça Max & Moritz): Panaderia rústica, pans plans i dolços. Opció ràpida: <strong>Station de Oost</strong> (zona Ruigrijk).</p></div><button class="tick-btn" onclick="toggleTick(event, 'dinar')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_cotxes" onclick="centrarMapa('cotxes')"><img src="https://images.unsplash.com/photo-1506521781263-d8422e82f27a?q=80=w=800&auto=format&fit=crop" alt="Cotxes"><div class="card-body"><span class="time-badge">14:30 - 14:45</span><h3>🚶 Comiat i Cotxes</h3><p>Sortida del parc i caminada fins a Loonsche Land per pujar als vehicles. Acomodar els 4 nens porta el seu temps, millor anar amb marge.</p></div><button class="tick-btn" onclick="toggleTick(event, 'cotxes')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_ruta" onclick="centrarMapa('ruta')"><img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80=w=800&auto=format&fit=crop" alt="Ruta"><div class="card-body"><span class="time-badge">15:15</span><h3>🚗 En Ruta</h3><p>Sortida en cotxe cap a l'aeroport. El trajecte dura uns 40 minuts sense trànsit pesat.</p></div><button class="tick-btn" onclick="toggleTick(event, 'ruta')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_aeroport" onclick="centrarMapa('aeroport')"><img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80=w=800&auto=format&fit=crop" alt="Aeroport"><div class="card-body"><span class="time-badge">16:00</span><h3>✈️ Aeroport d'Eindhoven</h3><p>Arribada per retornar els vehicles sense agobis. Fi de la part holandesa del viatge!</p></div><button class="tick-btn" onclick="toggleTick(event, 'aeroport')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_vol" onclick="centrarMapa('vol')"><img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80=w=800&auto=format&fit=crop" alt="Vol"><div class="card-body"><span class="time-badge">18:20</span><h3>🛫 Vol a Barcelona</h3><p>Enlairament des de l'Aeroport d'Eindhoven. Hora de dir adéu als Països Baixos.</p></div><button class="tick-btn" onclick="toggleTick(event, 'vol')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_barcelona" onclick="centrarMapa('barcelona')"><img src="https://images.unsplash.com/photo-1565017228812-2ce523355b5e?q=80=w=800&auto=format&fit=crop" alt="Barcelona"><div class="card-body"><span class="time-badge">20:25</span><h3>🛬 Arribada a Barcelona</h3><p>Aterratge a l'Aeroport del Prat. Recollida d'equipatges i temps per descansar una mica abans del bus.</p></div><button class="tick-btn" onclick="toggleTick(event, 'barcelona')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_bus" onclick="centrarMapa('bus')"><img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?q=80=w=800&auto=format&fit=crop" alt="Bus"><div class="card-body"><span class="time-badge">21:30</span><h3>🚌 Bus a Tortosa</h3><p>Sortida en bus des de Barcelona cap a casa.</p></div><button class="tick-btn" onclick="toggleTick(event, 'bus')">✔️ Marcar com a visitat</button></div></div>
+            <div class="timeline-item"><div class="card" id="card_tortosa" onclick="centrarMapa('tortosa')"><img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80=w=800&auto=format&fit=crop" alt="Tortosa"><div class="card-body"><span class="time-badge">23:40</span><h3>🏡 Arribada a Tortosa</h3><p>Fi del viatge. Ja som a casa per descansar de totes les aventures visquedes!</p></div><button class="tick-btn" onclick="toggleTick(event, 'tortosa')">✔️ Marcar com a visitat</button></div></div>
+        </div>
+        <div class="info-card">
+            <h2>✨ Fi de l'Aventura! ✨</h2>
+            <p>Després de 6 dies increïbles per los Països Baixos, és hora de plegar i guardar els records d'aquest viatge inoblidable. Benvinguts a casa! 🇳🇱 ➡️ 🇪🇸</p>
+        </div>
     </div>
-    <a href="dia7.html" class="btn-flotant">➡</a>
+    <a href="index.html" class="btn-flotant">🏠</a>
     <script>
-        var map = L.map('map').setView([51.55, 5.25], 11);
+        var map = L.map('map').setView([50.5, 4.0], 6);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
         setTimeout(function(){ map.invalidateSize(); }, 500);
         var customIcon = L.divIcon({ className: 'custom-pin', html: '<div style="font-size: 28px;">📍</div>', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] });
@@ -110,44 +100,13 @@
             return `<div class="map-card"><img src="${foto}" alt="${titol}"><span class="hora">${hora}</span><h3>${titol}</h3><p>${descripcio}</p><a href="${gmapsUrl}" target="_blank" class="map-btn">📍 Ruta a Google Maps</a></div>`;
         }
         var markers = {};
-        markers['checkout'] = L.marker([51.6519, 5.0412], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('08:30', 'Check-out Loonsche Land', 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=400&auto=format&fit=crop', 'Sortida de la cabanya.', 51.6519, 5.0412));
-        markers['parc'] = L.marker([51.6502, 5.0441], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('09:30', 'Efteling', 'https://images.unsplash.com/photo-1549887534-1541e9326642?q=80&w=400&auto=format&fit=crop', 'Última volta.', 51.6502, 5.0441));
-        markers['dinar'] = L.marker([51.6497, 5.0437], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('13:00', 'Bäckerei Krümel', 'https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80&w=400&auto=format&fit=crop', 'Dinar ràpid al parc.', 51.6497, 5.0437));
-        markers['cotxes'] = L.marker([51.6519, 5.0412], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('14:30', 'Cotxes', 'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?q=80&w=400&auto=format&fit=crop', 'Pujar als vehicles.', 51.6519, 5.0412));
-        markers['ruta'] = L.marker([51.55, 5.20], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('15:15', 'Ruta a Eindhoven', 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=400&auto=format&fit=crop', '40 minuts de carretera.', 51.55, 5.20));
-        markers['aeroport'] = L.marker([51.4510, 5.3745], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('16:00', 'Aeroport Eindhoven', 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=400&auto=format&fit=crop', 'Retornar cotxes.', 51.4510, 5.3745));
-        function centrarMapa(id) { var marker = markers[id]; if (marker) { map.setView(marker.getLatLng(), 13); setTimeout(function() { marker.openPopup(); map.invalidateSize(); }, 300); } document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-        function carregarEstatJoc() {
-            let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); document.getElementById('puntsTotals').innerText = punts;
-            let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}');
-            for (let id in visitats) { if (visitats[id] && id !== 'quiz6') { let card = document.getElementById('card_' + id); if (card) card.classList.add('visited'); } }
-            let diaCompletat = localStorage.getItem('dia6_complet');
-            if (diaCompletat === 'true') { let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Dia Completat!"; btn.disabled = true; document.getElementById('quizArea').style.display = 'block'; document.querySelectorAll('#formQuiz6 input').forEach(input => input.disabled = true); document.getElementById('btnValidar').disabled = true; }
-        }
-        carregarEstatJoc();
-        function marcarVisitat(ev, id) {
-            if (ev && ev.stopPropagation) ev.stopPropagation();
-            if (id === 'quiz6') {
-                let jaVisitat = localStorage.getItem('dia6_btnVisitat');
-                if (jaVisitat !== 'true') { let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 50; localStorage.setItem('puntsViatge', punts); localStorage.setItem('dia6_btnVisitat', 'true'); document.getElementById('puntsTotals').innerText = punts; }
-                let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Estàs aquí! Ara fes el Quiz:"; btn.disabled = true; document.getElementById('quizArea').style.display = 'block'; return;
-            }
-            let card = document.getElementById('card_' + id); if (!card || card.classList.contains('visited')) return;
-            card.classList.add('visited'); let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 10; localStorage.setItem('puntsViatge', punts); document.getElementById('puntsTotals').innerText = punts;
-            let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}'); visitats[id] = true; localStorage.setItem('llocsVisitats', JSON.stringify(visitats));
-            crearEspurnes(card);
-        }
-        function validarQuiz(dia) {
-            let respostesCorrectes = 0; let q1 = document.querySelector('input[name="q1"]:checked'); if (q1 && q1.value === '10:30') respostesCorrectes++;
-            let q2 = document.querySelector('input[name="q2"]:checked'); if (q2 && q2.value === 'eindhoven') respostesCorrectes++;
-            let feedback = document.getElementById('feedbackQuiz');
-            if (respostesCorrectes === 2) {
-                let jaQuiz = localStorage.getItem('dia' + dia + '_quiz'); if (jaQuiz !== 'true') { let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 50; localStorage.setItem('puntsViatge', punts); localStorage.setItem('dia' + dia + '_quiz', 'true'); localStorage.setItem('dia' + dia + '_complet', 'true'); document.getElementById('puntsTotals').innerText = punts; }
-                feedback.style.color = '#4CAF50'; feedback.innerHTML = "🎉 PERFECTE! 50 punts més! Dia completat!"; let btn = document.getElementById('btnVisitat'); btn.innerText = "✅ Dia Completat!"; btn.disabled = true; document.querySelectorAll('#formQuiz6 input').forEach(input => input.disabled = true); document.getElementById('btnValidar').disabled = true;
-            } else if (respostesCorrectes > 0) { feedback.style.color = '#FF9800'; feedback.innerHTML = "🤔 Gairebé! Tens " + respostesCorrectes + "/2 correctes. Torna-ho a provar!"; }
-            else { feedback.style.color = '#FF5252'; feedback.innerHTML = "❌ Cap de correcte! Repassa la ruta del dia i torna-ho a intentar."; }
-        }
-        function crearEspurnes(card) { let emojis = ['✨', '🎉', '⭐', '🌟', '💫']; for(let i=0; i<8; i++) { let s = document.createElement('div'); s.innerText = emojis[Math.floor(Math.random() * emojis.length)]; s.className = 'sparkle'; s.style.left = (40 + Math.random() * 20) + '%'; s.style.top = (40 + Math.random() * 20) + '%'; card.appendChild(s); setTimeout(() => s.remove(), 1000); } }
-    </script>
-</body>
-</html>
+        markers['checkout'] = L.marker([51.6519, 5.0412], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('08:30', 'Check-out Loonsche', 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80=w=400&auto=format&fit=crop', 'Sortida de la cabanya.', 51.6519, 5.0412));
+        markers['parc'] = L.marker([51.6502, 5.0441], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('09:30', 'Efteling', 'https://images.unsplash.com/photo-1549887534-1541e9326642?q=80=w=400&auto=format&fit=crop', 'Última volta.', 51.6502, 5.0441));
+        markers['dinar'] = L.marker([51.6497, 5.0437], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('13:00', 'Bäckerei Krümel', 'https://images.unsplash.com/photo-1565299543923-37dd37887442?q=80=w=400&auto=format&fit=crop', 'Dinar ràpid.', 51.6497, 5.0437));
+        markers['cotxes'] = L.marker([51.6519, 5.0412], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('14:30', 'Cotxes', 'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?q=80=w=400&auto=format&fit=crop', 'Pujar als vehicles.', 51.6519, 5.0412));
+        markers['ruta'] = L.marker([51.45, 5.00], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('15:15', 'Ruta a Eindhoven', 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80=w=400&auto=format&fit=crop', '40 minuts de cotxe.', 51.45, 5.00));
+        markers['aeroport'] = L.marker([51.4510, 5.3745], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('16:00', 'Aeroport Eindhoven', 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80=w=400&auto=format&fit=crop', 'Retornar cotxes.', 51.4510, 5.3745));
+        markers['vol'] = L.marker([51.4510, 5.3745], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('18:20', 'Vol: Eindhoven', 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80=w=400&auto=format&fit=crop', 'Sortida del vol.', 51.4510, 5.3745));
+        markers['barcelona'] = L.marker([41.2974, 2.0833], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('20:25', 'Arribada: BCN', 'https://images.unsplash.com/photo-1565017228812-2ce523355b5e?q=80=w=400&auto=format&fit=crop', 'Aeroport del Prat.', 41.2974, 2.0833));
+        markers['bus'] = L.marker([41.3851, 2.1734], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('21:30', 'Bus: Barcelona', 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?q=80=w=400&auto=format&fit=crop', 'Estació de Bus.', 41.3851, 2.1734));
+        markers['tortosa'] = L.marker([40.8125, 0.5236], {icon: customIcon}).addTo(map).bindPopup(crearTargeta('23:40', 'Arribada: Tortosa', 'https://images.unsplash.com/photo-1502082553048-f009c
