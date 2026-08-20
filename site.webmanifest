@@ -3,12 +3,12 @@
   "short_name": "Viatge",
   "icons": [
     {
-      "src": "viatge/favicon.png",
+      "src": "favicon.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "viatge/favicon.png",
+      "src": "favicon.png",
       "sizes": "192x192",
       "type": "image/png"
     }
