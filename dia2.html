@@ -47,6 +47,13 @@
         .hidden-object-item { background: white; border-radius: 15px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .hidden-object-item h3 { font-family: 'Baloo 2', cursive; color: #0277BD; font-size: 1.2rem; margin: 0 0 10px 0; }
         .hidden-object-item p { font-size: 0.95rem; color: #555; line-height: 1.4; margin-bottom: 15px; text-align: left; }
+        
+        /* ESTILS PER LA FOTO AMB LA RODONA VERMELLA */
+        .photo-container { position: relative; display: inline-block; width: 100%; margin-bottom: 15px; }
+        .photo-container img { width: 100%; border-radius: 12px; display: block; }
+        .red-circle { position: absolute; border: 5px solid #FF0000; border-radius: 50%; width: 60px; height: 60px; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+
         .btn-hidden { background: #FF9800; color: white; border: none; padding: 12px 25px; font-size: 1.1rem; font-family: 'Baloo 2', cursive; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #E65100; transition: all 0.2s; }
         .btn-hidden:active { transform: translateY(4px); box-shadow: 0 0px 0 #E65100; }
         .btn-hidden:disabled { background: #4CAF50; box-shadow: 0 4px 0 #1B5E20; cursor: default; }
@@ -66,9 +73,14 @@
         <div class="hidden-object-section">
             <h2>🔍 Objecte Amagat del Dia 2</h2>
             <div class="hidden-object-item">
-                <h3>El cartell I Amsterdam</h3>
-                <p>Avui haureu de trobar el famós cartell de lletres gegants "I Amsterdam". El trobareu muntat a la gespa de la plaça Museumplein, just darrere del Rijksmuseum.</p>
-                <button id="btnObj1" class="btn-hidden" onclick="trobarObjecteFinal('obj2', 'El cartell I Amsterdam', 'btnObj1')">🔍 El hem trobat! (+50 Punts)</button>
+                <h3>El gosset de La Ronda de Nit</h3>
+                <div class="photo-container">
+                    <img src="https://z-cdn-media.chatglm.cn/files/1cf6623c-8adf-440c-8320-a070e99d3480.png?auth_key=1887229903-875c5e2c5d4a4868826f6bb3e7385a2c-0-769b3c8e8b1d4d9e8a0d3a3e7d3b8e1a" alt="Rembrandtplein">
+                    <!-- La rodona vermella marca la zona general on hi ha les estàtues -->
+                    <div class="red-circle" style="top: 55%; left: 45%;"></div>
+                </div>
+                <p>A la plaça Rembrandtplein hi ha unes figures de bronze que recreen el famós quador "La Ronda de Nit". Entre les cames dels soldats, hi ha un gosset amagat. Busca'l de ben a prop!</p>
+                <button id="btnObj1" class="btn-hidden" onclick="trobarObjecteFinal('obj2', 'El gosset de bronze', 'btnObj1')">🔍 L'hem trobat! (+50 Punts)</button>
             </div>
         </div>
         <div class="timeline-container">
@@ -109,7 +121,7 @@
             let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); document.getElementById('puntsTotals').innerText = punts;
             let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}');
             for (let id in visitats) { if (visitats[id]) { let card = document.getElementById('card_' + id); if (card) { card.classList.add('visited'); let btn = card.querySelector('.tick-btn'); if (btn) btn.innerText = "✅ Visitat!"; } } }
-            if (localStorage.getItem('obj2_found') === 'true') { let btn = document.getElementById('btnObj1'); btn.innerText = "✅ El cartell I Amsterdam trobat!"; btn.disabled = true; }
+            if (localStorage.getItem('obj2_found') === 'true') { let btn = document.getElementById('btnObj1'); btn.innerText = "✅ Gosset de bronze trobat!"; btn.disabled = true; }
         }
         carregarEstatJoc();
         function toggleTick(ev, id) {
