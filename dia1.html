@@ -69,17 +69,12 @@
     <div id="map"></div>
     <div class="container">
         <div class="hidden-object-section">
-            <h2>🔍 Objectes Amagats del Dia 1</h2>
+            <h2>🔍 Objecte Amagat del Dia 1</h2>
             <div class="hidden-object-item">
-                <h3>1. Les marques de creixement a la paret</h3>
-                <p>A l'habitació on dormien l'Otto, l'Edith i la Margot (que més tard es faria servir com a sala d'estar), acosta't al paper pintat i busca unes fines línies de llapis. Són les marques on l'Otto Frank mesurava l'alçada de l'Anne i la Margot i anotava com anaven creixent durant els més de dos anys que van viure amagades.</p>
-                <button id="btnObj1" class="btn-hidden" onclick="trobarObjecteFinal('obj1a', 'Les marques de creixement', 'btnObj1')">🔍 Les hem trobat! (+50 Punts)</button>
-            </div>
-            <div class="hidden-object-item">
-                <h3>2. La petita estàtua d'Anna Frank</h3>
+                <h3>La petita estàtua d'Anna Frank</h3>
                 <img src="https://z-cdn-media.chatglm.cn/files/e33d2729-3b89-42bf-9849-c3295f3f5998.png?auth_key=1886974072-cafdb260cce041e49e0d6d9c51c88c21-0-c8c6398452ee725613de5b255afdb2cc" alt="Estàtua Anne Frank">
                 <p>No busqueu una gran escultura monumental just davant de la porta del museu. Si aneu a la plaça Westermarkt, al sud de l'església, hi trobareu una estàtua de bronze força petita, creada per l'escultor Mari Andriessen. Molts turistes ni la veuen, però mostra una Anne pensativa, mirant cap al cel i amb les mans a l'esquena, representant l'esperança abans d'haver d'amagar-se.</p>
-                <button id="btnObj2" class="btn-hidden" onclick="trobarObjecteFinal('obj1b', 'La petita estàtua d\'Anna Frank', 'btnObj2')">🔍 L'hem trobat! (+50 Punts)</button>
+                <button id="btnObj1" class="btn-hidden" onclick="trobarObjecteFinal('obj1', 'La petita estàtua d\'Anna Frank', 'btnObj1')">🔍 L'hem trobat! (+50 Punts)</button>
             </div>
         </div>
         <div class="timeline-container">
@@ -136,8 +131,7 @@
             let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); document.getElementById('puntsTotals').innerText = punts;
             let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}');
             for (let id in visitats) { if (visitats[id]) { let card = document.getElementById('card_' + id); if (card) { card.classList.add('visited'); let btn = card.querySelector('.tick-btn'); if (btn) btn.innerText = "✅ Visitat!"; } } }
-            if (localStorage.getItem('obj1a_found') === 'true') { let btn = document.getElementById('btnObj1'); btn.innerText = "✅ Marques de creixement trobades!"; btn.disabled = true; }
-            if (localStorage.getItem('obj1b_found') === 'true') { let btn = document.getElementById('btnObj2'); btn.innerText = "✅ Estàtua d'Anna Frank trobada!"; btn.disabled = true; }
+            if (localStorage.getItem('obj1_found') === 'true') { let btn = document.getElementById('btnObj1'); btn.innerText = "✅ Estàtua d'Anna Frank trobada!"; btn.disabled = true; }
         }
         carregarEstatJoc();
         function toggleTick(ev, id) {
@@ -156,7 +150,7 @@
             localStorage.setItem(idObj + '_found', 'true');
             let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); punts += 50;
             localStorage.setItem('puntsViatge', punts); document.getElementById('puntsTotals').innerText = punts;
-            let btn = document.getElementById(btnId); btn.innerText = "✅ " + nomObjecte + " trobat(a)!"; btn.disabled = true;
+            let btn = document.getElementById(btnId); btn.innerText = "✅ " + nomObjecte + " trobada!"; btn.disabled = true;
             alert("🎉 Has trobat: " + nomObjecte + "! +50 Punts!");
         }
         function crearEspurnes(card) { let emojis = ['✨', '🎉', '⭐', '🌟', '💫']; for(let i=0; i<8; i++) { let s = document.createElement('div'); s.innerText = emojis[Math.floor(Math.random() * emojis.length)]; s.className = 'sparkle'; s.style.left = (40 + Math.random() * 20) + '%'; s.style.top = (40 + Math.random() * 20) + '%'; card.appendChild(s); setTimeout(() => s.remove(), 1000); } }
