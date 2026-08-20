@@ -1,0 +1,18 @@
+{
+  "name": "Aventura als Països Baixos",
+  "short_name": "Viatge",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone"
+}
