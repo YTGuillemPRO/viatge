@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dia 4: Màgia a Efteling</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -67,9 +69,9 @@
         <div class="hidden-object-section">
             <h2>🔍 Objecte Amagat del Dia 4</h2>
             <div class="hidden-object-item">
-                <h3>El drac de l'entrada d'Efteling</h3>
-                <p>Just a l'entrar al parc, abans de creuar els torns, buscau el gran drac de pedra que vigila l'entrada principal des de dalt d'una columna.</p>
-                <button id="btnObj1" class="btn-hidden" onclick="trobarObjecteFinal('obj4', 'El drac de l\'entrada', 'btnObj1')">🔍 L'hem trobat! (+50 Punts)</button>
+                <h3>Les monedes d'or maldites (Baron 1898)</h3>
+                <p>A l'atracció Baron 1898, abans de la caiguda lliure del pou de la mina, busqueu les projeccions i figures de les Witte Wieven (dones fantasmagòriques vestides de blanc) i el cofre amb els lingots d'or del cobdiciós Baró Hooghmoed.</p>
+                <button id="btnObj1" class="btn-hidden" onclick="trobarObjecteFinal('obj4', 'Les monedes d\'or maldites', 'btnObj1')">🔍 L'hem trobat! (+50 Punts)</button>
             </div>
         </div>
         <div class="timeline-container">
@@ -122,7 +124,7 @@
             let punts = parseInt(localStorage.getItem('puntsViatge') || '0'); document.getElementById('puntsTotals').innerText = punts;
             let visitats = JSON.parse(localStorage.getItem('llocsVisitats') || '{}');
             for (let id in visitats) { if (visitats[id]) { let card = document.getElementById('card_' + id); if (card) { card.classList.add('visited'); let btn = card.querySelector('.tick-btn'); if (btn) btn.innerText = "✅ Visitat!"; } } }
-            if (localStorage.getItem('obj4_found') === 'true') { let btn = document.getElementById('btnObj1'); btn.innerText = "✅ Drac de l'entrada trobat!"; btn.disabled = true; }
+            if (localStorage.getItem('obj4_found') === 'true') { let btn = document.getElementById('btnObj1'); btn.innerText = "✅ Monedes d'or trobades!"; btn.disabled = true; }
         }
         carregarEstatJoc();
         function toggleTick(ev, id) {
